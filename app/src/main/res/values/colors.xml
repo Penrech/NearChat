@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="blueGray">#cfd8dc</color>
+    <color name="brokenBlack">#4D4D4D</color>
+    <color name="brokenGray">#666666</color>
+    <color name="defaultLightBlue">#B3E5FC</color>
+    <color name="defaultBlue">#81D4FA</color>
+    <color name="defaultGreen">#A5D6A7</color>
+    <color name="defaultYellow">#FFF59D</color>
+    <color name="defaultRed">#FFAB91</color>
+    <color name="random1">#EF9A9A</color>
+    <color name="random2">#F48FB1</color>
+    <color name="random3">#CE93D8</color>
+    <color name="random4">#B39DDB</color>
+    <color name="random5">#9FA8DA</color>
+    <color name="random6">#90CAF9</color>
+    <color name="random7">#81D4FA</color>
+    <color name="random8">#80DEEA</color>
+    <color name="random9">#80CBC4</color>
+    <color name="random10">#A5D6A7</color>
+    <color name="random11">#C5E1A5</color>
+    <color name="random12">#E6EE9C</color>
+    <color name="random13">#FFF59D</color>
+    <color name="random14">#FFE082</color>
+    <color name="random15">#FFCC80</color>
+    <color name="random16">#FFAB91</color>
+</resources>
