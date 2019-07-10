@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+            android:title="Chats"
+            android:id="@+id/userProfileChats"
+          android:icon="@drawable/icon_more_white"
+          app:showAsAction="always"/>
+    <item
+            android:title="Contacts"
+            android:id="@+id/userProfileContacts"
+            android:icon="@drawable/icon_user_white"
+            app:showAsAction="always"/>
+    <item
+            android:title="Events"
+            android:id="@+id/userProfileEvents"
+            android:icon="@drawable/icon_event_white"
+            app:showAsAction="always"/>
+    <item
+            android:title="Search"
+            android:id="@+id/userProfileSearch"
+            android:icon="@drawable/icon_search_white"
+            app:showAsAction="always"/>
+</menu>

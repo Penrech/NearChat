@@ -47,6 +47,8 @@ class UserProfileActivity : AppCompatActivity() {
         menu.getItem(activityNumber).isChecked = true
     }
 
+    //Funciones lifecycle de la actividad
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
@@ -56,7 +58,6 @@ class UserProfileActivity : AppCompatActivity() {
          */
         setBottomNavigation()
 
-        profileTxt.text = "Profile activity $this"
     }
 
     override fun onResume() {

@@ -36,6 +36,7 @@
             app:itemHorizontalTranslationEnabled="true"
             android:elevation="0dp"
             app:itemBackground="@android:color/transparent"
-            app:itemIconSize="40dp"/>
+            app:itemIconSize="40dp"
+            app:elevation="0dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

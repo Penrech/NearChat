@@ -6,4 +6,8 @@
     <string name="navigationEventItemLabel">Event</string>
     <string name="navigationProfileItemLabel">Profile</string>
     <string name="navigationMoreItemLabel">More</string>
+    <string name="title_activity_pruebas">Pruebas</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
