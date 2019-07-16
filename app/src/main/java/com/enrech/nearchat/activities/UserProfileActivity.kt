@@ -1,7 +1,9 @@
 package com.enrech.nearchat.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.core.view.get
 import androidx.core.view.iterator
 import com.enrech.nearchat.R
@@ -68,5 +70,10 @@ class UserProfileActivity : AppCompatActivity() {
          */
         updateBottomNavigationSelection()
         overridePendingTransition(0,0)
+    }
+
+    fun goToEditProfile(view: View) {
+        val intent = Intent(this,EditUserActivty::class.java)
+        startActivity(intent)
     }
 }

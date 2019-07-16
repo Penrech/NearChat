@@ -1,7 +1,6 @@
 package com.enrech.nearchat.activities
 
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,9 +11,7 @@ import androidx.viewpager.widget.ViewPager
 import com.enrech.nearchat.R
 import com.enrech.nearchat.adapters.DefaultPagerAdapter
 import com.enrech.nearchat.fragments.EventChatFragment
-import com.enrech.nearchat.fragments.EventListFragment
 import com.enrech.nearchat.fragments.EventMapFragment
-import com.enrech.nearchat.fragments.HomeMapFragment
 import com.enrech.nearchat.models.DynamicAnimatableToolbarElement
 import com.enrech.nearchat.navigation.BottomNavigationListener
 import com.enrech.nearchat.utils.ToolbarAnimationUtils
@@ -119,6 +116,8 @@ class EventActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
          */
         updateBottomNavigationSelection()
 
+        setToolbarUIAfterPageChange()
+
         listenPagerEvents()
 
         overridePendingTransition(0,0)
@@ -171,16 +170,16 @@ class EventActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         //Aquí se inicializan las propiedades de cada uno de los elementos del toolbar, ya sea el textView que contiene el titulo como los
         //diversos botones. Está implementación puede parecer tediosa, pero la cantidad de elementos de los toolbar a implentar no es elevada y
         //la realización de esta implementación permite más adelante facilitar y ahora mucho código cuando se realiza la animación.
-        val toolbarTitle = DynamicAnimatableToolbarElement(toolbarEventTitle,
+        val toolbarTitle = DynamicAnimatableToolbarElement(toolbarEditProfileTitle,
             DynamicAnimatableToolbarElement.TypeOfToolbarElements.TITLE,
             textParameters!!.first,
             textParameters.second,
             textParameters.third,
             false,
             true,
-            toolbarEventTitle.alpha,
-            toolbarEventTitle.elevation,
-            toolbarEventTitle.visibility,
+            toolbarEditProfileTitle.alpha,
+            toolbarEditProfileTitle.elevation,
+            toolbarEditProfileTitle.visibility,
             false)
 
         val changeFragmentButton = DynamicAnimatableToolbarElement(changeBetweenMapAndChatButton,
@@ -289,6 +288,25 @@ class EventActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         if (pagerIsListening) {
             mPager.removeOnPageChangeListener(this)
             pagerIsListening = false
+        }
+    }
+
+    //La función de este método es evitar que la interfaz del toolbar sea erronea respecto a su página actual
+    //Como resultado de un cambio en el tab bar mientras se esté realizando un cambio de página
+    private fun setToolbarUIAfterPageChange(){
+        val currentPage = mPager.currentItem
+
+        when (currentPage) {
+            0 -> {
+                run {
+                    toolbarAnimationUtils?.changeIconsDinamically(0 ,0.0f)
+                }
+            }
+            1-> {
+                run {
+                    toolbarAnimationUtils?.changeIconsDinamically(0 ,1.0f)
+                }
+            }
         }
     }
 

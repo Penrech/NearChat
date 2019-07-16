@@ -129,6 +129,8 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
          */
         updateBottomNavigationSelection()
 
+        setToolbarUIAfterPageChange()
+
         listenPagerEvents()
 
         overridePendingTransition(0,0)
@@ -285,6 +287,25 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         if (pagerIsListening) {
             mPager.removeOnPageChangeListener(this)
             pagerIsListening = false
+        }
+    }
+
+    //La función de este método es evitar que la interfaz del toolbar sea erronea respecto a su página actual
+    //Como resultado de un cambio en el tab bar mientras se esté realizando un cambio de página
+    private fun setToolbarUIAfterPageChange(){
+        val currentPage = mPager.currentItem
+
+        when (currentPage) {
+            0 -> {
+                run {
+                    toolbarAnimationUtils?.changeIconsDinamically(0 ,0.0f)
+                }
+            }
+            1-> {
+                run {
+                    toolbarAnimationUtils?.changeIconsDinamically(0 ,1.0f)
+                }
+            }
         }
     }
 
