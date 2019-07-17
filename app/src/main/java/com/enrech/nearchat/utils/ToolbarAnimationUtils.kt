@@ -3,6 +3,7 @@ package com.enrech.nearchat.utils
 import android.animation.ArgbEvaluator
 import android.app.Activity
 import android.util.DisplayMetrics
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.ImageButton
@@ -158,6 +159,7 @@ class ToolbarAnimationUtils(private val currentActivity: Activity?,
         val leftPercentage = leftPositionInPX  / widthPX
         val centerPercentage = centerPositionInPX / widthPX
 
+        Log.i("DATOS","left desde funcion $leftPercentage")
         return Triple(rightPercentage,leftPercentage,centerPercentage)
     }
 
@@ -189,6 +191,7 @@ class ToolbarAnimationUtils(private val currentActivity: Activity?,
         val leftPercentage = leftPositionInPX  / widthPX
         val centerPercentage = centerPositionInPX / widthPX
 
+        Log.i("DATOS","left desde funcion $leftPercentage")
         return Triple(leftPercentage,rightPercentage,centerPercentage)
 
     }

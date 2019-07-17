@@ -182,6 +182,8 @@ class EventActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
             toolbarEditProfileTitle.visibility,
             false)
 
+        Log.i("CUSTOM","Clase de toolbar ${toolbarEditProfileTitle.javaClass}")
+
         val changeFragmentButton = DynamicAnimatableToolbarElement(changeBetweenMapAndChatButton,
             DynamicAnimatableToolbarElement.TypeOfToolbarElements.BUTTON,
             changeFragmentButtonParameters!!.first,

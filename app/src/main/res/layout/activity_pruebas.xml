@@ -12,7 +12,7 @@
             android:layout_width="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-                android:id="@+id/homeToolbar"
+                android:id="@+id/home2Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"/>

@@ -1,10 +1,7 @@
 package com.enrech.nearchat.activities
 
 import android.animation.ArgbEvaluator
-import android.graphics.Color
-import android.graphics.LinearGradient
-import android.graphics.PorterDuff
-import android.graphics.Shader
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.media.Image
 import android.opengl.Visibility
@@ -12,10 +9,12 @@ import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.ImageButton
 import android.widget.TextView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.children
 import androidx.core.view.iterator
 import androidx.viewpager.widget.ViewPager
 import com.enrech.nearchat.R
@@ -24,6 +23,7 @@ import com.enrech.nearchat.fragments.EventListFragment
 import com.enrech.nearchat.fragments.HomeMapFragment
 import com.enrech.nearchat.models.DynamicAnimatableToolbarElement
 import com.enrech.nearchat.navigation.BottomNavigationListener
+import com.enrech.nearchat.utils.ToolbarAnimationManager
 import com.enrech.nearchat.utils.ToolbarAnimationUtils
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
@@ -31,6 +31,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.showMyPositionButton
 import kotlinx.android.synthetic.main.activity_pruebas.*
 import kotlin.math.abs
+
+
+
 
 class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
 
@@ -78,9 +81,9 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
     private var blueBackgroundButtonColor: Int? = null
     private var whiteBackgroundButtonColor: Int? = null
 
-    private var toolbarElementsData = ArrayList<DynamicAnimatableToolbarElement>()
+    private var toolbarElementsData = ArrayList<Any>()
 
-    private var toolbarAnimationUtils: ToolbarAnimationUtils? = null
+    private var toolbarAnimationUtils: ToolbarAnimationManager? = null
 
     //Variables y funciones del View Pager
 
@@ -119,6 +122,45 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         setUpToolbar()
         setUpPager()
 
+        /*val vto = homeRootLayout.viewTreeObserver
+        vto.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener{
+            override fun onGlobalLayout() {
+                homeRootLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                LinerLayoutHomeToolbar.children.forEach {
+                    val rect = Rect()
+                    it.getDrawingRect(rect)
+                    homeToolbar.offsetDescendantRectToMyCoords(it,rect)
+                    var left = rect.left.toFloat() / homeToolbar.width
+                    var right = rect.right.toFloat() / homeToolbar.width
+                    var center = rect.centerX().toFloat() / homeToolbar.width
+                    var type = DynamicAnimatableToolbarElement.TypeOfToolbarElements.BUTTON
+                    var shouldChangeColor = false
+                    var shouldHideOnChange = true
+
+
+                    if (it is TextView) {
+                        type = DynamicAnimatableToolbarElement.TypeOfToolbarElements.TITLE
+                        left = 1 - left
+                        right = 1 - right
+                        center = 1 - center
+                    }
+
+
+                    val animatableToolbarElement = DynamicAnimatableToolbarElement(it,
+                        type,
+                        left,
+                        right,
+                        center,
+                        shouldChangeColor,
+                        shouldHideOnChange,
+                        it.alpha,
+                        it.elevation,
+                        it.visibility,
+                        false)
+                }
+            }
+        })*/
+
     }
 
     override fun onResume() {
@@ -136,11 +178,13 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         overridePendingTransition(0,0)
     }
 
+
     override fun onPause() {
         super.onPause()
 
         deleteListenerPagerEvents()
     }
+
 
     /**
      *
@@ -152,8 +196,9 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
      *
      */
 
+
     private fun setUpToolbar(){
-        //Se inicializan una serie de drawables de forma global con el activity y la función mutate para evitar futuros problemas de UI.
+       /* //Se inicializan una serie de drawables de forma global con el activity y la función mutate para evitar futuros problemas de UI.
         //Esto último se realiza porque si no se usa mutate, la cache que guarda getdrawable puede hacer que el recurso obtenido en esta
         //Actividad aparezca en otra de la misma manera. Esto no sería un problema si no fuera porque muchos de estos recursos se tintan
         //Y modifican para afrontar los cambios de interfaz al cambiar de un fragment a otro del pager. Si no se utilizara mutate, un fondo
@@ -166,12 +211,9 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
 
         blueBackgroundButtonColor = getColor(R.color.defaultBlue)
         whiteBackgroundButtonColor = Color.WHITE
-
-        toolbarAnimationUtils = ToolbarAnimationUtils(this,
-            blueBackgroundButtonColor!!,
-            whiteBackgroundButtonColor!!,
-            resources.displayMetrics)
-
+*/
+        toolbarAnimationUtils = ToolbarAnimationManager(this)
+/*
         changeBetweenMapAndListButton.setImageDrawable(eventListIcon)
         showMyPositionButton.setImageDrawable(myPositionIcon)
         showEventAreaButton.setImageDrawable(showEventAreaIcon)
@@ -197,6 +239,14 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
             toolbarHomeTitle.elevation,
             toolbarHomeTitle.visibility,
             false)
+
+        Log.i("DATOSBOTON","Boton 1 datos: ${toolbarTitle.rightSideBound} ${toolbarTitle.leftSideBound}")
+        val offsetViewBounds = Rect()
+        toolbarHomeTitle.getDrawingRect(offsetViewBounds)
+        homeToolbar.offsetDescendantRectToMyCoords(toolbarHomeTitle,offsetViewBounds)
+        Log.i("DATOSBOTON","Boton 1 datos: ${offsetViewBounds.right} ${offsetViewBounds.left}")
+
+
 
         val changeFragmentButton = DynamicAnimatableToolbarElement(changeBetweenMapAndListButton,
             DynamicAnimatableToolbarElement.TypeOfToolbarElements.BUTTON,
@@ -249,10 +299,16 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         toolbarElementsData.add(changeFragmentButton)
         toolbarElementsData.add(getPositionButton)
         toolbarElementsData.add(showEventsAreaButton)
+*/
+
+        LinerLayoutHomeToolbar.children.forEach {
+            toolbarElementsData.add(it)
+        }
 
         toolbarAnimationUtils?.setToolbarElementsData(toolbarElementsData)
 
     }
+
 
     //Funciones del Pager
 
