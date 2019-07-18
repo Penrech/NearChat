@@ -7,8 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".activities.EditUserActivty"
-        android:id="@+id/rootEditProfileLayout">
+        tools:context=".fragments.AddEditUserDetails"
+        android:id="@+id/rootAddEditProfileLayout">
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
@@ -17,11 +17,11 @@
             android:fitsSystemWindows="true"
             app:elevation="0dp"
             android:padding="0dp"
-            android:layout_margin="0dp">
+            android:layout_margin="0dp" android:id="@+id/AddEditProfileAppBar">
 
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/editProfilePictureToolbar"
+                android:id="@+id/editProfilePictureCollapsingToolbar"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:contentInsetStartWithNavigation="0dp"
                 android:layout_width="match_parent"
@@ -59,8 +59,7 @@
                         android:textColor="@color/defaultBlue"
                         android:textAlignment="gravity"
                         app:layout_constraintVertical_bias="0.0"
-                        android:gravity="center_horizontal|top"
-                        android:onClick="changeUserProfilePhoto"/>
+                        android:gravity="center_horizontal|top"/>
 
                 <androidx.cardview.widget.CardView
                         android:layout_width="115dp"
@@ -77,8 +76,7 @@
                         app:cardBackgroundColor="@color/random2"
                         android:id="@+id/cardView"
                         android:layout_marginEnd="8dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:onClick="changeUserProfilePhoto">
+                        app:layout_constraintEnd_toEndOf="parent">
 
                     <ImageView
                             android:maxLines="1"
@@ -130,7 +128,7 @@
                             android:padding="10dp"
                             android:elevation="0dp"
                             android:contentDescription="edit user profile close button"
-                            android:onClick="closeEditUserProfile" android:layout_marginEnd="12dp"/>
+                            android:layout_marginEnd="12dp"/>
                     <TextView
                             android:maxLines="2"
                             app:autoSizeTextType="uniform"
@@ -157,8 +155,7 @@
                             android:background="@drawable/bottom_item_ripple_checked"
                             android:padding="10dp"
                             android:elevation="0dp"
-                            android:contentDescription="save changes edit profile toolbar button"
-                            android:onClick="saveUserProfile"/>
+                            android:contentDescription="save changes edit profile toolbar button"/>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -173,10 +170,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
-            android:background="@color/defaultLightBlue" android:id="@+id/AddEditProfileScrollView">
+            android:background="@color/defaultLightBlue" android:id="@+id/AddEditScrollView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/editProfileContainer"
+                android:id="@+id/AddEditProfileContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             <TextView
@@ -289,27 +286,15 @@
                     android:paddingEnd="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/editProfileBioLabel"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="24dp"
                     android:layout_marginTop="8dp" android:singleLine="true"
-                    android:gravity="bottom" android:paddingBottom="10dp" android:hint="Bio or something"/>
+                    android:gravity="bottom"
+                    android:paddingBottom="10dp"
+                    android:hint="Bio or something"
+                    app:layout_constraintVertical_bias="0.0"/>
 
-            <Button
-                    android:text="Guardar"
-                    android:textAllCaps="false"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:id="@+id/editProfileSaveTextButton"
-                    android:layout_marginTop="40dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editProfileBioEditText"
-                    android:background="@drawable/text_field_background"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:backgroundTint="@color/defaultBlue"
-                    android:textColor="@android:color/background_light"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="21sp"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                    android:onClick="saveUserProfile" android:layout_marginBottom="24dp"
-                    app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.0"/>
+
 
             <androidx.constraintlayout.widget.Guideline
                     android:orientation="vertical"

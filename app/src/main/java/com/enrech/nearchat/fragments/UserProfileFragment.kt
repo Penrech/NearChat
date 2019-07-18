@@ -16,19 +16,16 @@ import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-
-class HomeFragment : Fragment() {
+class UserProfileFragment : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
 
-    private val topFragmentNumber = 0
+    private val topFragmentNumber = 2
 
     private var currentFragment: Fragment? = null
 
-    var loadingFragment: LoadingFragment? = null
-
-    var pagerFragment: HomePagerFragment? = null
+    var profileDetailsFragment: ProfileDetailsFragment? = null
 
     private var changeTabListener: NotifyTopFragmentChange? = null
 
@@ -36,10 +33,9 @@ class HomeFragment : Fragment() {
 
     private var backStackChangeListener = object : FragmentManager.OnBackStackChangedListener {
         override fun onBackStackChanged() {
-            currentFragment = childFragmentManager.findFragmentById(R.id.MainHomeFragmentContainer)
+            currentFragment = childFragmentManager.findFragmentById(R.id.MainProfileFragmentContainer)
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,12 +54,12 @@ class HomeFragment : Fragment() {
 
         addBackStackChangeListener()
 
-
         if (currentFragment == null) {
-            loadFragment(pagerFragment)
+            Log.i("TIG","es null")
+            loadFragment(profileDetailsFragment)
         }
 
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_user_profile, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -107,25 +103,22 @@ class HomeFragment : Fragment() {
     }
 
     private fun initFragments(){
-        loadingFragment = LoadingFragment()
-        pagerFragment = HomePagerFragment()
+        profileDetailsFragment = ProfileDetailsFragment()
     }
 
-    private fun loadFragment(fragment: Fragment?) : Boolean {
+    fun loadFragment(fragment: Fragment?) : Boolean {
 
         if (fragment != null && currentFragment != fragment) {
-
             val transaction = childFragmentManager.beginTransaction()
 
-            transaction.replace(R.id.MainHomeFragmentContainer, fragment)
-            if (fragment !is HomePagerFragment) {
+            transaction.replace(R.id.MainProfileFragmentContainer, fragment)
+            if (fragment !is ProfileDetailsFragment) {
                 transaction.addToBackStack(null)
             }
 
             transaction.commit()
 
             currentFragment = fragment
-
 
             return true
         }
@@ -134,12 +127,11 @@ class HomeFragment : Fragment() {
     }
 
 
-
     companion object {
 
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
+            UserProfileFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

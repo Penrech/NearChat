@@ -3,6 +3,7 @@ package com.enrech.nearchat.CustomElements
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.util.Log
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.appcompat.widget.LinearLayoutCompat
@@ -12,6 +13,7 @@ class CustomToolbarLabel @JvmOverloads constructor(
     defStyleAttr: Int = 0) : androidx.appcompat.widget.AppCompatTextView(context, attrs, defStyleAttr) {
 
     var leftSideBound: Float? = null
+    var rightSideBound: Float? = null
     var alphaStored: Float? = null
     var initialAlpha: Float? = null
     var visibilityStored: Int? = null
@@ -42,8 +44,12 @@ class CustomToolbarLabel @JvmOverloads constructor(
             getDrawingRect(rect)
             toolbarParent.offsetDescendantRectToMyCoords(this, rect)
             val left = 1 - (rect!!.left.toFloat() / toolbarParent.width)
+            val right = 1 - (rect!!.right.toFloat() / toolbarParent.width)
 
             leftSideBound = left
+            Log.i("ALPHA","LEFT $left")
+            rightSideBound = right
+            Log.i("ALPHA","RIGHT $right")
         }
 
     }

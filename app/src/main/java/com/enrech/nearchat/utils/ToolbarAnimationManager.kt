@@ -30,11 +30,18 @@ class ToolbarAnimationManager(private val currentActivity: Activity?) {
                 Log.i("CUSTOM","ES CustomButton: ${it is CustomToolbarButton}")
                 if (it is CustomToolbarLabel) {
                     val textLeftPosition = it.leftSideBound ?: 0.5f
+                    val textRightPosition = it.rightSideBound ?: 0.6f
+                    val difference = 0 - textLeftPosition
+                    Log.i("OFFSET","left $textLeftPosition")
+                    Log.i("OFFSET","diff $difference")
+                    Log.i("OFFSET","offsset $offset")
+
                     if (offset >= textLeftPosition) {
                         if (it.visibilityStored == View.INVISIBLE) {
                             it.visibilityStored = View.VISIBLE
                         }
-                        it.alphaStored = (abs(textLeftPosition - offset) * 100) / 4
+                        it.alphaStored = 1 - (maxOf((offset), 0f) / difference)
+                        Log.i("OFFSET","alpha ${it.alphaStored}")
                     } else {
                         it.alphaStored = 0f
                         if (it.visibilityStored == View.VISIBLE) {
@@ -49,7 +56,6 @@ class ToolbarAnimationManager(private val currentActivity: Activity?) {
                     val difference = right - left
 
                     if (offset > left) {
-                        Log.i("OFFSET","AQUI NO ENTRA")
                         val actualElevation = (maxOf((right - offset), 0f) / difference)
                         val actualElevationNormalized = actualElevation * 2
 
@@ -105,10 +111,13 @@ class ToolbarAnimationManager(private val currentActivity: Activity?) {
 
                 }
 
+                Log.i("ELEMENTS","Hasta aqui bien")
+
                 //Esta función se llama desde el page change listener de un view pager concreto, y se hace en un thread diferente
                 //al de la UI para no entorpecer a esta durante los cálculos de las animaciones. Por ello es necesario plasmar
                 //todos los cambios calculados en el hilo de ejecución de la UI especificandolo de forma explicita.
                 currentActivity?.runOnUiThread {
+                    Log.i("ELEMENTS","Hasta aqui tambien")
                     if (it is CustomToolbarLabel) {
                         it.applyUIChanges()
                     } else if (it is CustomToolbarButton){

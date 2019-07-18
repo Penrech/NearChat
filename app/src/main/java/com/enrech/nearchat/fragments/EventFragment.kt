@@ -12,23 +12,25 @@ import androidx.fragment.app.FragmentManager
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
+import kotlinx.android.synthetic.main.activity_event.*
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val DEBUGTAG = "TUG"
 
 
-class HomeFragment : Fragment() {
+class EventFragment : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
 
-    private val topFragmentNumber = 0
+    private val topFragmentNumber = 1
 
     private var currentFragment: Fragment? = null
 
     var loadingFragment: LoadingFragment? = null
 
-    var pagerFragment: HomePagerFragment? = null
+    var pagerFragment: EventPagerFragment? = null
 
     private var changeTabListener: NotifyTopFragmentChange? = null
 
@@ -36,10 +38,10 @@ class HomeFragment : Fragment() {
 
     private var backStackChangeListener = object : FragmentManager.OnBackStackChangedListener {
         override fun onBackStackChanged() {
-            currentFragment = childFragmentManager.findFragmentById(R.id.MainHomeFragmentContainer)
+            currentFragment = childFragmentManager.findFragmentById(R.id.MainEventFragmentContainer)
+            Log.i(DEBUGTAG,"Current Fragment: $currentFragment")
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +51,8 @@ class HomeFragment : Fragment() {
         }
 
         initFragments()
+
+        Log.i("TUG","Fragment created")
     }
 
     override fun onCreateView(
@@ -59,11 +63,11 @@ class HomeFragment : Fragment() {
         addBackStackChangeListener()
 
 
-        if (currentFragment == null) {
+        if (currentFragment == null || currentFragment is EventPagerFragment ) {
             loadFragment(pagerFragment)
         }
 
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_event, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -108,24 +112,22 @@ class HomeFragment : Fragment() {
 
     private fun initFragments(){
         loadingFragment = LoadingFragment()
-        pagerFragment = HomePagerFragment()
+        pagerFragment = EventPagerFragment()
     }
 
     private fun loadFragment(fragment: Fragment?) : Boolean {
 
         if (fragment != null && currentFragment != fragment) {
+                val transaction = childFragmentManager.beginTransaction()
 
-            val transaction = childFragmentManager.beginTransaction()
+                transaction.replace(R.id.MainEventFragmentContainer, fragment)
+                if (fragment !is EventPagerFragment) {
+                    transaction.addToBackStack(null)
+                }
 
-            transaction.replace(R.id.MainHomeFragmentContainer, fragment)
-            if (fragment !is HomePagerFragment) {
-                transaction.addToBackStack(null)
-            }
+                transaction.commit()
 
-            transaction.commit()
-
-            currentFragment = fragment
-
+                currentFragment = fragment
 
             return true
         }
@@ -133,13 +135,11 @@ class HomeFragment : Fragment() {
         return false
     }
 
-
-
     companion object {
 
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
+            EventFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
