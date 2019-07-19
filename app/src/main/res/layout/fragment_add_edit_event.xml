@@ -7,8 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".fragments.AddEditUserDetails"
-        android:id="@+id/rootAddEditProfileLayout">
+        tools:context=".fragments.AddEditEventFragment"
+        android:id="@+id/rootAddEditEventLayout">
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
@@ -17,11 +17,12 @@
             android:fitsSystemWindows="true"
             app:elevation="0dp"
             android:padding="0dp"
-            android:layout_margin="0dp" android:id="@+id/AddEditProfileAppBar">
+            android:layout_margin="0dp"
+            android:id="@+id/AddEditEventAppBar">
 
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/editProfilePictureCollapsingToolbar"
+                android:id="@+id/editEventPictureCollapsingToolbar"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:contentInsetStartWithNavigation="0dp"
                 android:layout_width="match_parent"
@@ -43,7 +44,7 @@
                         app:autoSizeTextType="uniform"
                         app:autoSizeStepGranularity="2sp"
                         app:autoSizeMaxTextSize="20sp"
-                        android:text="Cambiar foto de perfil"
+                        android:text="Cambiar foto"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:id="@+id/changePhotoButton"
@@ -72,7 +73,7 @@
                         android:layout_marginTop="18dp"
                         android:layout_marginStart="12dp"
                         app:cardElevation="0dp"
-                        app:cardCornerRadius="57.5dp"
+                        app:cardCornerRadius="11.5dp"
                         app:cardBackgroundColor="@color/random2"
                         android:id="@+id/cardView"
                         android:layout_marginEnd="8dp"
@@ -85,8 +86,8 @@
                             app:autoSizeMaxTextSize="21sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/icon_user_white_with_padding"
-                            android:id="@+id/userProfileImage"/>
+                            app:srcCompat="@drawable/icon_event"
+                            android:id="@+id/eventImage"/>
 
                 </androidx.cardview.widget.CardView>
 
@@ -113,7 +114,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fitsSystemWindows="true"
-                        android:id="@+id/LinerLayoutEditProfileToolbar"
+                        android:id="@+id/LinerLayoutEditEventToolbar"
                         android:gravity="center_vertical|end"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp">
@@ -123,7 +124,7 @@
                             android:layout_width="@dimen/custom_toolbar_item_height"
                             android:layout_height="@dimen/custom_toolbar_item_height"
                             app:srcCompat="@drawable/icon_close_white"
-                            android:id="@+id/editUserProfileCloseButton"
+                            android:id="@+id/editEventCloseButton"
                             android:scaleType="centerInside"
                             android:background="@drawable/bottom_item_ripple_checked"
                             android:padding="10dp"
@@ -137,20 +138,20 @@
                             android:layout_weight="1"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:id="@+id/toolbarEditProfileTitle"
+                            android:id="@+id/toolbarEditEventTitle"
                             android:layout_marginEnd="12dp"
                             android:fontFamily="@font/roboto_medium"
                             android:visibility="visible"
                             android:textColor="@color/brokenBlack"
                             android:textAlignment="center"
                             android:gravity="center_vertical"
-                            android:text="Editar Usuario"/>
+                            android:text="Editar Evento"/>
 
                     <ImageButton
                             android:layout_width="@dimen/custom_toolbar_item_height"
                             android:layout_height="40dp"
                             app:srcCompat="@drawable/icon_done_white"
-                            android:id="@+id/saveChangesEditProfileToolbarButton"
+                            android:id="@+id/saveChangesEditEventToolbarButton"
                             android:scaleType="centerInside"
                             android:layout_weight="0"
                             android:background="@drawable/bottom_item_ripple_checked"
@@ -172,17 +173,18 @@
             android:layout_height="match_parent"
             android:fillViewport="true"
             android:background="@color/defaultLightBlue"
-            android:id="@+id/AddEditScrollView">
+            android:id="@+id/AddEditEventScrollView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/AddEditProfileContainer"
+                android:id="@+id/AddEditEventContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
             <TextView
-                    android:text="Nombre de usuario"
+                    android:text="Nombre del Evento"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editProfileUserNameLabel"
+                    android:id="@+id/editEventTitleLabel"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginTop="20dp"
                     app:layout_constraintStart_toStartOf="@+id/editProfileUsernameEditText"
@@ -201,44 +203,31 @@
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editProfileUserNameLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/editEventTitleLabel"
                     style="@style/Widget.AppCompat.AutoCompleteTextView"
                     android:background="@drawable/text_field_background"
                     android:layout_marginEnd="12dp"
-                    app:layout_constraintEnd_toStartOf="@+id/editProfileValidUserNameIndicator"
                     android:fontFamily="@font/roboto"
                     android:textSize="16sp"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
                     android:singleLine="true"
-                    android:hint="Username"/>
-
-            <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    app:srcCompat="@drawable/icon_done_white"
-                    android:id="@+id/editProfileValidUserNameIndicator"
-                    android:padding="10dp"
-                    android:background="@drawable/rounded_button_background_unchecked"
-                    android:backgroundTint="@color/defaultGreen"
-                    android:layout_marginEnd="12dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/editProfileUsernameEditText"
-                    app:layout_constraintBottom_toBottomOf="@+id/editProfileUsernameEditText"/>
+                    android:hint="Nombre del evento"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
-                    android:text="Nombre y apellidos"
+                    android:text="Fecha de finalización"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editProfileUserNameSurnameLabel"
+                    android:id="@+id/editEventEndDateLabel"
                     app:layout_constraintStart_toStartOf="@+id/editProfileUsernameEditText"
                     app:layout_constraintEnd_toEndOf="@+id/editProfileUsernameEditText"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="18sp"
                     android:textColor="@android:color/background_light"
-                    android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editProfileUsernameEditText"/>
+                    app:layout_constraintTop_toBottomOf="@+id/editProfileUsernameEditText"
+                    android:layout_marginStart="20dp"/>
 
             <EditText
                     android:layout_width="0dp"
@@ -256,16 +245,15 @@
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
                     android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editProfileUserNameSurnameLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/editEventEndDateLabel"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:singleLine="true"
-                    android:hint="Name Surname"/>
+                    android:singleLine="true"/>
 
             <TextView
-                    android:text="Estado"
+                    android:text="Rango del evento"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editProfileBioLabel"
+                    android:id="@+id/editEventRangeLabel"
                     app:layout_constraintStart_toStartOf="@+id/editProfileUsernameEditText"
                     app:layout_constraintEnd_toEndOf="@+id/editProfileUsernameEditText"
                     android:fontFamily="@font/roboto_medium"
@@ -280,7 +268,7 @@
                     android:layout_height="40dp"
                     android:inputType="textPersonName"
                     android:ems="0"
-                    android:id="@+id/editProfileBioEditText"
+                    android:id="@+id/editEventRangeEditText"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="12dp"
                     style="@style/Widget.AppCompat.AutoCompleteTextView"
@@ -290,30 +278,122 @@
                     android:textSize="16sp"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editProfileBioLabel"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="80dp"
+                    app:layout_constraintTop_toBottomOf="@+id/editEventRangeLabel"
                     android:layout_marginTop="8dp"
                     android:singleLine="true"
                     android:gravity="bottom"
                     android:paddingBottom="10dp"
-                    android:hint="Bio or something"
-                    app:layout_constraintVertical_bias="0.0"/>
+                    android:hint="50"
+                    app:layout_constraintEnd_toStartOf="@+id/editEventMeassureChangeButton"/>
+            <Button
+                    android:textAllCaps="false"
+                    android:text="M"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/editEventMeassureChangeButton"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:background="@drawable/rounded_button_background_unchecked"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintTop_toTopOf="@+id/editEventRangeEditText"
+                    app:layout_constraintBottom_toBottomOf="@+id/editEventRangeEditText"
+                    android:fontFamily="@font/roboto_bold"/>
+            <TextView
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeStepGranularity="2sp"
+                    app:autoSizeMaxTextSize="15sp"
+                    android:text="Mínimo 10 metros, máximo 1000 metros"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editEventHelperRangeLabel"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/defaultWhite"
+                    android:layout_marginStart="20dp"
+                    app:layout_constraintStart_toStartOf="@+id/editEventRangeEditText"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintTop_toBottomOf="@+id/editEventRangeEditText"
+                    android:textSize="15sp"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"/>
 
-            <androidx.constraintlayout.widget.Guideline
-                    android:orientation="vertical"
+            <TextView
+                    android:text="Localización"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editLocationLabel"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/background_light"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/editEventHelperRangeLabel"
+                    app:layout_constraintStart_toStartOf="@+id/editEventLocationCardView"
+                    app:layout_constraintEnd_toEndOf="@+id/editEventLocationCardView"
+                    android:layout_marginStart="20dp"/>
+
+            <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/editLocationLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardBackgroundColor="@color/blueLightGray"
+                    android:id="@+id/editEventLocationCardView"/>
+
+            <TextView
+                    android:text="Aforo máximo virtual"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editCapacityLabel"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/background_light"
+                    app:layout_constraintStart_toStartOf="@+id/editEventCapacityEditText"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/editEventLocationCardView" android:layout_marginEnd="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:enabled="false"
+                    android:inputType="textPersonName"
+                    android:ems="0"
+                    android:id="@+id/editEventCapacityEditText"
+                    style="@style/Widget.AppCompat.AutoCompleteTextView"
+                    android:background="@drawable/custom_text_field_selectable"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="16sp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:singleLine="true"
+                    android:gravity="bottom"
+                    android:paddingBottom="10dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/editCapacityLabel"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintEnd_toStartOf="@+id/editEventEnableCapacityLimit"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="145dp"/>
+
+            <CheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/guideline"
-                    app:layout_constraintGuide_percent="0.25"/>
-
-            <androidx.constraintlayout.widget.Guideline
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/guideline3"
-                    app:layout_constraintGuide_percent="0.75"/>
+                    android:id="@+id/editEventEnableCapacityLimit"
+                    android:button="@drawable/custom_radio_button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintTop_toTopOf="@+id/editEventCapacityEditText"
+                    app:layout_constraintBottom_toBottomOf="@+id/editEventCapacityEditText"
+                    android:checked="false"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

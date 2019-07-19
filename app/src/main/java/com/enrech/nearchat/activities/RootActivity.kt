@@ -138,7 +138,7 @@ class RootActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     //anida, estos métodos responden a diferentes acciones realizadas sobre estos diferentes fragments.
 
     override fun profileOpenEditUserClick(boolean: Boolean) {
-        (currentFragment as? UserProfileFragment)?.loadFragment(AddEditUserDetails())
+        (currentFragment as? UserProfileFragment)?.loadFragment(AddEditEventFragment())
     }
 
     override fun profilePropagateBackButton() {
