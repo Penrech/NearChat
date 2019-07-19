@@ -11,27 +11,16 @@ import android.view.ViewGroup
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
 
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-
+//Este fragment será el encargado de incorporar nuevas funcionalidades en un futuro
 class MoreFragment : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
+    //Variables
 
     private val topFragmentNumber = 3
 
     private var changeTabListener: NotifyTopFragmentChange? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    //Métodos lifecycle
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,16 +49,4 @@ class MoreFragment : Fragment() {
         changeTabListener = null
     }
 
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MoreFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

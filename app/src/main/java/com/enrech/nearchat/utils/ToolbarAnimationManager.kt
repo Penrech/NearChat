@@ -8,8 +8,8 @@ import com.enrech.nearchat.CustomElements.CustomToolbarButton
 import com.enrech.nearchat.CustomElements.CustomToolbarLabel
 import kotlin.math.abs
 
+//Esta clase es la encargada de gestionar las animaciones dinámicas de la mayoría de los toolbar de la aplicación
 class ToolbarAnimationManager(private val currentActivity: Activity?) {
-
 
     private var toolbarElementsData = ArrayList<Any>()
 
@@ -106,18 +106,14 @@ class ToolbarAnimationManager(private val currentActivity: Activity?) {
                             }
                         }
 
-
                     }
 
                 }
-
-                Log.i("ELEMENTS","Hasta aqui bien")
 
                 //Esta función se llama desde el page change listener de un view pager concreto, y se hace en un thread diferente
                 //al de la UI para no entorpecer a esta durante los cálculos de las animaciones. Por ello es necesario plasmar
                 //todos los cambios calculados en el hilo de ejecución de la UI especificandolo de forma explicita.
                 currentActivity?.runOnUiThread {
-                    Log.i("ELEMENTS","Hasta aqui tambien")
                     if (it is CustomToolbarLabel) {
                         it.applyUIChanges()
                     } else if (it is CustomToolbarButton){

@@ -13,17 +13,14 @@ import androidx.fragment.app.FragmentManager
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
+//Este fragment gestiona todos los fragments encargados de mostrar o editar información del usuario
 class UserProfileFragment : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
+    //Variables
 
     private val topFragmentNumber = 2
 
-    private var currentFragment: Fragment? = null
+    var currentFragment: Fragment? = null
 
     var profileDetailsFragment: ProfileDetailsFragment? = null
 
@@ -31,18 +28,18 @@ class UserProfileFragment : Fragment() {
 
     private var backStackListening = false
 
+    //Listeners
+
     private var backStackChangeListener = object : FragmentManager.OnBackStackChangedListener {
         override fun onBackStackChanged() {
             currentFragment = childFragmentManager.findFragmentById(R.id.MainProfileFragmentContainer)
         }
     }
 
+    //Métodos lifecycle
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
 
         initFragments()
     }
@@ -55,7 +52,6 @@ class UserProfileFragment : Fragment() {
         addBackStackChangeListener()
 
         if (currentFragment == null) {
-            Log.i("TIG","es null")
             loadFragment(profileDetailsFragment)
         }
 
@@ -88,6 +84,10 @@ class UserProfileFragment : Fragment() {
         changeTabListener = null
     }
 
+    //Métodos
+
+    //Estos dos métodos añaden o eliminan el listener encargado de gestionar que fragmento se está visualizando al
+    //Usar el boton de navegación hacia atras
     private fun addBackStackChangeListener(){
         if (!backStackListening) {
             childFragmentManager.addOnBackStackChangedListener(backStackChangeListener)
@@ -102,10 +102,14 @@ class UserProfileFragment : Fragment() {
         }
     }
 
+    //métodos fragment
+
+    //Este método inicializa los fragments principales de para esta funcionalidad para tener su estado guardado
     private fun initFragments(){
         profileDetailsFragment = ProfileDetailsFragment()
     }
 
+    //Esta función es la cargada de introducir los fragments en el contenedor del fragment destinado a ello
     fun loadFragment(fragment: Fragment?) : Boolean {
 
         if (fragment != null && currentFragment != fragment) {
@@ -126,16 +130,4 @@ class UserProfileFragment : Fragment() {
         return false
     }
 
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            UserProfileFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

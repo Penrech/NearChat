@@ -7,16 +7,18 @@ import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
-import android.widget.ImageButton
-import android.widget.Toolbar
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.core.widget.ImageViewCompat
 import com.enrech.nearchat.R
 
+//Esta clase permite guardar todos los métodos y propiedades necesarias para que los diferentes
+//Botones del toolbar puedan ser animados dinámicamente
 class CustomToolbarButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null,
     defStyleAttr: Int = 0) : androidx.appcompat.widget.AppCompatImageButton(context, attrs, defStyleAttr)
 {
+
+    //Variables
+
     var leftSideBound: Float? = null
     var rightSideBound: Float? = null
     var centerSideBound: Float? = null
@@ -38,29 +40,37 @@ class CustomToolbarButton @JvmOverloads constructor(
     var secundaryDrawable: Drawable? = null
     var rect : Rect? = null
 
+    //Método de inicio
+
+    //Aqui se inicializan todas las propiedades del elemento del toolbar, parte de ellas provienen de los stylables custom
+    //Definidos para este elemento en res/values/attrs.xml
      init {
        attrs?.let {
 
            val ta = context.obtainStyledAttributes(it, R.styleable.CustomToolbarButton)
 
            rect = Rect()
+
            alphaStored = alpha
            initialAlpha = alpha
            elevationStored = elevation
            initialElevation = elevation
            visibilityStored = visibility
+
            initialBackgroundColor = backgroundTintList?.defaultColor
            elementBackgroundColor = initialBackgroundColor
            initialElementColor = ta.getColor(R.styleable.CustomToolbarButton_icon_initial_tint_color,Color.WHITE)
-           Log.i("COLOR","Initial color $initialElementColor")
            elementIconColor = initialElementColor
+
            setImageDrawable(drawable.mutate())
            actualDrawable = drawable
            initialDrawable = drawable
            val secundaryDrawable = ta.getDrawable(R.styleable.CustomToolbarButton_secundary_drawable)?.mutate()
+
            secundaryDrawable?.let {
                this.secundaryDrawable = it
            }
+
            isLeading = ta.getBoolean(R.styleable.CustomToolbarButton_is_leading,false)
            shouldChangeColor = ta.getBoolean(R.styleable.CustomToolbarButton_should_change_color,false)
            shouldHideOnChange = ta.getBoolean(R.styleable.CustomToolbarButton_should_hide_on_change,false)
@@ -70,17 +80,18 @@ class CustomToolbarButton @JvmOverloads constructor(
        }
     }
 
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
+    //métodos sobrescritos
 
-    }
-
+    //Ya que la vista del botón y la de sus elementos superiores en la herarquia no está cargada todavía en init, se llama
+    //a la función encargada de determinar la posición del elemento en esta función en la que si está la herarquia cargada
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-        Log.i("LAYOUT","LAYOUT change")
         getBoundaries()
     }
 
+    //métodos
+
+    //Esta función permite cambiar de una vez todos los parámetros visuales del botón
     fun applyUIChanges(){
         alpha = alphaStored ?: alpha
         elevation = elevationStored ?: elevation
@@ -100,7 +111,8 @@ class CustomToolbarButton @JvmOverloads constructor(
 
     }
 
-    fun getBoundaries(){
+    //Este método permite obtener la posición exacta del botón en la pantalla
+    private fun getBoundaries(){
         val layoutParent = parent as? LinearLayoutCompat
         val toolbarParent = layoutParent?.parent as? androidx.appcompat.widget.Toolbar
 

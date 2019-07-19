@@ -15,7 +15,8 @@
             android:fitsSystemWindows="true"
             app:elevation="0dp"
             android:padding="0dp"
-            android:layout_margin="0dp" android:id="@+id/profileDetailsAppBar">
+            android:layout_margin="0dp"
+            android:id="@+id/profileDetailsAppBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
                 app:contentInsetStartWithNavigation="0dp"
@@ -109,7 +110,8 @@
                     app:contentInsetStart="0dp"
                     android:layout_margin="0dp"
                     android:layout_gravity="bottom"
-                    android:gravity="bottom" android:minHeight="58dp">
+                    android:gravity="bottom"
+                    android:minHeight="58dp">
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                         android:layout_width="match_parent"
@@ -130,6 +132,7 @@
                 </com.google.android.material.bottomnavigation.BottomNavigationView>
 
             </androidx.appcompat.widget.Toolbar>
+
             <androidx.appcompat.widget.Toolbar
                     android:id="@+id/ProfileToolbar"
                     app:layout_collapseMode="pin"
@@ -187,9 +190,7 @@
 
             </androidx.appcompat.widget.Toolbar>
 
-
         </com.google.android.material.appbar.CollapsingToolbarLayout>
-
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -197,7 +198,8 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true" android:id="@+id/profileDetailsScrollView">
+            android:fillViewport="true"
+            android:id="@+id/profileDetailsScrollView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/container"
@@ -207,7 +209,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
-
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

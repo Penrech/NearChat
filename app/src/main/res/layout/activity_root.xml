@@ -7,7 +7,6 @@
         android:layout_height="match_parent"
         tools:context=".activities.RootActivity">
 
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/RootNavView"
             android:layout_width="0dp"

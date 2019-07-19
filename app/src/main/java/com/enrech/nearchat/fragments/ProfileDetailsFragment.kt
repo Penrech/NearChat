@@ -15,43 +15,36 @@ import com.enrech.nearchat.interfaces.NotifyInteractionUserProfile
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_profile_details.*
 
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
+//Este fragment es el encargado de mostrar la información del perfil de usuario
 class ProfileDetailsFragment : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
-    private var listener: NotifyInteractionUserProfile? = null
+    //Variables
 
-    private var openEditProfileButtonListener = View.OnClickListener {
-        listener?.profileOpenEditUserClick(true)
-    }
+    private var listener: NotifyInteractionUserProfile? = null
 
     private var appBarScrollOffset: Int? = null
 
     private var appBarIsListening = false
+
+    private var scrollOffset: Int? = null
+
+    //Listeners
+
+    private var openEditProfileButtonListener = View.OnClickListener {
+        listener?.profileOpenEditUserClick(true)
+    }
 
     private var onAppBarOffsetChangeListener = AppBarLayout.OnOffsetChangedListener { appBarLayout, offset ->
         Log.i("TIG","Profile scroll offset $offset")
         appBarScrollOffset = offset
     }
 
-    private var scrollOffset: Int? = null
-
     private var onScrollChangeListener = NestedScrollView.OnScrollChangeListener { view, scrollX, scrollY, oldScrollX, oldScrollY ->
         scrollOffset = scrollY
 
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    //Métodos lifeCycle
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,10 +83,14 @@ class ProfileDetailsFragment : Fragment() {
         listener = null
     }
 
+    //Métodos
+
+    //Este método inicializa los listener de los diferentes botones del toolbar
     private fun setUpButtons(){
         editUserProfileButton.setOnClickListener(openEditProfileButtonListener)
     }
 
+    //Las siguientes 3 funciones mantienen el estado del scroll actual del fragment en caso de cambiar y volver de una pestaña a otra
     private fun setScrollListener(){
 
         appBarScrollOffset?.let {
@@ -123,15 +120,4 @@ class ProfileDetailsFragment : Fragment() {
         }
     }
 
-    companion object {
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ProfileDetailsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

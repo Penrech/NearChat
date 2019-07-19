@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="CustomToolbarButton">
         <attr name="should_change_color" format="boolean"/>
         <attr name="should_hide_on_change" format="boolean"/>
@@ -7,6 +8,6 @@
         <attr name="is_leading" format="boolean"/>
         <attr name="secundary_drawable" format="integer"/>
         <attr name="secundary_elevation" format="float"/>
-
     </declare-styleable>
+
 </resources>

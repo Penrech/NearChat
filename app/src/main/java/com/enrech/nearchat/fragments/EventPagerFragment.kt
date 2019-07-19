@@ -1,7 +1,5 @@
 package com.enrech.nearchat.fragments
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -16,13 +14,13 @@ import com.enrech.nearchat.adapters.DefaultPagerAdapter
 import com.enrech.nearchat.utils.ToolbarAnimationManager
 import kotlinx.android.synthetic.main.fragment_even_pager.*
 import kotlinx.android.synthetic.main.fragment_even_pager.view.*
+import kotlin.math.max
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
+//Este fragment se encarga de las pager que conforman el mapa y la lista de chat del evento
 class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
-    private var param1: String? = null
-    private var param2: String? = null
+
+    //Variables
+
     private var mPager: ViewPager? = null
     private var pagerAdapter: DefaultPagerAdapter? = null
     private var pagerFragments: ArrayList<Fragment> = arrayListOf()
@@ -36,7 +34,9 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
     private var pagerIsListening = false
 
-    private var currentPage : Int? = null
+    var currentPage : Int? = null
+
+    //Listeners
 
     override fun onPageScrollStateChanged(state: Int) {}
 
@@ -48,6 +48,7 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
     override fun onPageSelected(position: Int) {
         currentPage = position
+        Log.i("EVENTLOG","CurrentPage: $currentPage")
     }
 
     private var changePageButtonListener = View.OnClickListener {
@@ -58,14 +59,12 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         }
     }
 
+    //Métodos lifeCycle
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-
+        Log.i("EVENTLOG","CreoPager: $currentPage")
         initPagerFragments()
     }
 
@@ -98,6 +97,11 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         deleteListenerPagerEvents()
     }
 
+    //Métodos
+
+    //Métodos pager
+
+    //Esta función inicializa el pager
     private fun setUpPager(){
 
         pagerAdapter = DefaultPagerAdapter(childFragmentManager,pagerFragments)
@@ -109,30 +113,6 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         }
 
         setToolbarUIAfterPageChange()
-
-    }
-
-    private fun initPagerFragments(){
-        homeMapFragment = EventMapFragment()
-        homeListFragment = EventChatFragment()
-        pagerFragments.add(homeMapFragment!!)
-        pagerFragments.add(homeListFragment!!)
-    }
-
-    private fun setUpToolbar(){
-
-        toolbarAnimationUtils = ToolbarAnimationManager(activity)
-
-        LinerLayoutEventToolbar.children.forEach {
-            toolbarElementsData.add(it)
-        }
-
-        toolbarAnimationUtils?.setToolbarElementsData(toolbarElementsData)
-
-    }
-
-    private fun setUpButtons(){
-        changeBetweenMapAndChatButton.setOnClickListener(changePageButtonListener)
 
     }
 
@@ -154,9 +134,54 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         }
     }
 
+    //métodos fragment
+
+    //Este método inicializa los fragments principales de para esta funcionalidad para tener su estado guardado
+    private fun initPagerFragments(){
+        homeMapFragment = EventMapFragment()
+        homeListFragment = EventChatFragment()
+        pagerFragments.add(homeMapFragment!!)
+        pagerFragments.add(homeListFragment!!)
+    }
+
+    //Estos dos métodos sirven para volver a la página anterior del pager en caso de presionar el botón atrás
+    fun getActualPage(): Int {
+        return mPager?.currentItem ?: 0
+    }
+
+    fun setPagerPageBackwards() {
+        val currentItem = mPager?.currentItem ?: 0
+        mPager?.currentItem = currentItem - 1
+    }
+
+    //Métodos custom toolbar
+
+    //Este método inicializa la clase
+    /**
+     * @see toolbarAnimationUtils
+     * */
+    //Que ese encarga de la animcación dinámica de los elementos del toolbar
+    private fun setUpToolbar(){
+
+        toolbarAnimationUtils = ToolbarAnimationManager(activity)
+
+        LinerLayoutEventToolbar.children.forEach {
+            toolbarElementsData.add(it)
+        }
+
+        toolbarAnimationUtils?.setToolbarElementsData(toolbarElementsData)
+
+    }
+
+    //Este método inicializa los listener de los diferentes botones del toolbar
+    private fun setUpButtons(){
+        changeBetweenMapAndChatButton.setOnClickListener(changePageButtonListener)
+    }
+
+    //La función de este método es evitar que la interfaz del toolbar sea erronea respecto a su página actual
+    //Como resultado de un cambio en el tab bar mientras se esté realizando un cambio de página
     private fun setToolbarUIAfterPageChange(){
         val currentPage = mPager?.currentItem
-        Log.i("TIG","currentPage: $currentPage")
 
         when (currentPage) {
             0 -> {
@@ -172,15 +197,4 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         }
     }
 
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EventPagerFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

@@ -2,9 +2,7 @@ package com.enrech.nearchat.fragments
 
 import android.app.Activity
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,19 +13,22 @@ import androidx.core.widget.NestedScrollView
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.NotifyInteractionUserProfile
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.activity_edit_user_activty.*
 import kotlinx.android.synthetic.main.fragment_add_edit_user_details.*
 import kotlinx.android.synthetic.main.fragment_add_edit_user_details.editUserProfileCloseButton
 import kotlinx.android.synthetic.main.fragment_add_edit_user_details.saveChangesEditProfileToolbarButton
 
+private const val ISADD = "isAdd"
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
+//Este fragment es el encargado de mostrar la ui y gestionar la edición o adición de datos del perfil del usuario, es
+//reutilizable para un caso u otro y su estado se determina con la constante
+/**
+ * @see ISADD
+ * */
 class AddEditUserDetails : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
+    //Variables
+
+    private var isAdd: Boolean? = null
 
     private var listener: NotifyInteractionUserProfile? = null
 
@@ -36,15 +37,15 @@ class AddEditUserDetails : Fragment() {
     private var appBarIsListening = false
 
     private var scrollOffset: Int? = null
+
+    //Listener objects
     
     private var onScrollChangeListener = NestedScrollView.OnScrollChangeListener { view, scrollX, scrollY, oldScrollX, oldScrollY ->
         scrollOffset = scrollY
-
     }
 
     private var onAppBarOffsetChangeListener = AppBarLayout.OnOffsetChangedListener { appBarLayout, offset ->
         appBarScrollOffset = offset
-        Log.i("TIG","offset $offset")
     }
 
     private var closeWithoutSaveButtonListener = View.OnClickListener {
@@ -55,11 +56,23 @@ class AddEditUserDetails : Fragment() {
          listener?.profilePropagateBackButton()
     }
 
+    private fun setClickOnScreenListener(){
+        rootAddEditProfileLayout.setOnTouchListener { _, _ ->
+            hideSoftKeyboard(activity as Activity)
+            false
+        }
+        AddEditProfileContainer.setOnTouchListener { _, _ ->
+            hideSoftKeyboard(activity as Activity)
+            false
+        }
+    }
+
+    //Métodos lifecycle
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            isAdd = it.getBoolean(ISADD)
         }
 
     }
@@ -68,17 +81,18 @@ class AddEditUserDetails : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_add_edit_user_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUIIfAdd()
         setUpButtons()
         setClickOnScreenListener()
         setScrollListener()
         addAppBarListener()
+
     }
 
     override fun onDestroyView() {
@@ -100,22 +114,25 @@ class AddEditUserDetails : Fragment() {
         listener = null
     }
 
+    //métodos
+
+    //Este método cambia la interfaz en función de si se usa el fragment para editar o para añadir datos de nuevo usuario
+    private fun setUIIfAdd(){
+        isAdd?.let {
+            if (it) {
+                toolbarEditProfileTitle.text = "Nuevo Usuario"
+                changePhotoButton.text = "Añadir foto de perfil"
+            }
+        }
+    }
+
+    //Este método inicializa los listeners de los botones
     private fun setUpButtons(){
         saveChangesEditProfileToolbarButton.setOnClickListener(closeSaveButtonListener)
         editUserProfileCloseButton.setOnClickListener(closeWithoutSaveButtonListener)
     }
 
-    private fun setClickOnScreenListener(){
-        rootAddEditProfileLayout.setOnTouchListener { _, _ ->
-            hideSoftKeyboard(activity as Activity)
-            false
-        }
-        AddEditProfileContainer.setOnTouchListener { _, _ ->
-            hideSoftKeyboard(activity as Activity)
-            false
-        }
-    }
-
+    //Esta función oculta el teclado al apretar fuera de los límites del textEdit
     private fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager = activity.getSystemService(
             Activity.INPUT_METHOD_SERVICE
@@ -129,6 +146,7 @@ class AddEditUserDetails : Fragment() {
 
     }
 
+    //Las siguientes 3 funciones mantienen el estado del scroll actual del fragment en caso de cambiar y volver de una pestaña a otra
     private fun setScrollListener(){
 
         appBarScrollOffset?.let {
@@ -158,14 +176,14 @@ class AddEditUserDetails : Fragment() {
         }
     }
 
+    //Este objeto permite inicializar el fragment en un estado u otro, en este caso en modo edit o modo add
     companion object {
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(isAdd: Boolean = false) =
             AddEditUserDetails().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putBoolean(ISADD,isAdd)
                 }
             }
     }

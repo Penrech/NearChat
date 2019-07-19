@@ -1,7 +1,6 @@
 package com.enrech.nearchat.fragments
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,26 +12,24 @@ import androidx.fragment.app.FragmentManager
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-
+//Este fragment gestiona la UI y las diferentes funcionalidades encargadas de mostrar los eventos cercanos
 class HomeFragment : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
+    //Variables
 
     private val topFragmentNumber = 0
 
-    private var currentFragment: Fragment? = null
+    var currentFragment: Fragment? = null
 
     var loadingFragment: LoadingFragment? = null
 
     var pagerFragment: HomePagerFragment? = null
 
-    private var changeTabListener: NotifyTopFragmentChange? = null
-
     private var backStackListening = false
+
+    //Listeners
+
+    private var changeTabListener: NotifyTopFragmentChange? = null
 
     private var backStackChangeListener = object : FragmentManager.OnBackStackChangedListener {
         override fun onBackStackChanged() {
@@ -40,13 +37,10 @@ class HomeFragment : Fragment() {
         }
     }
 
+    //Métodos lifeCycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
 
         initFragments()
     }
@@ -57,7 +51,6 @@ class HomeFragment : Fragment() {
     ): View? {
 
         addBackStackChangeListener()
-
 
         if (currentFragment == null) {
             loadFragment(pagerFragment)
@@ -92,6 +85,10 @@ class HomeFragment : Fragment() {
         changeTabListener = null
     }
 
+    //Métodos
+
+    //Estos dos métodos añaden o eliminan el listener encargado de gestionar que fragmento se está visualizando al
+    //Usar el boton de navegación hacia atras
     private fun addBackStackChangeListener(){
         if (!backStackListening) {
             childFragmentManager.addOnBackStackChangedListener(backStackChangeListener)
@@ -106,11 +103,15 @@ class HomeFragment : Fragment() {
         }
     }
 
+    //Métodos fragment
+
+    //Este método inicializa los fragments principales de para esta funcionalidad para tener su estado guardado
     private fun initFragments(){
         loadingFragment = LoadingFragment()
         pagerFragment = HomePagerFragment()
     }
 
+    //Esta función es la cargada de introducir los fragments en el contenedor del fragment destinado a ello
     private fun loadFragment(fragment: Fragment?) : Boolean {
 
         if (fragment != null && currentFragment != fragment) {
@@ -133,17 +134,4 @@ class HomeFragment : Fragment() {
         return false
     }
 
-
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

@@ -1,7 +1,6 @@
 package com.enrech.nearchat.fragments
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,25 +11,21 @@ import androidx.fragment.app.FragmentManager
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
-import kotlinx.android.synthetic.main.activity_event.*
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-private const val DEBUGTAG = "TUG"
-
-
+//Este fragment gestiona la UI y las diferentes funcionalidades dentro de un evento
 class EventFragment : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
+    //Variables
 
     private val topFragmentNumber = 1
 
-    private var currentFragment: Fragment? = null
+    var currentFragment: Fragment? = null
 
     var loadingFragment: LoadingFragment? = null
 
     var pagerFragment: EventPagerFragment? = null
+
+    //Listeners
 
     private var changeTabListener: NotifyTopFragmentChange? = null
 
@@ -39,20 +34,16 @@ class EventFragment : Fragment() {
     private var backStackChangeListener = object : FragmentManager.OnBackStackChangedListener {
         override fun onBackStackChanged() {
             currentFragment = childFragmentManager.findFragmentById(R.id.MainEventFragmentContainer)
-            Log.i(DEBUGTAG,"Current Fragment: $currentFragment")
         }
     }
 
+    //Métodos de lifecycle
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
 
+        Log.i("EVENTLOG","Creo Evento principal")
         initFragments()
-
-        Log.i("TUG","Fragment created")
     }
 
     override fun onCreateView(
@@ -61,7 +52,6 @@ class EventFragment : Fragment() {
     ): View? {
 
         addBackStackChangeListener()
-
 
         if (currentFragment == null || currentFragment is EventPagerFragment ) {
             loadFragment(pagerFragment)
@@ -96,6 +86,15 @@ class EventFragment : Fragment() {
         changeTabListener = null
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.i("EVENTLOG","Guardo instancia")
+    }
+
+    //Métodos
+
+    //Estos dos métodos añaden o eliminan el listener encargado de gestionar que fragmento se está visualizando al
+    //Usar el boton de navegación hacia atras
     private fun addBackStackChangeListener(){
         if (!backStackListening) {
             childFragmentManager.addOnBackStackChangedListener(backStackChangeListener)
@@ -110,11 +109,15 @@ class EventFragment : Fragment() {
         }
     }
 
+    //Métodos fragments
+
+    //Este método inicializa los fragments principales de para esta funcionalidad para tener su estado guardado
     private fun initFragments(){
         loadingFragment = LoadingFragment()
         pagerFragment = EventPagerFragment()
     }
 
+    //Esta función es la cargada de introducir los fragments en el contenedor del fragment destinado a ello
     private fun loadFragment(fragment: Fragment?) : Boolean {
 
         if (fragment != null && currentFragment != fragment) {
@@ -135,15 +138,4 @@ class EventFragment : Fragment() {
         return false
     }
 
-    companion object {
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            EventFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

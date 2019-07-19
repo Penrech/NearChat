@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.enrech.nearchat.R
 import com.enrech.nearchat.fragments.*
 import com.enrech.nearchat.interfaces.NotifyInteractionUserProfile
@@ -17,6 +18,8 @@ import kotlinx.android.synthetic.main.activity_root.*
 
 class RootActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, NotifyTopFragmentChange, NotifyInteractionUserProfile {
 
+    //Variables
+
     private var fragmentHome: HomeFragment? = null
     private var fragmentEvent: EventFragment? = null
     private var fragmentProfile: UserProfileFragment? = null
@@ -25,6 +28,8 @@ class RootActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private var mainFragments: ArrayList<Fragment> = arrayListOf()
 
     private var currentFragment: Fragment? = null
+
+    // métodos de vista
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +40,11 @@ class RootActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         loadFragment(fragmentHome,false)
     }
 
-    fun initTopFragments(){
+    // métodos de fragments
+
+    //Este método inicializa los cuatro fragments principales de la aplicación, y se guarda siempre una instacia de ellos
+    //para mantener de forma sencilla su instancia aun cambiando de tab y volviendo nuevamente a ella
+    private fun initTopFragments(){
         fragmentHome = HomeFragment()
         fragmentEvent = EventFragment()
         fragmentProfile = UserProfileFragment()
@@ -47,29 +56,11 @@ class RootActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         mainFragments.add(fragmentMore!!)
     }
 
-    fun initNavigationListener(){
-
-        val menuView = RootNavView.getChildAt(0) as BottomNavigationMenuView
-
-        for (i in menuView.iterator()) {
-            val itemView = i as BottomNavigationItemView
-            val iconView = itemView.getChildAt(0)
-            iconView.background = getDrawable(R.drawable.bottom_item_switchable_background)
-        }
-
-        RootNavView.setOnNavigationItemSelectedListener(this)
-    }
-
+    //Esta función es la cargada de introducir los fragments en el contenedor de la actividad destinado a ello
     private fun loadFragment(fragment: Fragment?, shouldAddToBackStack: Boolean) : Boolean {
 
         if (fragment != null && currentFragment != fragment) {
             val transaction = supportFragmentManager.beginTransaction()
-
-           /* if (!fragment.isAdded){
-                transaction.add(R.id.MainRootFragmentContainer,fragment)
-            }*/
-
-
 
             if (shouldAddToBackStack) {
                 transaction.addToBackStack(null)
@@ -87,6 +78,28 @@ class RootActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         return false
     }
 
+    //Métodos de navegación
+
+    //Esta función por un lado inicializa el fondo circular de los iconos del bottom navigation View
+    //Por otro lado inicializa la variable navigationListener y el listener onNavigationItemSelectedListener del bottom navigation View
+    private fun initNavigationListener(){
+
+        val menuView = RootNavView.getChildAt(0) as BottomNavigationMenuView
+
+        for (i in menuView.iterator()) {
+            val itemView = i as BottomNavigationItemView
+            val iconView = itemView.getChildAt(0)
+            iconView.background = getDrawable(R.drawable.bottom_item_switchable_background)
+        }
+
+        RootNavView.setOnNavigationItemSelectedListener(this)
+    }
+
+    //Métodos de los delegados
+
+    // Métodos delegados de navegación
+
+    //Este método es llamado cuando se selecciona algun menu item del navigation view
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         var fragment: Fragment? = null
 
@@ -108,24 +121,67 @@ class RootActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         return loadFragment(fragment,true)
     }
 
+
+    //Este método es llamado cada vez que un nuevo fragment principal es cargado para indicar de forma consistente
+    //cual es el fragment visible actualmente
     override fun tabChangeTo(number: Int) {
         val menu = RootNavView.menu
         val fragment = mainFragments[number]
         menu.getItem(number).isChecked = true
         currentFragment = fragment
-        Log.i("TIG","cambio a numero $number y fragment $fragment")
+
     }
 
+    //Métodos delegados del fragment profile
+
+    //Ya que los listener de cada uno de los fragments y subfragments han de estar reflajados en la activity que nos
+    //anida, estos métodos responden a diferentes acciones realizadas sobre estos diferentes fragments.
+
     override fun profileOpenEditUserClick(boolean: Boolean) {
-        Log.i("TIG","Apreto boton ")
-        Log.i("TIG","currentFragment as? UserProfileFragment: ${currentFragment as? UserProfileFragment} ")
-        (currentFragment as? UserProfileFragment)?.let {
-            Log.i("TIG","Entro en let ")
-            it.loadFragment(AddEditUserDetails())
-        }
+        (currentFragment as? UserProfileFragment)?.loadFragment(AddEditUserDetails())
     }
 
     override fun profilePropagateBackButton() {
        onBackPressed()
+    }
+
+    override fun onBackPressed() {
+        if (backOnPagerIfNeed()){
+            super.onBackPressed()
+        }
+
+    }
+
+    //Este método permite sincronizar la accion de backbutton con la posicion de las páginas en los view pager anidados
+    private fun backOnPagerIfNeed(): Boolean{
+        if (currentFragment != null) {
+
+            when (currentFragment) {
+                is HomeFragment -> {
+                    val fragment = (currentFragment as HomeFragment)
+                    if (fragment.currentFragment == fragment.pagerFragment){
+                        if (fragment.pagerFragment?.getActualPage() != 0)  {
+                            fragment.pagerFragment?.setPagerPageBackwards()
+                            return false
+                        }
+                    }
+                }
+                is EventFragment -> {
+                    val fragment = (currentFragment as EventFragment)
+                    if (fragment.currentFragment == fragment.pagerFragment){
+                        if (fragment.pagerFragment?.getActualPage() != 0)  {
+                            fragment.pagerFragment?.setPagerPageBackwards()
+                            return false
+                        }
+                    }
+                }
+                is UserProfileFragment -> {
+                    val fragment = (currentFragment as UserProfileFragment)
+                    return true
+                }
+            }
+        }
+
+        return true
     }
 }
