@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
+import androidx.fragment.app.DialogFragment
 import androidx.viewpager.widget.ViewPager
 
 import com.enrech.nearchat.R
@@ -14,7 +15,10 @@ import com.enrech.nearchat.adapters.DefaultPagerAdapter
 import com.enrech.nearchat.utils.ToolbarAnimationManager
 import kotlinx.android.synthetic.main.fragment_even_pager.*
 import kotlinx.android.synthetic.main.fragment_even_pager.view.*
-import kotlin.math.max
+
+private const val INFO_NOTCH = "EventInfoNotch"
+private const val VISUAL_NOTCH = "EventVisualizationNotch"
+private const val USER_NOTCH = "UserNotch"
 
 //Este fragment se encarga de las pager que conforman el mapa y la lista de chat del evento
 class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
@@ -36,11 +40,15 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
     var currentPage : Int? = null
 
+    var isScrolling: Boolean = false
+
     //Listeners
 
     override fun onPageScrollStateChanged(state: Int) {}
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        isScrolling = positionOffset != 0.0f
+
         run{
             toolbarAnimationUtils?.changeIconsDinamically(position,positionOffset)
         }
@@ -57,6 +65,18 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         } else {
             mPager?.currentItem = 0
         }
+    }
+
+    private var openEventInfoDialog = View.OnClickListener {
+       loadDialogFragment(INFO_NOTCH,NotchEventInfo())
+    }
+
+    private var openEventVisualizationDialog = View.OnClickListener {
+       loadDialogFragment(VISUAL_NOTCH,NotchEventChatVisualization())
+    }
+
+    private var openUserDialog = View.OnClickListener {
+        loadDialogFragment(USER_NOTCH,NotchUserInfo())
     }
 
     //Métodos lifeCycle
@@ -154,6 +174,36 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         mPager?.currentItem = currentItem - 1
     }
 
+    private fun isFragmentInTheBackStack(): Boolean {
+        for (index in 0 until childFragmentManager.backStackEntryCount) {
+            if (childFragmentManager.getBackStackEntryAt(index).name.equals(INFO_NOTCH,true)) {
+                return true
+            }
+            if (childFragmentManager.getBackStackEntryAt(index).name.equals(VISUAL_NOTCH,true)) {
+                return true
+            }
+            if (childFragmentManager.getBackStackEntryAt(index).name.equals(USER_NOTCH,true)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun loadDialogFragment(fragmentTag: String, dialogFragment: DialogFragment) {
+        if (!isScrolling) {
+            if (!isFragmentInTheBackStack()) {
+                val transaction = childFragmentManager.beginTransaction()
+                val prev = childFragmentManager.findFragmentByTag(fragmentTag)
+                if (prev != null) {
+                    transaction.remove(prev)
+                }
+                transaction.addToBackStack(fragmentTag)
+
+                dialogFragment.show(transaction, fragmentTag)
+            }
+        }
+    }
+
     //Métodos custom toolbar
 
     //Este método inicializa la clase
@@ -176,6 +226,9 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
     //Este método inicializa los listener de los diferentes botones del toolbar
     private fun setUpButtons(){
         changeBetweenMapAndChatButton.setOnClickListener(changePageButtonListener)
+        showEventInfoButton.setOnClickListener(openEventInfoDialog)
+        showHideConversationsButton.setOnClickListener(openEventVisualizationDialog)
+        showMyPositionButton.setOnClickListener(openUserDialog)
     }
 
     //La función de este método es evitar que la interfaz del toolbar sea erronea respecto a su página actual

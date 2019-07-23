@@ -1,5 +1,6 @@
 package com.enrech.nearchat.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import androidx.viewpager.widget.ViewPager
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.adapters.DefaultPagerAdapter
+import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
 import com.enrech.nearchat.utils.ToolbarAnimationManager
 import kotlinx.android.synthetic.main.fragment_home_pager.*
 import kotlinx.android.synthetic.main.fragment_home_pager.view.*
@@ -34,6 +36,8 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
     private var toolbarAnimationUtils: ToolbarAnimationManager? = null
 
+    private var bottomNavigationListener: ModifyNavigationBarFromFragments? = null
+
     private var pagerIsListening = false
 
     var currentPage : Int? = null
@@ -46,6 +50,9 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         run{
             toolbarAnimationUtils?.changeIconsDinamically(position,positionOffset)
         }
+        if (position == 0) {
+            bottomNavigationListener?.slideWithScrollView(positionOffsetPixels)
+        }
     }
 
     override fun onPageSelected(position: Int) {
@@ -57,6 +64,12 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
             mPager?.currentItem = 1
         } else {
             mPager?.currentItem = 0
+        }
+    }
+
+    private var showSearchBarListener = View.OnClickListener {
+        if (mPager?.currentItem == 1) {
+
         }
     }
 
@@ -94,6 +107,21 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         super.onDestroyView()
 
         deleteListenerPagerEvents()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is ModifyNavigationBarFromFragments){
+            bottomNavigationListener = context
+        }
+        else {
+            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        bottomNavigationListener = null
     }
 
     //Métodos

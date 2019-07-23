@@ -232,9 +232,10 @@
             <EditText
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:inputType="textPersonName"
+                    android:inputType="datetime"
                     android:ems="0"
-                    android:id="@+id/editProfileUserNameSurnameEdiText"
+                    android:focusable="false"
+                    android:id="@+id/editEventEndDateEdiText"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="12dp"
                     style="@style/Widget.AppCompat.Light.AutoCompleteTextView"
@@ -260,13 +261,13 @@
                     android:textSize="18sp"
                     android:textColor="@android:color/background_light"
                     android:layout_marginStart="20dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editProfileUserNameSurnameEdiText"
+                    app:layout_constraintTop_toBottomOf="@+id/editEventEndDateEdiText"
                     android:layout_marginTop="20dp"/>
 
             <EditText
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:inputType="textPersonName"
+                    android:inputType="numberDecimal"
                     android:ems="0"
                     android:id="@+id/editEventRangeEditText"
                     app:layout_constraintStart_toStartOf="parent"
@@ -332,6 +333,9 @@
                     android:layout_marginStart="20dp"/>
 
             <androidx.cardview.widget.CardView
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_width="0dp"
                     android:layout_height="140dp"
                     android:layout_marginTop="8dp"
@@ -356,14 +360,15 @@
                     app:layout_constraintStart_toStartOf="@+id/editEventCapacityEditText"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editEventLocationCardView" android:layout_marginEnd="12dp"
+                    app:layout_constraintTop_toBottomOf="@+id/editEventLocationCardView"
+                    android:layout_marginEnd="12dp"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
             <EditText
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:enabled="false"
-                    android:inputType="textPersonName"
+                    android:inputType="numberDecimal"
                     android:ems="0"
                     android:id="@+id/editEventCapacityEditText"
                     style="@style/Widget.AppCompat.AutoCompleteTextView"

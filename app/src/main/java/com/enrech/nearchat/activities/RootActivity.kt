@@ -1,14 +1,19 @@
 package com.enrech.nearchat.activities
 
+import android.graphics.Point
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.enrech.nearchat.R
 import com.enrech.nearchat.fragments.*
+import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
+import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
 import com.enrech.nearchat.interfaces.NotifyInteractionUserProfile
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -16,7 +21,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_root.*
 
-class RootActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener, NotifyTopFragmentChange, NotifyInteractionUserProfile {
+class RootActivity : AppCompatActivity(),
+    BottomNavigationView.OnNavigationItemSelectedListener,
+    NotifyTopFragmentChange,
+    NotifyInteractionUserProfile,
+    NotifyInteractionEventTab,
+    ModifyNavigationBarFromFragments {
 
     //Variables
 
@@ -29,11 +39,18 @@ class RootActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     private var currentFragment: Fragment? = null
 
+    private var screeWidht: Int? = null
+
     // métodos de vista
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_root)
+
+        val display = windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        screeWidht = size.x
 
         initTopFragments()
         initNavigationListener()
@@ -93,6 +110,13 @@ class RootActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
 
         RootNavView.setOnNavigationItemSelectedListener(this)
+    }
+
+    fun hideBottomNavigation(hide: Boolean){
+        when (hide){
+            true -> RootNavView.visibility = View.GONE
+            false -> RootNavView.visibility = View.VISIBLE
+        }
     }
 
     //Métodos de los delegados
@@ -183,5 +207,30 @@ class RootActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
 
         return true
+    }
+
+    override fun eventOpenEditEventClick(boolean: Boolean) {
+
+    }
+
+    override fun eventRecieveLatLngFromMap(latLng: String) {
+
+    }
+
+    override fun eventPropagateBackButton() {
+        onBackPressed()
+    }
+
+    override fun eventOpenGetLocationEventClick(boolean: Boolean) {
+        (currentFragment as? UserProfileFragment)?.loadFragment(SetEventLocationFragment())
+    }
+
+    override fun showBottomNavigationBar(show: Boolean) {
+        hideBottomNavigation(!show)
+    }
+
+    override fun slideWithScrollView(offset: Int) {
+
+        RootNavView.scrollX = offset
     }
 }

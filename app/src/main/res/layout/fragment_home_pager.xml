@@ -110,6 +110,8 @@
                         android:backgroundTint="@color/defaultBlue"
                         app:icon_initial_tint_color="@color/defaultWhite"/>
 
+
+
                 <com.enrech.nearchat.CustomElements.CustomToolbarButton
                         app:should_change_color="true"
                         app:secundary_drawable="@drawable/icon_position_pin_white"

@@ -51,7 +51,7 @@ class UserProfileFragment : Fragment() {
 
         addBackStackChangeListener()
 
-        if (currentFragment == null) {
+        if (currentFragment == null || currentFragment is ProfileDetailsFragment) {
             loadFragment(profileDetailsFragment)
         }
 
