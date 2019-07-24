@@ -34,6 +34,10 @@ class ProfileDetailsFragment : Fragment() {
         listener?.profileOpenEditUserClick(true)
     }
 
+    private var openEditAccessButtonListener = View.OnClickListener {
+        listener?.profileOpenEditAccessClick()
+    }
+
     private var onAppBarOffsetChangeListener = AppBarLayout.OnOffsetChangedListener { appBarLayout, offset ->
         Log.i("TIG","Profile scroll offset $offset")
         appBarScrollOffset = offset
@@ -41,7 +45,6 @@ class ProfileDetailsFragment : Fragment() {
 
     private var onScrollChangeListener = NestedScrollView.OnScrollChangeListener { view, scrollX, scrollY, oldScrollX, oldScrollY ->
         scrollOffset = scrollY
-
     }
 
     //Métodos lifeCycle
@@ -88,6 +91,7 @@ class ProfileDetailsFragment : Fragment() {
     //Este método inicializa los listener de los diferentes botones del toolbar
     private fun setUpButtons(){
         editUserProfileButton.setOnClickListener(openEditProfileButtonListener)
+        editUserAccessButton.setOnClickListener(openEditAccessButtonListener)
     }
 
     //Las siguientes 3 funciones mantienen el estado del scroll actual del fragment en caso de cambiar y volver de una pestaña a otra

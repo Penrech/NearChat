@@ -7,8 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".fragments.AddEditEventFragment"
-        android:id="@+id/rootAddEditEventLayout">
+        tools:context=".fragments.InitRegisterFragment"
+        android:id="@+id/rootAddEditProfileLayout">
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
@@ -18,11 +18,11 @@
             app:elevation="0dp"
             android:padding="0dp"
             android:layout_margin="0dp"
-            android:id="@+id/AddEditEventAppBar">
+            android:id="@+id/RegisterAppBar">
 
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/editEventPictureCollapsingToolbar"
+                android:id="@+id/RegisterPictureCollapsingToolbar"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:contentInsetStartWithNavigation="0dp"
                 android:layout_width="match_parent"
@@ -37,19 +37,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="192dp"
                     android:background="@android:color/background_light"
-                    android:layout_marginTop="@dimen/design_bottom_navigation_height">
+                    android:layout_marginTop="@dimen/custom_toolbar_height">
 
                 <TextView
                         android:maxLines="1"
                         app:autoSizeTextType="uniform"
                         app:autoSizeStepGranularity="2sp"
                         app:autoSizeMaxTextSize="20sp"
-                        android:text="Cambiar foto"
+                        android:text="Añadir foto de perfil"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:id="@+id/changePhotoButton"
+                        android:id="@+id/addPhotoButton"
                         android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/cardView"
+                        app:layout_constraintTop_toBottomOf="@+id/addPhotoCardButton"
                         android:layout_marginBottom="18dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -73,9 +73,9 @@
                         android:layout_marginTop="18dp"
                         android:layout_marginStart="12dp"
                         app:cardElevation="0dp"
-                        app:cardCornerRadius="11.5dp"
+                        app:cardCornerRadius="57.5dp"
                         app:cardBackgroundColor="@color/random2"
-                        android:id="@+id/cardView"
+                        android:id="@+id/addPhotoCardButton"
                         android:layout_marginEnd="8dp"
                         app:layout_constraintEnd_toEndOf="parent">
 
@@ -86,15 +86,15 @@
                             app:autoSizeMaxTextSize="21sp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/icon_event"
-                            android:id="@+id/eventImage"/>
+                            app:srcCompat="@drawable/icon_user_white_with_padding"
+                            android:id="@+id/registerProfileImage"/>
 
                 </androidx.cardview.widget.CardView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/EditProfileToolbar"
+                    android:id="@+id/registerUserToolbar"
                     app:contentInsetStartWithNavigation="0dp"
                     android:elevation="0dp"
                     android:padding="0dp"
@@ -114,7 +114,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fitsSystemWindows="true"
-                        android:id="@+id/LinerLayoutEditEventToolbar"
+                        android:id="@+id/LinerLayoutRegisterUserToolbar"
                         android:gravity="center_vertical|end"
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp">
@@ -124,13 +124,14 @@
                             android:layout_width="@dimen/custom_toolbar_item_height"
                             android:layout_height="@dimen/custom_toolbar_item_height"
                             app:srcCompat="@drawable/icon_close_white"
-                            android:id="@+id/editEventCloseButton"
+                            android:id="@+id/registerUserBackButton"
                             android:scaleType="centerInside"
                             android:background="@drawable/bottom_item_ripple_checked"
                             android:padding="10dp"
                             android:elevation="0dp"
-                            android:contentDescription="edit user profile close button"
+                            android:contentDescription="back to login button"
                             android:layout_marginEnd="12dp"/>
+
                     <TextView
                             android:maxLines="2"
                             app:autoSizeTextType="uniform"
@@ -138,26 +139,26 @@
                             android:layout_weight="1"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
-                            android:id="@+id/toolbarEditEventTitle"
+                            android:id="@+id/toolbarRegisterUserTitle"
                             android:layout_marginEnd="12dp"
                             android:fontFamily="@font/roboto_medium"
                             android:visibility="visible"
                             android:textColor="@color/brokenBlack"
                             android:textAlignment="center"
                             android:gravity="center_vertical"
-                            android:text="Editar Evento"/>
+                            android:text="Registrarse"/>
 
                     <ImageButton
                             android:layout_width="@dimen/custom_toolbar_item_height"
                             android:layout_height="40dp"
                             app:srcCompat="@drawable/icon_done_white"
-                            android:id="@+id/saveChangesEditEventToolbarButton"
+                            android:id="@+id/registerUserToolbarButton"
                             android:scaleType="centerInside"
                             android:layout_weight="0"
                             android:background="@drawable/bottom_item_ripple_checked"
                             android:padding="10dp"
                             android:elevation="0dp"
-                            android:contentDescription="save changes edit profile toolbar button"/>
+                            android:contentDescription="register toolbar button"/>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -173,22 +174,22 @@
             android:layout_height="match_parent"
             android:fillViewport="true"
             android:background="@color/defaultLightBlue"
-            android:id="@+id/AddEditEventScrollView">
+            android:id="@+id/registerUserScrollView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/AddEditEventContainer"
+                android:id="@+id/registerUserContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
             <TextView
-                    android:text="Nombre del Evento"
+                    android:text="Nombre de usuario"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editEventTitleLabel"
+                    android:id="@+id/RegisterProfileUserNameLabel"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginTop="20dp"
-                    app:layout_constraintStart_toStartOf="@+id/editProfileUsernameEditText"
-                    app:layout_constraintEnd_toEndOf="@+id/editProfileUsernameEditText"
+                    app:layout_constraintStart_toStartOf="@+id/registerUsernameEditText"
+                    app:layout_constraintEnd_toEndOf="@+id/registerUsernameEditText"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="18sp"
                     android:textColor="@android:color/background_light"
@@ -199,207 +200,171 @@
                     android:layout_height="40dp"
                     android:inputType="textPersonName"
                     android:ems="0"
-                    android:id="@+id/editProfileUsernameEditText"
+                    android:id="@+id/registerUsernameEditText"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editEventTitleLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/RegisterProfileUserNameLabel"
                     style="@style/Widget.AppCompat.AutoCompleteTextView"
                     android:background="@drawable/text_field_background"
                     android:layout_marginEnd="12dp"
+                    app:layout_constraintEnd_toStartOf="@+id/registerValidUserNameIndicator"
                     android:fontFamily="@font/roboto"
                     android:textSize="16sp"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
                     android:singleLine="true"
-                    android:hint="Nombre del evento"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    android:hint="Username"/>
 
-            <TextView
-                    android:text="Fecha de finalización"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editEventEndDateLabel"
-                    app:layout_constraintStart_toStartOf="@+id/editProfileUsernameEditText"
-                    app:layout_constraintEnd_toEndOf="@+id/editProfileUsernameEditText"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/background_light"
-                    android:layout_marginTop="20dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editProfileUsernameEditText"
-                    android:layout_marginStart="20dp"/>
-
-            <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:inputType="datetime"
-                    android:ems="0"
-                    android:focusable="false"
-                    android:id="@+id/editEventEndDateEdiText"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="12dp"
-                    style="@style/Widget.AppCompat.Light.AutoCompleteTextView"
-                    android:background="@drawable/text_field_background"
-                    android:layout_marginEnd="12dp"
-                    android:fontFamily="@font/roboto"
-                    android:textSize="16sp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editEventEndDateLabel"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:singleLine="true"/>
-
-            <TextView
-                    android:text="Rango del evento"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editEventRangeLabel"
-                    app:layout_constraintStart_toStartOf="@+id/editProfileUsernameEditText"
-                    app:layout_constraintEnd_toEndOf="@+id/editProfileUsernameEditText"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/background_light"
-                    android:layout_marginStart="20dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editEventEndDateEdiText"
-                    android:layout_marginTop="20dp"/>
-
-            <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:inputType="numberDecimal"
-                    android:ems="0"
-                    android:id="@+id/editEventRangeEditText"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="12dp"
-                    style="@style/Widget.AppCompat.AutoCompleteTextView"
-                    android:background="@drawable/text_field_background"
-                    android:layout_marginEnd="12dp"
-                    android:fontFamily="@font/roboto"
-                    android:textSize="16sp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editEventRangeLabel"
-                    android:layout_marginTop="8dp"
-                    android:singleLine="true"
-                    android:gravity="bottom"
-                    android:paddingBottom="10dp"
-                    android:hint="50"
-                    app:layout_constraintEnd_toStartOf="@+id/editEventMeassureChangeButton"/>
-            <Button
-                    android:textAllCaps="false"
-                    android:text="M"
+            <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:id="@+id/editEventMeassureChangeButton"
-                    style="@style/Widget.AppCompat.Button.Borderless"
+                    app:srcCompat="@drawable/icon_cancel_white"
+                    android:id="@+id/registerValidUserNameIndicator"
+                    android:padding="10dp"
                     android:background="@drawable/rounded_button_background_unchecked"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginEnd="12dp"
-                    app:layout_constraintTop_toTopOf="@+id/editEventRangeEditText"
-                    app:layout_constraintBottom_toBottomOf="@+id/editEventRangeEditText"
-                    android:fontFamily="@font/roboto_bold"/>
-
-            <TextView
-                    app:autoSizeTextType="uniform"
-                    app:autoSizeStepGranularity="2sp"
-                    app:autoSizeMaxTextSize="15sp"
-                    android:text="Mínimo 10 metros, máximo 1000 metros"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editEventHelperRangeLabel"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textColor="@color/defaultWhite"
-                    android:layout_marginStart="20dp"
-                    app:layout_constraintStart_toStartOf="@+id/editEventRangeEditText"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editEventRangeEditText"
-                    android:textSize="15sp"
+                    android:backgroundTint="@color/defaultRed"
                     android:layout_marginEnd="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"/>
+                    app:layout_constraintTop_toTopOf="@+id/registerUsernameEditText"
+                    app:layout_constraintBottom_toBottomOf="@+id/registerUsernameEditText"/>
 
-            <TextView
-                    android:text="Localización"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editLocationLabel"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/background_light"
-                    android:layout_marginTop="20dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editEventHelperRangeLabel"
-                    app:layout_constraintStart_toStartOf="@+id/editEventLocationCardView"
-                    app:layout_constraintEnd_toEndOf="@+id/editEventLocationCardView"
-                    android:layout_marginStart="20dp"/>
-
-            <androidx.cardview.widget.CardView
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:layout_width="0dp"
-                    android:layout_height="140dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editLocationLabel"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
+            <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/icon_cancel_white"
+                    android:id="@+id/registerValidEmailIndicator"
+                    android:padding="10dp"
+                    android:background="@drawable/rounded_button_background_unchecked"
+                    android:backgroundTint="@color/defaultRed"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:cardElevation="0dp"
-                    app:cardCornerRadius="20dp"
-                    app:cardBackgroundColor="@color/blueLightGray"
-                    android:id="@+id/editEventLocationCardView"/>
-
-            <TextView
-                    android:text="Aforo máximo virtual"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editCapacityLabel"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/background_light"
-                    app:layout_constraintStart_toStartOf="@+id/editEventCapacityEditText"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editEventLocationCardView"
                     android:layout_marginEnd="12dp"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    app:layout_constraintTop_toTopOf="@+id/registerEmailEditText"
+                    app:layout_constraintBottom_toBottomOf="@+id/registerEmailEditText"/>
 
             <EditText
-                    android:layout_width="0dp"
+                    android:layout_width="335dp"
                     android:layout_height="40dp"
-                    android:enabled="false"
-                    android:inputType="numberDecimal"
+                    android:inputType="textEmailAddress"
                     android:ems="0"
-                    android:id="@+id/editEventCapacityEditText"
+                    android:id="@+id/registerEmailEditText"
                     style="@style/Widget.AppCompat.AutoCompleteTextView"
-                    android:background="@drawable/custom_text_field_selectable"
+                    android:background="@drawable/text_field_background"
                     android:fontFamily="@font/roboto"
                     android:textSize="16sp"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
                     android:singleLine="true"
-                    android:gravity="bottom"
-                    android:paddingBottom="10dp"
+                    android:hint="Email"
                     android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toBottomOf="@+id/editCapacityLabel"
+                    app:layout_constraintTop_toBottomOf="@+id/registerEmailLabel"
+                    app:layout_constraintEnd_toStartOf="@+id/registerValidEmailIndicator"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="12dp"/>
+
+            <TextView
+                    android:text="Email "
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/registerEmailLabel"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/background_light"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/registerUsernameEditText"
+                    app:layout_constraintStart_toStartOf="@+id/registerEmailEditText"
+                    app:layout_constraintEnd_toEndOf="@+id/registerEmailEditText"
+                    android:layout_marginStart="20dp"/>
+
+            <EditText
+                    android:layout_width="335dp"
+                    android:layout_height="40dp"
+                    android:inputType="textPassword"
+                    android:ems="0"
+                    android:id="@+id/registerPasswordEditText"
+                    style="@style/Widget.AppCompat.AutoCompleteTextView"
+                    android:background="@drawable/text_field_background"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="16sp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:singleLine="true"
+                    android:hint="Contraseña"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/registerPasswordLabel"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
-                    app:layout_constraintEnd_toStartOf="@+id/editEventEnableCapacityLimit"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="145dp"/>
+                    app:layout_constraintEnd_toStartOf="@+id/registerViewPasswordButton"
+                    android:layout_marginEnd="12dp"/>
 
-            <CheckBox
-                    android:layout_width="wrap_content"
+            <TextView
+                    android:text="Contraseña"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editEventEnableCapacityLimit"
-                    android:button="@drawable/custom_radio_button"
+                    android:id="@+id/registerPasswordLabel"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/background_light"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/registerEmailEditText"
+                    app:layout_constraintStart_toStartOf="@+id/registerPasswordEditText"
+                    app:layout_constraintEnd_toEndOf="@+id/registerPasswordEditText"
+                    android:layout_marginStart="20dp"/>
+
+            <ImageButton
+                    android:layout_width="@dimen/custom_toolbar_item_height"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/icon_visibility_white"
+                    android:id="@+id/registerViewPasswordButton"
+                    android:scaleType="centerInside"
+                    android:layout_weight="0"
+                    android:background="@drawable/bottom_item_ripple_checked"
+                    android:padding="10dp"
+                    android:elevation="0dp"
+                    android:contentDescription="view password button"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="12dp"
-                    app:layout_constraintTop_toTopOf="@+id/editEventCapacityEditText"
-                    app:layout_constraintBottom_toBottomOf="@+id/editEventCapacityEditText"
-                    android:checked="false"/>
+                    app:layout_constraintTop_toTopOf="@+id/registerPasswordEditText"
+                    app:layout_constraintBottom_toBottomOf="@+id/registerPasswordEditText"/>
+
+            <Button
+                    android:text="Registrarse"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeStepGranularity="2sp"
+                    android:maxLines="1"
+                    android:textAllCaps="false"
+                    android:layout_width="160dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/registerRegisterButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/button_rectangular_background_ripple"
+                    android:elevation="0dp"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="18dp"
+                    android:textColor="@color/defaultWhite"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintTop_toBottomOf="@+id/registerPasswordEditText"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="120dp"
+                    app:layout_constraintVertical_bias="0.0"/>
+
+            <ProgressBar
+                    android:visibility="gone"
+                    android:theme="@style/AppTheme.WhiteAccent"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/registerLoadingProgressBar"
+                    app:layout_constraintStart_toStartOf="@+id/registerRegisterButton"
+                    app:layout_constraintEnd_toEndOf="@+id/registerRegisterButton"
+                    app:layout_constraintTop_toTopOf="@+id/registerRegisterButton"
+                    app:layout_constraintBottom_toBottomOf="@+id/registerRegisterButton"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

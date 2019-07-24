@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 
 import com.enrech.nearchat.R
+import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
 
 //Este fragment gestiona la UI y las diferentes funcionalidades dentro de un evento
@@ -24,6 +25,8 @@ class EventFragment : Fragment() {
     var loadingFragment: LoadingFragment? = null
 
     var pagerFragment: EventPagerFragment? = null
+
+    private var notifyInteractionEventTab: NotifyInteractionEventTab? = null
 
     //Listeners
 
@@ -76,7 +79,11 @@ class EventFragment : Fragment() {
         super.onAttach(context)
         if (context is NotifyTopFragmentChange) {
             changeTabListener = context
-        } else {
+        }
+        if (context is NotifyInteractionEventTab) {
+            notifyInteractionEventTab = context
+        }
+        else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
     }
@@ -84,6 +91,7 @@ class EventFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         changeTabListener = null
+        notifyInteractionEventTab = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -118,7 +126,7 @@ class EventFragment : Fragment() {
     }
 
     //Esta función es la cargada de introducir los fragments en el contenedor del fragment destinado a ello
-    private fun loadFragment(fragment: Fragment?) : Boolean {
+    fun loadFragment(fragment: Fragment?) : Boolean {
 
         if (fragment != null && currentFragment != fragment) {
                 val transaction = childFragmentManager.beginTransaction()

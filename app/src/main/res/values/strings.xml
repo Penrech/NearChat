@@ -10,4 +10,21 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_event_description">Actualmente no estás participando en ningún evento, acercate y entra en uno o
+        crea el tuyo propio
+    </string>
+    <string name="event_end_description">El evento en el que te encuentras ha terminado o el administrador ha decidio
+        finalizarlo, ¿Salir del evento?
+    </string>
+    <string name="loading_event_description">Comprobando si estás dentro del área del evento...</string>
+    <string name="cant_enter_description">Estás demasiado lejos del área del evento al que quieres entrar, acercate más
+        y prueba de nuevo
+    </string>
+    <string name="too_far_description">Te has alejado demasiado del área del evento, acercate de nuevo para volver a
+        entrar
+    </string>
+    <string name="no_event_button_label">Crear evento</string>
+    <string name="event_end_button_label">Salir del evento</string>
+    <string name="cant_enter_button_label">Intentar de nuevo</string>
+    <string name="too_far_button_label">Entrar de nuevo</string>
 </resources>

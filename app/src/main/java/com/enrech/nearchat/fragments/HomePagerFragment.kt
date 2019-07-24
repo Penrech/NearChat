@@ -14,6 +14,7 @@ import androidx.viewpager.widget.ViewPager
 import com.enrech.nearchat.R
 import com.enrech.nearchat.adapters.DefaultPagerAdapter
 import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
+import com.enrech.nearchat.interfaces.NotifyInteractionHomeTab
 import com.enrech.nearchat.utils.ToolbarAnimationManager
 import kotlinx.android.synthetic.main.fragment_home_pager.*
 import kotlinx.android.synthetic.main.fragment_home_pager.view.*
@@ -37,6 +38,8 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
     private var toolbarAnimationUtils: ToolbarAnimationManager? = null
 
     private var bottomNavigationListener: ModifyNavigationBarFromFragments? = null
+
+    private var notifyInteractionHomeTab: NotifyInteractionHomeTab? = null
 
     private var pagerIsListening = false
 
@@ -96,6 +99,8 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         listenPagerEvents()
 
         setUpButtons()
+
+        notifyInteractionHomeTab?.homePagerLoadedWithCurrentItem(mPager!!.currentItem)
     }
 
     override fun onDestroyView() {
@@ -109,6 +114,9 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         if (context is ModifyNavigationBarFromFragments){
             bottomNavigationListener = context
         }
+        if (context is NotifyInteractionHomeTab) {
+            notifyInteractionHomeTab = context
+        }
         else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
@@ -117,6 +125,7 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
     override fun onDetach() {
         super.onDetach()
         bottomNavigationListener = null
+        notifyInteractionHomeTab = null
     }
 
     //Métodos

@@ -17,12 +17,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_root.*
+import android.view.Display
+import com.enrech.nearchat.models.EventHelper
+
 
 class RootActivity : AppCompatActivity(),
     BottomNavigationView.OnNavigationItemSelectedListener,
     NotifyTopFragmentChange,
     NotifyInteractionUserProfile,
     NotifyInteractionEventTab,
+    NotifyInteractionHomeTab,
     ModifyNavigationBarFromFragments {
 
     //Variables
@@ -42,8 +46,7 @@ class RootActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_root)
 
-
-
+        overridePendingTransition(0, 0)
 
         initTopFragments()
         initNavigationListener()
@@ -141,6 +144,16 @@ class RootActivity : AppCompatActivity(),
     }
 
 
+    private fun slideToMatchPlace(currentPosition: Int){
+        if (currentPosition == 1) {
+            val display = windowManager.defaultDisplay
+            val size = Point()
+            display.getSize(size)
+            val width = size.x
+            RootNavView.scrollX =  width
+        }
+    }
+
     //Este método es llamado cada vez que un nuevo fragment principal es cargado para indicar de forma consistente
     //cual es el fragment visible actualmente
     override fun tabChangeTo(number: Int) {
@@ -148,6 +161,7 @@ class RootActivity : AppCompatActivity(),
         val fragment = mainFragments[number]
         menu.getItem(number).isChecked = true
         currentFragment = fragment
+        if (RootNavView.scrollX != 0) RootNavView.scrollX = 0
 
     }
 
@@ -157,7 +171,11 @@ class RootActivity : AppCompatActivity(),
     //anida, estos métodos responden a diferentes acciones realizadas sobre estos diferentes fragments.
 
     override fun profileOpenEditUserClick(boolean: Boolean) {
-        (currentFragment as? UserProfileFragment)?.loadFragment(AddEditEventFragment())
+        (currentFragment as? UserProfileFragment)?.loadFragment(AddEditUserDetails())
+    }
+
+    override fun profileOpenEditAccessClick() {
+        (currentFragment as? UserProfileFragment)?.loadFragment(UserProfileEditAccess())
     }
 
     override fun profilePropagateBackButton() {
@@ -236,7 +254,32 @@ class RootActivity : AppCompatActivity(),
     }
 
     override fun slideWithScrollView(offset: Int) {
-
         RootNavView.scrollX = offset
+    }
+
+    override fun eventPagerLoadedWithCurrentItem(item: Int) {
+        slideToMatchPlace(item)
+    }
+
+    override fun eventLoadEvent() {
+        val eventFragment = (currentFragment as? EventFragment)
+        eventFragment?.loadFragment(eventFragment.pagerFragment)
+    }
+
+    override fun eventEnd() {
+        val eventFragment = (currentFragment as? EventFragment)
+        eventFragment?.childFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        eventFragment?.loadFragment(EventHelperFragment.newInstance(EventHelper.TypeOFHelper.EVENTEND))
+    }
+
+    override fun eventTooFar() {
+        val eventFragment = (currentFragment as? EventFragment)
+        eventFragment?.childFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        eventFragment?.loadFragment(EventHelperFragment.newInstance(EventHelper.TypeOFHelper.TOOFAR))
+
+    }
+
+    override fun homePagerLoadedWithCurrentItem(item: Int) {
+        slideToMatchPlace(item)
     }
 }

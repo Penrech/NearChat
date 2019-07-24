@@ -14,6 +14,7 @@ import androidx.viewpager.widget.ViewPager
 import com.enrech.nearchat.R
 import com.enrech.nearchat.adapters.DefaultPagerAdapter
 import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
+import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
 import com.enrech.nearchat.interfaces.TypeOfComunication
 import com.enrech.nearchat.utils.ToolbarAnimationManager
 import kotlinx.android.synthetic.main.fragment_even_pager.*
@@ -41,6 +42,8 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
     private var toolbarAnimationUtils: ToolbarAnimationManager? = null
 
     private var bottomNavigationListener: ModifyNavigationBarFromFragments? = null
+
+    private var notifyInteractionEventTab: NotifyInteractionEventTab? = null
 
     private var pagerIsListening = false
 
@@ -125,6 +128,8 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
         setUpButtons()
 
+        notifyInteractionEventTab?.eventPagerLoadedWithCurrentItem(mPager!!.currentItem)
+
     }
 
     override fun onDestroyView() {
@@ -138,6 +143,9 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         if (context is ModifyNavigationBarFromFragments){
             bottomNavigationListener = context
         }
+        if (context is NotifyInteractionEventTab) {
+            notifyInteractionEventTab = context
+        }
         else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
@@ -146,6 +154,7 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
     override fun onDetach() {
         super.onDetach()
         bottomNavigationListener = null
+        notifyInteractionEventTab = null
     }
 
     //Métodos

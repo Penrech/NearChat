@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.NestedScrollView
 
 import com.enrech.nearchat.R
+import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
 import com.enrech.nearchat.interfaces.NotifyInteractionUserProfile
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_add_edit_user_details.*
@@ -31,6 +32,8 @@ class AddEditUserDetails : Fragment() {
     private var isAdd: Boolean? = null
 
     private var listener: NotifyInteractionUserProfile? = null
+
+    private var bottomNavigationListener: ModifyNavigationBarFromFragments? = null
 
     private var appBarScrollOffset: Int? = null
 
@@ -97,6 +100,7 @@ class AddEditUserDetails : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
         removeAppBarListener()
     }
 
@@ -104,7 +108,11 @@ class AddEditUserDetails : Fragment() {
         super.onAttach(context)
         if (context is NotifyInteractionUserProfile) {
             listener = context
-        } else {
+        }
+        if (context is ModifyNavigationBarFromFragments){
+            bottomNavigationListener = context
+        }
+        else {
 
         }
     }
@@ -112,6 +120,17 @@ class AddEditUserDetails : Fragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+        bottomNavigationListener = null
+    }
+
+    override fun onStop() {
+        super.onStop()
+        bottomNavigationListener?.showBottomNavigationBar(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bottomNavigationListener?.showBottomNavigationBar(false)
     }
 
     //métodos

@@ -6,4 +6,8 @@ interface NotifyInteractionEventTab {
     fun eventRecieveLatLngFromMap(latLng: String)
     fun eventPropagateBackButton()
     fun eventChangeChatConversationType(typeOfComunication: TypeOfComunication)
+    fun eventPagerLoadedWithCurrentItem(item: Int)
+    fun eventLoadEvent()
+    fun eventEnd()
+    fun eventTooFar()
 }

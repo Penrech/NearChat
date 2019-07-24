@@ -144,7 +144,7 @@
                             android:textColor="@color/brokenBlack"
                             android:textAlignment="center"
                             android:gravity="center_vertical"
-                            android:text="Editar Usuario"/>
+                            android:text="Editar Perfil"/>
 
                     <ImageButton
                             android:layout_width="@dimen/custom_toolbar_item_height"
@@ -178,6 +178,7 @@
                 android:id="@+id/AddEditProfileContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
             <TextView
                     android:text="Nombre de usuario"
                     android:layout_width="0dp"
