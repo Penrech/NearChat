@@ -5,12 +5,13 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/eventChatRootContainer"
         tools:context=".fragments.EventChatFragment"
         android:background="@color/defaultLightBlue">
 
     <TextView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Event Chat"
             android:textSize="30sp"
             android:textAlignment="center"
@@ -19,5 +20,73 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:gravity="center_vertical"/>
+
+    <androidx.appcompat.widget.Toolbar
+            app:contentInsetStartWithNavigation="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:background="@android:color/transparent"
+            android:theme="?attr/actionBarTheme"
+            android:minHeight="?attr/actionBarSize"
+            android:id="@+id/setEventLocationSearchToolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <com.enrech.nearchat.CustomElements.CustomToolbarButton
+                    app:should_hide_on_change="true"
+                    android:layout_weight="0"
+                    android:layout_width="@dimen/custom_toolbar_item_height"
+                    android:layout_height="@dimen/custom_toolbar_item_height"
+                    app:srcCompat="@drawable/icon_talk_white"
+                    android:id="@+id/eventChatSendMessage"
+                    android:scaleType="centerInside"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="@drawable/bottom_home_background"
+                    android:padding="10dp"
+                    android:elevation="0dp"
+                    android:contentDescription="search location"
+                    android:backgroundTint="@color/defaultBlue"
+                    app:icon_initial_tint_color="@color/defaultWhite"
+                    app:layout_constraintBottom_toBottomOf="@+id/evenChatMessageEditText"
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/evenChatMessageEditText"/>
+
+            <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:inputType="textPersonName"
+                    android:ems="0"
+                    android:id="@+id/evenChatMessageEditText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="9dp"
+                    android:layout_marginStart="12dp"
+                    android:elevation="0dp"
+                    style="@style/Widget.AppCompat.AutoCompleteTextView"
+                    android:background="@drawable/text_field_background"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="16sp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:singleLine="true"
+                    android:hint="Enviar un mensaje..."
+                    android:layout_marginEnd="12dp"
+                    app:layout_constraintEnd_toStartOf="@+id/eventChatSendMessage"
+                    app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="9dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.Toolbar>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

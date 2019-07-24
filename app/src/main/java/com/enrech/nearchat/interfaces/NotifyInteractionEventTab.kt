@@ -5,4 +5,5 @@ interface NotifyInteractionEventTab {
     fun eventOpenGetLocationEventClick(boolean: Boolean)
     fun eventRecieveLatLngFromMap(latLng: String)
     fun eventPropagateBackButton()
+    fun eventChangeChatConversationType(typeOfComunication: TypeOfComunication)
 }

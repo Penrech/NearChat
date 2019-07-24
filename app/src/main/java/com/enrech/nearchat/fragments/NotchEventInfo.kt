@@ -3,12 +3,10 @@ package com.enrech.nearchat.fragments
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.DialogFragment
 
 import com.enrech.nearchat.R
 import kotlinx.android.synthetic.main.fragment_notch_event_info.*
-import com.enrech.nearchat.CustomElements.SwipeDismissTouchListener
 
 
 private const val ARG_PARAM1 = "param1"
@@ -41,7 +39,6 @@ class NotchEventInfo : DialogFragment() {
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
             val params = dialog.window?.attributes
             params?.gravity = Gravity.TOP
-            dialog.setCanceledOnTouchOutside(false)
             dialog.window?.setLayout(width, height)
         }
     }

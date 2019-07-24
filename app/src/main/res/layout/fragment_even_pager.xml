@@ -76,7 +76,7 @@
                 <com.enrech.nearchat.CustomElements.CustomToolbarButton
                         android:clickable="true"
                         android:focusable="true"
-                        app:should_hide_on_change="true"
+                        app:should_change_color="true"
                         android:layout_marginEnd="12dp"
                         android:layout_weight="0"
                         android:layout_width="@dimen/custom_toolbar_item_height"
@@ -89,7 +89,8 @@
                         android:elevation="2dp"
                         android:contentDescription="show my position button"
                         android:backgroundTint="@color/defaultBlue"
-                        app:icon_initial_tint_color="@color/defaultWhite"/>
+                        app:icon_initial_tint_color="@color/defaultWhite"
+                        app:secundary_drawable="@drawable/icon_talk_white"/>
 
                 <com.enrech.nearchat.CustomElements.CustomToolbarButton
                         app:should_change_color="true"

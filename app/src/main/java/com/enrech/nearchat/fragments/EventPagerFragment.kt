@@ -1,5 +1,6 @@
 package com.enrech.nearchat.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,8 @@ import androidx.viewpager.widget.ViewPager
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.adapters.DefaultPagerAdapter
+import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
+import com.enrech.nearchat.interfaces.TypeOfComunication
 import com.enrech.nearchat.utils.ToolbarAnimationManager
 import kotlinx.android.synthetic.main.fragment_even_pager.*
 import kotlinx.android.synthetic.main.fragment_even_pager.view.*
@@ -19,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_even_pager.view.*
 private const val INFO_NOTCH = "EventInfoNotch"
 private const val VISUAL_NOTCH = "EventVisualizationNotch"
 private const val USER_NOTCH = "UserNotch"
+private const val CONVERSATION_NOTCH = "EventChatConversation"
 
 //Este fragment se encarga de las pager que conforman el mapa y la lista de chat del evento
 class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
@@ -36,6 +40,8 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
     private var toolbarAnimationUtils: ToolbarAnimationManager? = null
 
+    private var bottomNavigationListener: ModifyNavigationBarFromFragments? = null
+
     private var pagerIsListening = false
 
     var currentPage : Int? = null
@@ -48,6 +54,10 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         isScrolling = positionOffset != 0.0f
+
+        if (position == 0) {
+            bottomNavigationListener?.slideWithScrollView(positionOffsetPixels)
+        }
 
         run{
             toolbarAnimationUtils?.changeIconsDinamically(position,positionOffset)
@@ -75,8 +85,14 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
        loadDialogFragment(VISUAL_NOTCH,NotchEventChatVisualization())
     }
 
-    private var openUserDialog = View.OnClickListener {
-        loadDialogFragment(USER_NOTCH,NotchUserInfo())
+    private var openComunicationOrPositionUser = View.OnClickListener {
+        if (mPager?.currentItem == 0) {
+
+        } else {
+            val actualCommunication = homeListFragment!!.getActualCommunicationType()
+            loadDialogFragment(CONVERSATION_NOTCH,NotchEventChatConversationType.newInstance(actualCommunication))
+
+        }
     }
 
     //Métodos lifeCycle
@@ -115,6 +131,21 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         super.onDestroyView()
 
         deleteListenerPagerEvents()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is ModifyNavigationBarFromFragments){
+            bottomNavigationListener = context
+        }
+        else {
+            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        bottomNavigationListener = null
     }
 
     //Métodos
@@ -162,6 +193,10 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         homeListFragment = EventChatFragment()
         pagerFragments.add(homeMapFragment!!)
         pagerFragments.add(homeListFragment!!)
+    }
+
+    fun changeComunicationTypeFromChat(typeOfComunication: TypeOfComunication) {
+        homeListFragment?.changeComunication(typeOfComunication)
     }
 
     //Estos dos métodos sirven para volver a la página anterior del pager en caso de presionar el botón atrás
@@ -228,7 +263,7 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         changeBetweenMapAndChatButton.setOnClickListener(changePageButtonListener)
         showEventInfoButton.setOnClickListener(openEventInfoDialog)
         showHideConversationsButton.setOnClickListener(openEventVisualizationDialog)
-        showMyPositionButton.setOnClickListener(openUserDialog)
+        showMyPositionButton.setOnClickListener(openComunicationOrPositionUser)
     }
 
     //La función de este método es evitar que la interfaz del toolbar sea erronea respecto a su página actual

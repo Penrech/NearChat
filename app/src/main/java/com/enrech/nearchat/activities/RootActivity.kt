@@ -12,10 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.enrech.nearchat.R
 import com.enrech.nearchat.fragments.*
-import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
-import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
-import com.enrech.nearchat.interfaces.NotifyInteractionUserProfile
-import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
+import com.enrech.nearchat.interfaces.*
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -39,18 +36,14 @@ class RootActivity : AppCompatActivity(),
 
     private var currentFragment: Fragment? = null
 
-    private var screeWidht: Int? = null
-
     // métodos de vista
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_root)
 
-        val display = windowManager.defaultDisplay
-        val size = Point()
-        display.getSize(size)
-        screeWidht = size.x
+
+
 
         initTopFragments()
         initNavigationListener()
@@ -110,6 +103,8 @@ class RootActivity : AppCompatActivity(),
         }
 
         RootNavView.setOnNavigationItemSelectedListener(this)
+
+        Log.i("BOTTOMNAV","anchura de nav: ${RootNavView.width}")
     }
 
     fun hideBottomNavigation(hide: Boolean){
@@ -215,6 +210,17 @@ class RootActivity : AppCompatActivity(),
 
     override fun eventRecieveLatLngFromMap(latLng: String) {
 
+    }
+
+    override fun eventChangeChatConversationType(typeOfComunication: TypeOfComunication) {
+        val currentFragment = (currentFragment as? EventFragment)
+
+        currentFragment?.let {
+            val eventCurrentFragment = it.currentFragment
+            if (eventCurrentFragment != null && eventCurrentFragment == it.pagerFragment){
+               it.pagerFragment?.changeComunicationTypeFromChat(typeOfComunication)
+            }
+        }
     }
 
     override fun eventPropagateBackButton() {

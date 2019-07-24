@@ -38,9 +38,7 @@ class NotchUserInfo : DialogFragment() {
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
             val params = dialog.window?.attributes
             params?.gravity = Gravity.TOP
-            dialog.setCanceledOnTouchOutside(false)
             dialog.window?.setLayout(width, height)
-            dialog.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL)
         }
     }
 

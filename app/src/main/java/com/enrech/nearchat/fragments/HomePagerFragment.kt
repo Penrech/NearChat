@@ -67,11 +67,6 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         }
     }
 
-    private var showSearchBarListener = View.OnClickListener {
-        if (mPager?.currentItem == 1) {
-
-        }
-    }
 
     //Métodos lifeCycle
 

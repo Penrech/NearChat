@@ -5,12 +5,13 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/eventListRootContainer"
         tools:context=".fragments.EventListFragment"
         android:background="@color/defaultLightBlue">
 
     <TextView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Event List"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -18,7 +19,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:textSize="30sp"
             android:textAlignment="center"
-            android:gravity="center_vertical" android:id="@+id/textView3"/>
+            android:gravity="center_vertical"
+            android:id="@+id/textView3"/>
 
     <androidx.appcompat.widget.Toolbar
             app:contentInsetStartWithNavigation="0dp"
@@ -35,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:visibility="visible"
-    >
+            app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -60,13 +62,13 @@
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
                     android:singleLine="true"
-                    android:hint="Busca una ubicación..."
+                    android:hint="Busca evento cercano..."
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="12dp"
                     android:drawableEnd="@drawable/small_icon_search_white"
                     android:drawableTint="@color/defaultBlue"
                     app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintVertical_bias="1.0"/>
+                    app:layout_constraintVertical_bias="1.0" android:layout_marginTop="9dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
