@@ -6,7 +6,6 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context=".fragments.UserProfileEditAccess"
         android:id="@+id/rootEditAccessLayout">
 
@@ -14,7 +13,6 @@
             android:layout_height="58dp"
             android:layout_width="match_parent"
             android:background="@android:color/transparent"
-            android:fitsSystemWindows="true"
             app:elevation="0dp"
             android:padding="0dp"
             android:layout_margin="0dp"
@@ -96,9 +94,8 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="false"
             android:background="@color/defaultLightBlue"
-            android:id="@+id/EditAccessScrollView">
+            android:id="@+id/EditAccessScrollView" android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/EditAccessContainer"

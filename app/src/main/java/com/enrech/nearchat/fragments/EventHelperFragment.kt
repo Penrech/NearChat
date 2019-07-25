@@ -1,5 +1,6 @@
 package com.enrech.nearchat.fragments
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.enrech.nearchat.R
+import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
 import com.enrech.nearchat.models.EventHelper
 import kotlinx.android.synthetic.main.fragment_event_helper.*
 
@@ -21,22 +23,34 @@ class EventHelperFragment : Fragment() {
 
     private var allHelpers: ArrayList<EventHelper> = arrayListOf()
 
+    private var notifyInteractionEventTab: NotifyInteractionEventTab? = null
+
     //Listener
 
     private var onClickOnCloseButton = View.OnClickListener {
-        currentHelperType = EventHelper.TypeOFHelper.NOEVENT
-        setUI()
+        backToDefaultState()
     }
 
-    private var onClickOnExitButton = View.OnClickListener {
-        currentHelperType = EventHelper.TypeOFHelper.NOEVENT
-        setUI()
+    private var onClickOnExitEnterButton = View.OnClickListener {
+        when (currentHelperType) {
+            EventHelper.TypeOFHelper.NOEVENT -> {
+                notifyInteractionEventTab?.eventOpenAddEditEventClick(true)
+            }
+            EventHelper.TypeOFHelper.EVENTEND -> {
+                backToDefaultState()
+            }
+            EventHelper.TypeOFHelper.TOOFAR -> {
+
+            }
+            EventHelper.TypeOFHelper.CANTENTER -> {
+
+            }
+            EventHelper.TypeOFHelper.LOADINGEVENT -> {}
+        }
+
     }
 
-    private var onClickOnEnterButton = View.OnClickListener {
-        currentHelperType = EventHelper.TypeOFHelper.LOADINGEVENT
-        setUI()
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +76,22 @@ class EventHelperFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setUI()
+        setUpButtons()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is NotifyInteractionEventTab) {
+            notifyInteractionEventTab = context
+        }
+        else {
+            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        notifyInteractionEventTab = null
     }
 
     private fun initAllHelpers(){
@@ -75,6 +105,11 @@ class EventHelperFragment : Fragment() {
             getString(R.string.cant_enter_description),getString(R.string.cant_enter_button_label),context?.getDrawable(R.drawable.icon_event_helper_distance),true))
         allHelpers.add(EventHelper(EventHelper.TypeOFHelper.TOOFAR,
             getString(R.string.too_far_description),getString(R.string.too_far_button_label),context?.getDrawable(R.drawable.icon_event_helper_distance),true))
+    }
+
+    private fun setUpButtons(){
+        eventHelperActionButton.setOnClickListener(onClickOnExitEnterButton)
+        eventHelperCloseButton.setOnClickListener(onClickOnCloseButton)
     }
 
     private fun setUI(){
@@ -93,6 +128,11 @@ class EventHelperFragment : Fragment() {
         }
 
         eventHelperImageView.setImageDrawable(currentHelper.drawable)
+    }
+
+    private fun backToDefaultState(){
+        currentHelperType = EventHelper.TypeOFHelper.NOEVENT
+        setUI()
     }
 
     companion object {

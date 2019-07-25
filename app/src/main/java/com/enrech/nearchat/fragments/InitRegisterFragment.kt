@@ -1,12 +1,15 @@
 package com.enrech.nearchat.fragments
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.InitActivityInterface
@@ -22,6 +25,8 @@ class InitRegisterFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private var passwordVisible = false
+
     private var loginInterface: InitActivityInterface? = null
 
     //Listeners
@@ -33,6 +38,32 @@ class InitRegisterFragment : Fragment() {
     private var registerUser = View.OnClickListener {
         if (checkIfRegisterDateIsCorrect()) {
             loginInterface?.userLoggedProperly()
+        }
+    }
+
+    private var viewPasswordClickListener = View.OnClickListener {
+        if (passwordVisible) {
+            registerPasswordEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            registerPasswordEditText.setSelection(registerPasswordEditText.text.length)
+            registerPasswordEditText.typeface = registerEmailEditText.typeface
+            registerViewPasswordButton.setImageDrawable(context?.getDrawable(R.drawable.icon_visibility_white))
+            passwordVisible = false
+        } else {
+            registerPasswordEditText.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            registerPasswordEditText.setSelection(registerPasswordEditText.text.length)
+            registerViewPasswordButton.setImageDrawable(context?.getDrawable(R.drawable.icon_no_visibility_white))
+            passwordVisible = true
+        }
+    }
+
+    private fun setClickOnScreenListener(){
+        RegisterAppBar.setOnTouchListener { _, _ ->
+            hideSoftKeyboard(activity as Activity)
+            false
+        }
+        registerUserScrollView.setOnTouchListener { _, _ ->
+            hideSoftKeyboard(activity as Activity)
+            false
         }
     }
 
@@ -54,6 +85,7 @@ class InitRegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setClickOnScreenListener()
         setUpButtons()
     }
 
@@ -61,6 +93,7 @@ class InitRegisterFragment : Fragment() {
         registerUserBackButton.setOnClickListener(backToLoginFragment)
         registerRegisterButton.setOnClickListener(registerUser)
         registerUserToolbarButton.setOnClickListener(registerUser)
+        registerViewPasswordButton.setOnClickListener(viewPasswordClickListener)
     }
 
     override fun onAttach(context: Context) {
@@ -95,6 +128,19 @@ class InitRegisterFragment : Fragment() {
             registerRegisterButton.visibility = View.VISIBLE
             registerRegisterButton.isEnabled = true
 
+        }
+    }
+
+    //Esta función oculta el teclado al apretar fuera de los límites del textEdit
+    private fun hideSoftKeyboard(activity: Activity) {
+        val inputMethodManager = activity.getSystemService(
+            Activity.INPUT_METHOD_SERVICE
+        ) as InputMethodManager
+        activity.currentFocus?.let {
+            inputMethodManager.hideSoftInputFromWindow(
+                activity.currentFocus!!.windowToken, 0
+            )
+            it.clearFocus()
         }
     }
 

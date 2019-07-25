@@ -1,5 +1,6 @@
 package com.enrech.nearchat.fragments
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.InitActivityInterface
@@ -37,6 +39,13 @@ class InitLoginFragment : Fragment() {
             }
     }
 
+    private fun setClickOnScreenListener(){
+        rootLoginLayout.setOnTouchListener { _, _ ->
+            hideSoftKeyboard(activity as Activity)
+            false
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -55,6 +64,7 @@ class InitLoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setClickOnScreenListener()
         setUpButtons()
     }
 
@@ -92,6 +102,19 @@ class InitLoginFragment : Fragment() {
             loginButton.isEnabled = true
             loginLoadindProgressBar.visibility = View.INVISIBLE
             loginButton.visibility = View.VISIBLE
+        }
+    }
+
+    //Esta función oculta el teclado al apretar fuera de los límites del textEdit
+    private fun hideSoftKeyboard(activity: Activity) {
+        val inputMethodManager = activity.getSystemService(
+            Activity.INPUT_METHOD_SERVICE
+        ) as InputMethodManager
+        activity.currentFocus?.let {
+            inputMethodManager.hideSoftInputFromWindow(
+                activity.currentFocus!!.windowToken, 0
+            )
+            it.clearFocus()
         }
     }
 

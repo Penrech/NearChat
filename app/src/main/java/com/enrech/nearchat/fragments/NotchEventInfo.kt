@@ -1,27 +1,45 @@
 package com.enrech.nearchat.fragments
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.DialogFragment
 
 import com.enrech.nearchat.R
+import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
+import com.enrech.nearchat.interfaces.NotifyInteractionHomeTab
 import kotlinx.android.synthetic.main.fragment_notch_event_info.*
 
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val WILLENTER = "willEnter"
+private const val EVENTID = "eventID"
 
 class NotchEventInfo : DialogFragment() {
 
     //Variables
 
-    private var param1: String? = null
-    private var param2: String? = null
+    private var willEnter: Boolean? = null
+    private var eventId: String? = null
+
+    private var notifyInteractionEventTab: NotifyInteractionEventTab? = null
+
+    private var notifyInteractionHomeTab: NotifyInteractionHomeTab? = null
 
     //Listeners
 
     private var closeEventInfoListener = View.OnClickListener {
+        dismiss()
+    }
+
+    private var enterOrExitFromEventListener = View.OnClickListener {
+        willEnter?.let {
+            if (it) {
+
+            } else {
+                notifyInteractionEventTab?.eventClose()
+            }
+        }
         dismiss()
     }
 
@@ -46,8 +64,8 @@ class NotchEventInfo : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            willEnter = it.getBoolean(WILLENTER)
+            eventId = it.getString(EVENTID)
         }
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.FullScreenDialogStyle)
     }
@@ -66,18 +84,38 @@ class NotchEventInfo : DialogFragment() {
         setUpButtons()
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is NotifyInteractionHomeTab) {
+            notifyInteractionHomeTab = context
+        }
+        if (context is NotifyInteractionEventTab) {
+            notifyInteractionEventTab = context
+        }
+        else {
+            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        notifyInteractionHomeTab = null
+        notifyInteractionEventTab = null
+    }
+
     private fun setUpButtons(){
         fragmentNotchEventDismissButton.setOnClickListener(closeEventInfoListener)
+        fragmentNotchEventLeftEventButton.setOnClickListener(enterOrExitFromEventListener)
     }
 
     companion object {
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(willEnter: Boolean, eventId: String?) =
             NotchEventInfo().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putBoolean(WILLENTER, willEnter)
+                    putString(EVENTID, eventId)
                 }
             }
     }

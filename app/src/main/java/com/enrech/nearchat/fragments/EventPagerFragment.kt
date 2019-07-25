@@ -81,7 +81,7 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
     }
 
     private var openEventInfoDialog = View.OnClickListener {
-       loadDialogFragment(INFO_NOTCH,NotchEventInfo())
+       loadDialogFragment(INFO_NOTCH,NotchEventInfo.newInstance(false,null))
     }
 
     private var openEventVisualizationDialog = View.OnClickListener {
@@ -229,6 +229,10 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
             if (childFragmentManager.getBackStackEntryAt(index).name.equals(USER_NOTCH,true)) {
                 return true
             }
+            if (childFragmentManager.getBackStackEntryAt(index).name.equals(CONVERSATION_NOTCH,true)) {
+                return true
+            }
+
         }
         return false
     }

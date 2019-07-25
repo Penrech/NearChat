@@ -42,9 +42,7 @@ class AddEditEventFragment : Fragment() {
 
     private var isAdd: Boolean? = null
 
-    private var listener: NotifyInteractionUserProfile? = null
-
-    private var listener2: NotifyInteractionEventTab? = null
+    private var listener: NotifyInteractionEventTab? = null
 
     private var bottomNavigationListener: ModifyNavigationBarFromFragments? = null
 
@@ -67,11 +65,11 @@ class AddEditEventFragment : Fragment() {
     }
 
     private var closeWithoutSaveButtonListener = View.OnClickListener {
-        listener2?.eventPropagateBackButton()
+        listener?.eventPropagateBackButton()
     }
 
     private var closeSaveButtonListener = View.OnClickListener {
-        listener2?.eventPropagateBackButton()
+        listener?.eventPropagateBackButton()
     }
 
     private var enableCapacityLimit = object : CompoundButton.OnCheckedChangeListener {
@@ -81,7 +79,7 @@ class AddEditEventFragment : Fragment() {
     }
 
     private var openLocationFragmentToGetLocation = View.OnClickListener {
-        listener2?.eventOpenGetLocationEventClick(true)
+        listener?.eventOpenGetLocationEventClick(null)
     }
 
     private var openDateTimePickerListener = View.OnClickListener {
@@ -147,12 +145,9 @@ class AddEditEventFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is NotifyInteractionUserProfile) {
+        if (context is NotifyInteractionEventTab) {
             listener = context
         }
-        if (context is NotifyInteractionEventTab) {
-            listener2 = context
-            }
         if (context is ModifyNavigationBarFromFragments){
             bottomNavigationListener = context
         }
@@ -164,7 +159,6 @@ class AddEditEventFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
-        listener2 = null
         bottomNavigationListener = null
     }
 
@@ -212,7 +206,6 @@ class AddEditEventFragment : Fragment() {
             )
             it.clearFocus()
         }
-
     }
 
     //Las siguientes 3 funciones mantienen el estado del scroll actual del fragment en caso de cambiar y volver de una pestaña a otra

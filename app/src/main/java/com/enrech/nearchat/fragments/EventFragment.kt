@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
+import com.enrech.nearchat.models.EventHelper
 
 //Este fragment gestiona la UI y las diferentes funcionalidades dentro de un evento
 class EventFragment : Fragment() {
@@ -22,11 +23,13 @@ class EventFragment : Fragment() {
 
     var currentFragment: Fragment? = null
 
-    var loadingFragment: LoadingFragment? = null
+    var helperFragment: EventHelperFragment? = null
 
     var pagerFragment: EventPagerFragment? = null
 
     private var notifyInteractionEventTab: NotifyInteractionEventTab? = null
+
+    var userInEvent = true
 
     //Listeners
 
@@ -56,9 +59,7 @@ class EventFragment : Fragment() {
 
         addBackStackChangeListener()
 
-        if (currentFragment == null || currentFragment is EventPagerFragment ) {
-            loadFragment(pagerFragment)
-        }
+        whatShouldThisLoad()
 
         return inflater.inflate(R.layout.fragment_event, container, false)
     }
@@ -101,6 +102,20 @@ class EventFragment : Fragment() {
 
     //Métodos
 
+    private fun whatShouldThisLoad(){
+        if (userInEvent) {
+            if (currentFragment == null || currentFragment is EventPagerFragment ) {
+                loadFragment(pagerFragment)
+            }
+        } else {
+            loadFragment(helperFragment)
+        }
+    }
+
+    fun checkOutUserFromEvent(){
+        userInEvent = false
+    }
+
     //Estos dos métodos añaden o eliminan el listener encargado de gestionar que fragmento se está visualizando al
     //Usar el boton de navegación hacia atras
     private fun addBackStackChangeListener(){
@@ -121,7 +136,7 @@ class EventFragment : Fragment() {
 
     //Este método inicializa los fragments principales de para esta funcionalidad para tener su estado guardado
     private fun initFragments(){
-        loadingFragment = LoadingFragment()
+        helperFragment = EventHelperFragment()
         pagerFragment = EventPagerFragment()
     }
 
@@ -132,7 +147,7 @@ class EventFragment : Fragment() {
                 val transaction = childFragmentManager.beginTransaction()
 
                 transaction.replace(R.id.MainEventFragmentContainer, fragment)
-                if (fragment !is EventPagerFragment) {
+                if (fragment !is EventPagerFragment && fragment !is EventHelperFragment) {
                     transaction.addToBackStack(null)
                 }
 

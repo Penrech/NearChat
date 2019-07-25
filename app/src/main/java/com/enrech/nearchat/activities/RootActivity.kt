@@ -19,6 +19,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_root.*
 import android.view.Display
 import com.enrech.nearchat.models.EventHelper
+import android.telephony.TelephonyManager
+
+
 
 
 class RootActivity : AppCompatActivity(),
@@ -222,8 +225,8 @@ class RootActivity : AppCompatActivity(),
         return true
     }
 
-    override fun eventOpenEditEventClick(boolean: Boolean) {
-
+    override fun eventOpenAddEditEventClick(isAdd: Boolean) {
+        (currentFragment as? EventFragment)?.loadFragment(AddEditEventFragment.newInstance(isAdd))
     }
 
     override fun eventRecieveLatLngFromMap(latLng: String) {
@@ -245,8 +248,8 @@ class RootActivity : AppCompatActivity(),
         onBackPressed()
     }
 
-    override fun eventOpenGetLocationEventClick(boolean: Boolean) {
-        (currentFragment as? UserProfileFragment)?.loadFragment(SetEventLocationFragment())
+    override fun eventOpenGetLocationEventClick(actualLocation: String?) {
+        (currentFragment as? EventFragment)?.loadFragment(SetEventLocationFragment())
     }
 
     override fun showBottomNavigationBar(show: Boolean) {
@@ -279,7 +282,18 @@ class RootActivity : AppCompatActivity(),
 
     }
 
+    override fun eventClose() {
+        val eventFragment = (currentFragment as? EventFragment)
+        eventFragment?.childFragmentManager?.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        eventFragment?.checkOutUserFromEvent()
+        eventFragment?.loadFragment(EventHelperFragment.newInstance(EventHelper.TypeOFHelper.NOEVENT))
+    }
+
     override fun homePagerLoadedWithCurrentItem(item: Int) {
         slideToMatchPlace(item)
+    }
+
+    override fun homeMapInitMap() {
+        (currentFragment as? HomePagerFragment)?.moveToUserPosition()
     }
 }

@@ -1,5 +1,6 @@
 package com.enrech.nearchat.fragments
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 
 import com.enrech.nearchat.R
@@ -36,20 +38,30 @@ class UserProfileEditAccess : Fragment() {
 
     private var viewNewPasswordClickListener = View.OnClickListener {
         if (newPasswordVisible) {
-            editAccessNewPasswordEditText.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
+            editAccessNewPasswordEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            editAccessNewPasswordEditText.setSelection(editAccessNewPasswordEditText.text.length)
+            editAccessNewPasswordEditText.typeface = editAccessEmailEditText.typeface
+            editAccessViewPasswordButton.setImageDrawable(context?.getDrawable(R.drawable.icon_visibility_white))
             newPasswordVisible = false
         } else {
             editAccessNewPasswordEditText.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            editAccessNewPasswordEditText.setSelection(editAccessNewPasswordEditText.text.length)
+            editAccessViewPasswordButton.setImageDrawable(context?.getDrawable(R.drawable.icon_no_visibility_white))
             newPasswordVisible = true
         }
     }
 
     private var viewOldPasswordClickListener = View.OnClickListener {
         if (oldPasswordVisible) {
-            editAccessOldPasswordEditText.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
+            editAccessOldPasswordEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            editAccessOldPasswordEditText.setSelection(editAccessOldPasswordEditText.text.length)
+            editAccessOldPasswordEditText.typeface = editAccessEmailEditText.typeface
+            editAccessViewActualPasswordButton.setImageDrawable(context?.getDrawable(R.drawable.icon_visibility_white))
             oldPasswordVisible = false
         } else {
             editAccessOldPasswordEditText.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            editAccessOldPasswordEditText.setSelection(editAccessOldPasswordEditText.text.length)
+            editAccessViewActualPasswordButton.setImageDrawable(context?.getDrawable(R.drawable.icon_no_visibility_white))
             oldPasswordVisible = true
         }
     }
@@ -60,6 +72,17 @@ class UserProfileEditAccess : Fragment() {
 
     private var exitWithoutSavingListener = View.OnClickListener {
         notifyInteractionEventTab?.eventPropagateBackButton()
+    }
+
+    private fun setClickOnScreenListener(){
+        editAccessAppBar.setOnTouchListener { _, _ ->
+            hideSoftKeyboard(activity as Activity)
+            false
+        }
+        EditAccessScrollView.setOnTouchListener { _, _ ->
+            hideSoftKeyboard(activity as Activity)
+            false
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,6 +103,7 @@ class UserProfileEditAccess : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setClickOnScreenListener()
         setUpButtons()
     }
 
@@ -122,6 +146,19 @@ class UserProfileEditAccess : Fragment() {
         editAccessViewPasswordButton.setOnClickListener(viewNewPasswordClickListener)
         editAccessCloseButton.setOnClickListener(exitWithoutSavingListener)
         saveChangesEditAccessToolbarButton.setOnClickListener(exitSavingListener)
+    }
+
+    //Esta función oculta el teclado al apretar fuera de los límites del textEdit
+    private fun hideSoftKeyboard(activity: Activity) {
+        val inputMethodManager = activity.getSystemService(
+            Activity.INPUT_METHOD_SERVICE
+        ) as InputMethodManager
+        activity.currentFocus?.let {
+            inputMethodManager.hideSoftInputFromWindow(
+                activity.currentFocus!!.windowToken, 0
+            )
+            it.clearFocus()
+        }
     }
 
     companion object {

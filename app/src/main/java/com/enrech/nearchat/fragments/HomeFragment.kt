@@ -1,6 +1,8 @@
 package com.enrech.nearchat.fragments
 
 import android.content.Context
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -133,5 +135,6 @@ class HomeFragment : Fragment() {
 
         return false
     }
+
 
 }
