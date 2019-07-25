@@ -294,6 +294,6 @@ class RootActivity : AppCompatActivity(),
     }
 
     override fun homeMapInitMap() {
-        (currentFragment as? HomePagerFragment)?.moveToUserPosition()
+        //(currentFragment as? HomePagerFragment)?.moveToUserPosition()
     }
 }

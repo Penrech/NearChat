@@ -30,7 +30,7 @@ import java.lang.Exception
 
 
 //Este fragment contiene la interfaz y parte de la funcionalidad del mapa de eventos cercanos
-class HomeMapFragment : Fragment(), OnMapReadyCallback {
+class HomeMapFragment : SupportMapFragment(), OnMapReadyCallback {
 
     //Variables
 
@@ -66,7 +66,7 @@ class HomeMapFragment : Fragment(), OnMapReadyCallback {
 
         if (mapFragment == null) {
 
-            mapFragment = childFragmentManager.findFragmentById(R.id.homeMap) as SupportMapFragment
+            mapFragment = this
             mapFragment?.getMapAsync(this)
         }
 
