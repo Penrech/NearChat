@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "175796427297",
+    "firebase_url": "https://nearchat-546aa.firebaseio.com",
+    "project_id": "nearchat-546aa",
+    "storage_bucket": "nearchat-546aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175796427297:android:0f1217f37f63fce0",
+        "android_client_info": {
+          "package_name": "com.enrech.nearchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "175796427297-vh0u5t8le786jnmfo4oni12rb00b8bn9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.enrech.nearchat",
+            "certificate_hash": "ba8976e769781fc809ec5338e506d0b8a587d6ca"
+          }
+        },
+        {
+          "client_id": "175796427297-qk21qdr2n0joihn9s95tksfucjm79jta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiDaQeUDK_nthiYZ4KwuBgeU1zvqf372I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "175796427297-qk21qdr2n0joihn9s95tksfucjm79jta.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
