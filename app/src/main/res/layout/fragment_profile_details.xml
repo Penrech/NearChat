@@ -172,7 +172,7 @@
                             android:textColor="@color/brokenBlack"
                             android:textAlignment="textStart"
                             android:gravity="center_vertical"
-                            android:text="Usuario"/>
+                            android:text="@string/user_toolbar_title"/>
 
                     <ImageButton
                             android:layout_weight="0"
@@ -184,7 +184,7 @@
                             android:background="@drawable/bottom_item_ripple_checked"
                             android:padding="10dp"
                             android:elevation="0dp"
-                            android:contentDescription="change between map and list button"
+                            android:contentDescription="@string/toolbar_edit_profile_button_descriptor"
                             android:layout_marginEnd="12dp"/>
 
                     <ImageButton
@@ -197,7 +197,7 @@
                             android:background="@drawable/bottom_item_ripple_checked"
                             android:padding="10dp"
                             android:elevation="0dp"
-                            android:contentDescription="change between map and list button"/>
+                            android:contentDescription="@string/toolbar_edit_access_button_descriptor"/>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 

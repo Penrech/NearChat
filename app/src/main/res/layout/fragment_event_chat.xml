@@ -54,7 +54,7 @@
                     android:background="@drawable/bottom_home_background"
                     android:padding="10dp"
                     android:elevation="0dp"
-                    android:contentDescription="search location"
+                    android:contentDescription="@string/event_chat_send_message_button_descriptor"
                     android:backgroundTint="@color/defaultBlue"
                     app:icon_initial_tint_color="@color/defaultWhite"
                     app:layout_constraintBottom_toBottomOf="@+id/evenChatMessageEditText"
@@ -80,7 +80,7 @@
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
                     android:singleLine="true"
-                    android:hint="Enviar un mensaje..."
+                    android:hint="@string/event_chat_send_message_edit_text_hint"
                     android:layout_marginEnd="12dp"
                     app:layout_constraintEnd_toStartOf="@+id/eventChatSendMessage"
                     app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="9dp"/>

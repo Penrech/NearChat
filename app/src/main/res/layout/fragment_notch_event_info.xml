@@ -8,7 +8,6 @@
         tools:context=".fragments.NotchEventInfo"
         android:id="@+id/fragmentNotchEventRoot">
 
-
     <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="250dp"
@@ -49,7 +48,7 @@
                         android:textColor="@color/brokenBlack"
                         android:textAlignment="textStart"
                         android:gravity="center_vertical"
-                        android:text="Evento"/>
+                        android:text="@string/event_toolbar_title_label"/>
 
                 <ImageButton
                         android:layout_weight="0"
@@ -61,7 +60,7 @@
                         android:background="@drawable/bottom_item_ripple_checked"
                         android:padding="10dp"
                         android:elevation="0dp"
-                        android:contentDescription="close event info window "/>
+                        android:contentDescription="@string/close_notch_button_descriptor"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -101,7 +100,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     android:textColor="@color/brokenBlack"
                     android:fontFamily="@font/roboto_medium"
-                    android:layout_marginEnd="20dp" android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toTopOf="@+id/fragmentNotchEventTimeIcon"
                     android:gravity="center_vertical"/>
 
@@ -112,7 +112,8 @@
                     app:layout_constraintTop_toBottomOf="@+id/fragmentNotchEventPictureCardView"
                     app:layout_constraintStart_toStartOf="@+id/fragmentNotchEventPictureCardView"
                     app:layout_constraintEnd_toEndOf="@+id/fragmentNotchEventPictureCardView"
-                    android:orientation="horizontal" android:gravity="center_horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal">
 
                 <ImageView
                         android:src="@drawable/icon_user_white"
@@ -135,9 +136,11 @@
                         app:layout_constraintStart_toEndOf="@+id/fragmentNotchEventIconPeople"
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/brokenBlack"
-                        android:textSize="18sp" android:layout_marginEnd="0dp"
+                        android:textSize="18sp"
+                        android:layout_marginEnd="0dp"
                         app:layout_constraintEnd_toEndOf="@+id/fragmentNotchEventPictureCardView"
-                        android:textAlignment="center" android:gravity="center_vertical"/>
+                        android:textAlignment="center"
+                        android:gravity="center_vertical"/>
             </LinearLayout>
 
 
@@ -148,8 +151,7 @@
                     android:tint="@color/defaultBlue"
                     app:srcCompat="@drawable/icon_time_white"
                     app:layout_constraintStart_toStartOf="@+id/fragmentNotchEventTitleTextView"
-                    app:layout_constraintBottom_toBottomOf="@+id/fragmentNotchEventPictureCardView"
-            />
+                    app:layout_constraintBottom_toBottomOf="@+id/fragmentNotchEventPictureCardView"/>
 
             <TextView
                     app:autoSizeMaxTextSize="16sp"
@@ -177,7 +179,7 @@
                     app:autoSizeTextType="uniform"
                     app:autoSizeStepGranularity="2sp"
                     android:maxLines="1"
-                    android:text="Dejarás de poder participar en este evento"
+                    android:text="@string/event_notch_exit_helper_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/fragmentNotchEventHelperTextView"
@@ -192,7 +194,7 @@
                     android:textColor="@color/defaultBlue"/>
 
             <Button
-                    android:text="Salir del evento"
+                    android:text="@string/event_notch_exit_button_label"
                     app:autoSizeMaxTextSize="16sp"
                     app:autoSizeTextType="uniform"
                     app:autoSizeStepGranularity="2sp"
@@ -214,7 +216,7 @@
                     android:elevation="0dp"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:fontFamily="@font/roboto_medium"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textColor="@color/defaultWhite"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

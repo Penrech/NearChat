@@ -27,7 +27,7 @@
             android:scaleType="centerInside"
             android:background="@drawable/bottom_home_background"
             android:padding="10dp"
-            android:contentDescription="close button"
+            android:contentDescription="@string/event_helper_close_button_descriptor"
             android:backgroundTint="@color/defaultBlue"
             app:icon_initial_tint_color="@color/defaultWhite"
             app:layout_constraintTop_toTopOf="parent"

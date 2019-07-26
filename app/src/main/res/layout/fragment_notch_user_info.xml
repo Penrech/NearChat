@@ -48,7 +48,7 @@
                         android:textColor="@color/brokenBlack"
                         android:textAlignment="textStart"
                         android:gravity="center_vertical"
-                        android:text="Usuario"/>
+                        android:text="@string/user_toolbar_title"/>
 
                 <ImageButton
                         android:layout_weight="0"
@@ -60,7 +60,7 @@
                         android:background="@drawable/bottom_item_ripple_checked"
                         android:padding="10dp"
                         android:elevation="0dp"
-                        android:contentDescription="close event info window "
+                        android:contentDescription="@string/toolbar_user_position_button_descriptro"
                         android:layout_marginEnd="12dp"/>
 
                 <ImageButton
@@ -73,7 +73,7 @@
                         android:background="@drawable/bottom_item_ripple_checked"
                         android:padding="10dp"
                         android:elevation="0dp"
-                        android:contentDescription="close event info window "
+                        android:contentDescription="@string/toolbar_add_user_to_contact_button_descriptor"
                         android:layout_marginEnd="12dp"/>
 
                 <ImageButton
@@ -86,7 +86,7 @@
                         android:background="@drawable/bottom_item_ripple_checked"
                         android:padding="10dp"
                         android:elevation="0dp"
-                        android:contentDescription="close event info window "
+                        android:contentDescription="@string/toolbar_block_user_button_descriptor"
                         android:layout_marginEnd="12dp"
                         android:tint="@color/defaultWhite"/>
 
@@ -100,7 +100,7 @@
                         android:background="@drawable/bottom_item_ripple_checked"
                         android:padding="10dp"
                         android:elevation="0dp"
-                        android:contentDescription="close event info window "/>
+                        android:contentDescription="@string/close_notch_button_descriptor"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -118,6 +118,7 @@
 
                 <ImageView
                         app:srcCompat="@drawable/icon_user"
+                        android:tint="@color/defaultWhite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/fragmentNotchUserImageView"
@@ -143,7 +144,6 @@
                     android:layout_marginEnd="20dp"
                     android:gravity="center_vertical"/>
 
-
             <TextView
                     app:autoSizeMaxTextSize="16sp"
                     app:autoSizeTextType="uniform"
@@ -167,7 +167,7 @@
                     app:autoSizeTextType="uniform"
                     app:autoSizeStepGranularity="2sp"
                     android:maxLines="1"
-                    android:text="Se iniciará una conversación privada"
+                    android:text="@string/user_notch_new_message_helper_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/fragmentNotchUserHelperTextView"
@@ -182,7 +182,7 @@
                     android:textColor="@color/defaultBlue"/>
 
             <Button
-                    android:text="Enviar mensaje"
+                    android:text="@string/user_notch_new_message_button_label"
                     app:autoSizeMaxTextSize="16sp"
                     app:autoSizeTextType="uniform"
                     app:autoSizeStepGranularity="2sp"
@@ -201,7 +201,7 @@
                     android:elevation="0dp"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:fontFamily="@font/roboto_medium"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textColor="@color/defaultWhite"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

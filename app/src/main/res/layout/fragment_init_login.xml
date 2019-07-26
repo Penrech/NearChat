@@ -6,7 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".fragments.InitLoginFragment"
-        android:background="@color/defaultLightBlue" android:id="@+id/rootLoginLayout">
+        android:background="@color/defaultLightBlue"
+        android:id="@+id/rootLoginLayout">
 
     <EditText
             android:layout_width="0dp"
@@ -24,7 +25,7 @@
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:singleLine="true"
-            android:hint="Email "
+            android:hint="@string/login_email_edit_text_hint"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="24dp"
             android:drawableTint="@color/defaultBlue"
@@ -50,7 +51,7 @@
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:singleLine="true"
-            android:hint="Contraseña "
+            android:hint="@string/login_password_edit_text_hint"
             android:drawablePadding="12dp"
             android:drawableLeft="@drawable/icon_lock_small"
             app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +62,7 @@
             app:layout_constraintTop_toBottomOf="@+id/loginEmailEditText"/>
 
     <Button
-            android:text="Login"
+            android:text="@string/login_button_label"
             app:autoSizeMaxTextSize="16sp"
             app:autoSizeTextType="uniform"
             app:autoSizeStepGranularity="2sp"
@@ -78,7 +79,7 @@
             android:elevation="0dp"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:fontFamily="@font/roboto_medium"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textColor="@color/defaultWhite"
             android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@+id/loginPasswordEditText"/>
@@ -88,7 +89,7 @@
             app:autoSizeTextType="uniform"
             app:autoSizeStepGranularity="2sp"
             android:maxLines="1"
-            android:text="¿No tienes cuenta? Regístrate"
+            android:text="@string/login_to_register_button_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/loginGoToRegisterButton"

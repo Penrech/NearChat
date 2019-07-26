@@ -60,7 +60,7 @@
                     android:layout_marginEnd="12dp">
 
                 <com.enrech.nearchat.CustomElements.CustomToolbarLabel
-                        android:text="Eventos Cercanos"
+                        android:text="@string/home_pager_near_events_list_title"
                         android:maxLines="2"
                         app:autoSizeTextType="uniform"
                         app:autoSizeStepGranularity="2sp"
@@ -88,7 +88,7 @@
                         android:padding="10dp"
                         android:elevation="2dp"
                         app:should_hide_on_change="true"
-                        android:contentDescription="show event area button"
+                        android:contentDescription="@string/toolbar_show_event_area_button_descriptor"
                         android:backgroundTint="@color/defaultBlue"
                         app:icon_initial_tint_color="@color/defaultWhite"/>
 
@@ -106,7 +106,7 @@
                         android:background="@drawable/bottom_home_background"
                         android:padding="10dp"
                         android:elevation="2dp"
-                        android:contentDescription="show my position button"
+                        android:contentDescription="@string/toolbar_my_position_button_descriptor"
                         android:backgroundTint="@color/defaultBlue"
                         app:icon_initial_tint_color="@color/defaultWhite"/>
 
@@ -125,7 +125,7 @@
                         android:background="@drawable/bottom_home_background"
                         android:padding="10dp"
                         android:elevation="2dp"
-                        android:contentDescription="change between map and list button"
+                        android:contentDescription="@string/toolbar_change_between_map_list_button_descriptor"
                         android:backgroundTint="@color/defaultBlue"
                         app:icon_initial_tint_color="@color/defaultWhite"/>
 
@@ -134,6 +134,5 @@
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

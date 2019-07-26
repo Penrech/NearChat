@@ -49,7 +49,7 @@
                         android:textColor="@color/brokenBlack"
                         android:textAlignment="textStart"
                         android:gravity="center_vertical"
-                        android:text="Comunicación"/>
+                        android:text="@string/comunication_title_label"/>
 
                 <ImageButton
                         android:layout_weight="0"
@@ -61,7 +61,7 @@
                         android:background="@drawable/bottom_item_ripple_checked"
                         android:padding="10dp"
                         android:elevation="0dp"
-                        android:contentDescription="close event visualization window "/>
+                        android:contentDescription="@string/close_notch_button_descriptor"/>
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -80,7 +80,7 @@
                     app:autoSizeTextType="uniform"
                     app:autoSizeStepGranularity="1sp"
                     app:autoSizeMaxTextSize="21sp"
-                    android:text="Comunicarte hablando"
+                    android:text="@string/comunicate_talking_label"
                     android:layout_width="0dp"
                     android:layout_height="25dp"
                     android:id="@+id/notchEventVisualizationTalkPrimaryLabel"
@@ -96,7 +96,7 @@
                     app:autoSizeTextType="uniform"
                     app:autoSizeStepGranularity="1sp"
                     app:autoSizeMaxTextSize="18sp"
-                    android:text="Hasta 10 metros de tí"
+                    android:text="@string/comunicate_talking_helper_label"
                     android:layout_width="0dp"
                     android:layout_height="15dp"
                     android:id="@+id/notchEventVisualizationTalkSecundaryLabel"
@@ -110,7 +110,7 @@
                     app:autoSizeTextType="uniform"
                     app:autoSizeStepGranularity="1sp"
                     app:autoSizeMaxTextSize="18sp"
-                    android:text="Hasta 20 metros de tí"
+                    android:text="@string/comunicate_shouting_helper_label"
                     android:layout_width="0dp"
                     android:layout_height="15dp"
                     android:id="@+id/notchEventVisualizationShoutSecundaryLabel"
@@ -135,7 +135,7 @@
                     app:autoSizeTextType="uniform"
                     app:autoSizeStepGranularity="1sp"
                     app:autoSizeMaxTextSize="21sp"
-                    android:text="Comunicarte gritando"
+                    android:text="@string/comunicate_shouting_label"
                     android:layout_width="0dp"
                     android:layout_height="25dp"
                     android:id="@+id/notchEventVisualizationShoutPrimaryLabel"
@@ -151,7 +151,7 @@
                     app:autoSizeTextType="uniform"
                     app:autoSizeStepGranularity="1sp"
                     app:autoSizeMaxTextSize="21sp"
-                    android:text="Comunitarte globalmente"
+                    android:text="@string/communicate_broadcast_label"
                     android:layout_width="0dp"
                     android:layout_height="25dp"
                     android:id="@+id/notchEventVisualizationShoutBroadcastPrimaryLabel"
@@ -159,14 +159,15 @@
                     android:textColor="@color/brokenBlack"
                     app:layout_constraintTop_toTopOf="@+id/notchEventVisualizationBroadcastcon"
                     app:layout_constraintStart_toEndOf="@+id/notchEventVisualizationBroadcastcon"
-                    android:layout_marginStart="18dp" android:layout_marginEnd="12dp"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginEnd="12dp"
                     app:layout_constraintEnd_toStartOf="@+id/notchEventComunicationRadioGroup"/>
 
             <TextView
                     app:autoSizeTextType="uniform"
                     app:autoSizeStepGranularity="1sp"
                     app:autoSizeMaxTextSize="18sp"
-                    android:text="Visible en todo el evento"
+                    android:text="@string/comunicate_broadcast_helper_label"
                     android:layout_width="0dp"
                     android:layout_height="15dp"
                     android:id="@+id/notchEventVisualizationShoutBroadcastSecundaryLabel"
@@ -205,8 +206,11 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/notchEventComunicateTalking"
                         android:button="@drawable/custom_radio_buton_blue"
-                        android:checked="true" android:layout_gravity="top" android:gravity="top"
-                        android:foregroundGravity="top" android:layout_marginBottom="30dp"/>
+                        android:checked="true"
+                        android:layout_gravity="top"
+                        android:gravity="top"
+                        android:foregroundGravity="top"
+                        android:layout_marginBottom="30dp"/>
                 <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -218,12 +222,12 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/notchEventComunicateBroadcast"
                         android:button="@drawable/custom_radio_buton_blue"
-                        android:checked="false" android:gravity="bottom"
+                        android:checked="false"
+                        android:gravity="bottom"
                         android:layout_gravity="bottom"
                         android:layout_marginTop="30dp"/>
 
             </RadioGroup>
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

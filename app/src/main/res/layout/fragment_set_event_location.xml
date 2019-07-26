@@ -63,7 +63,7 @@
                         android:background="@drawable/bottom_home_background"
                         android:padding="10dp"
                         android:elevation="2dp"
-                        android:contentDescription="search location"
+                        android:contentDescription="@string/search_location_button_descriptor"
                         android:backgroundTint="@color/defaultBlue"
                         app:icon_initial_tint_color="@color/defaultWhite"
                         app:layout_constraintBottom_toBottomOf="@+id/setEventLocationSearchEditText"
@@ -89,7 +89,7 @@
                         android:paddingStart="20dp"
                         android:paddingEnd="20dp"
                         android:singleLine="true"
-                        android:hint="Busca una ubicación..."
+                        android:hint="@string/search_location_edit_text_hint"
                         android:layout_marginEnd="12dp"
                         app:layout_constraintEnd_toStartOf="@+id/setEventLocationSearchButton"/>
 
@@ -146,7 +146,7 @@
                         android:padding="10dp"
                         android:elevation="2dp"
                         app:should_hide_on_change="true"
-                        android:contentDescription="my position"
+                        android:contentDescription="@string/toolbar_my_position_button_descriptor"
                         android:backgroundTint="@color/defaultBlue"
                         app:icon_initial_tint_color="@color/defaultWhite"/>
 
@@ -179,7 +179,7 @@
                         android:background="@drawable/bottom_home_background"
                         android:padding="10dp"
                         android:elevation="2dp"
-                        android:contentDescription="save event location"
+                        android:contentDescription="@string/toolbar_save_position_button_descriptor"
                         android:backgroundTint="@color/defaultBlue"
                         app:icon_initial_tint_color="@color/defaultWhite"/>
 
@@ -196,7 +196,7 @@
                         android:background="@drawable/bottom_home_background"
                         android:padding="10dp"
                         android:elevation="2dp"
-                        android:contentDescription="close event location picker without save"
+                        android:contentDescription="@string/toolbar_exit_without_save"
                         android:backgroundTint="@color/defaultBlue"
                         app:icon_initial_tint_color="@color/defaultWhite"/>
 
@@ -205,6 +205,5 @@
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

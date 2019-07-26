@@ -87,7 +87,7 @@
                         android:background="@drawable/bottom_item_ripple_checked"
                         android:padding="10dp"
                         android:elevation="2dp"
-                        android:contentDescription="show my position button"
+                        android:contentDescription="@string/toolbar_my_position_button_descriptor"
                         android:backgroundTint="@color/defaultBlue"
                         app:icon_initial_tint_color="@color/defaultWhite"
                         app:secundary_drawable="@drawable/icon_talk_white"/>
@@ -106,7 +106,7 @@
                         android:background="@drawable/bottom_item_ripple_checked"
                         android:padding="10dp"
                         android:elevation="2dp"
-                        android:contentDescription="show event info button"
+                        android:contentDescription="@string/toolbar_event_info_button_descriptor"
                         android:backgroundTint="@color/defaultBlue"
                         app:icon_initial_tint_color="@color/defaultWhite"/>
 
@@ -124,7 +124,7 @@
                         android:background="@drawable/bottom_item_ripple_checked"
                         android:padding="10dp"
                         android:elevation="2dp"
-                        android:contentDescription="show and hide conversations button"
+                        android:contentDescription="@string/toolbar_show_hide_conversations_button_descriptor"
                         android:backgroundTint="@color/defaultBlue"
                         app:icon_initial_tint_color="@color/defaultWhite"/>
 
@@ -143,7 +143,7 @@
                         android:background="@drawable/bottom_item_ripple_checked"
                         android:padding="10dp"
                         android:elevation="2dp"
-                        android:contentDescription="change between map and list button"
+                        android:contentDescription="@string/toolbar_change_between_map_list_button_descriptor"
                         android:backgroundTint="@color/defaultBlue"
                         app:icon_initial_tint_color="@color/defaultWhite"/>
 

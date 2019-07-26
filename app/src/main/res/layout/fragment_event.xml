@@ -4,4 +4,5 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context=".fragments.EventFragment"
-             android:id="@+id/MainEventFragmentContainer" android:background="@color/defaultLightBlue"/>
+             android:id="@+id/MainEventFragmentContainer"
+             android:background="@color/defaultLightBlue"/>
