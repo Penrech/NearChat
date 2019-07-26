@@ -22,10 +22,6 @@ import com.enrech.nearchat.models.EventHelper
 import android.telephony.TelephonyManager
 import com.enrech.nearchat.models.StateFragment
 
-private const val TAG_ONE = "first"
-private const val TAG_SECOND = "second"
-private const val TAG_THIRD = "third"
-private const val TAG_FOURTH = "fourth"
 private const val MAX_HISTORIC = 5
 
 class RootActivity : AppCompatActivity(),
@@ -35,17 +31,19 @@ class RootActivity : AppCompatActivity(),
     NotifyInteractionHomeTab,
     ModifyNavigationBarFromFragments {
 
+    companion object {
+        const val TAG_ONE = "first"
+        const val TAG_SECOND = "second"
+        const val TAG_THIRD = "third"
+        const val TAG_FOURTH = "fourth"
+    }
+
     //Variables
 
     private var fragmentHome: HomeFragment? = null
     private var fragmentEvent: EventFragment? = null
     private var fragmentProfile: UserProfileFragment? = null
     private var fragmentMore: MoreFragment? = null
-
-   /* private val fragmentHomeTag = "home"
-    private val fragmentEventTag = "event"
-    private val fragmentProfileTag = "profile"
-    private val fragmentMoreTag = "more"*/
 
     private var mainFragments: ArrayList<Fragment> = arrayListOf()
 
@@ -55,28 +53,6 @@ class RootActivity : AppCompatActivity(),
     private var currentTag: String = TAG_ONE
     private var oldTag: String = TAG_ONE
     private var currentMenuItemId: Int = R.id.navigation_home
-
-   /* private var backStackListening = false
-
-    private var currentBackStackNumber = 0
-
-    private var backStackChangeListener = object : FragmentManager.OnBackStackChangedListener {
-
-        override fun onBackStackChanged() {
-            Log.i("BACKSTACK","currentFragment before: $currentFragment")
-            val newCount = supportFragmentManager.backStackEntryCount
-            currentFragment = supportFragmentManager.fragments.last()
-            if (newCount < currentBackStackNumber) {
-                tabChangedOnBackStackPop()
-            }
-            Log.i("BACKSTACK","New count: $newCount")
-            Log.i("BACKSTACK","Old count: $currentBackStackNumber")
-            Log.i("BACKSTACK","currentFragment after: $currentFragment")
-
-            currentBackStackNumber = newCount
-        }
-
-    }*/
 
     // métodos de vista
 
@@ -91,19 +67,6 @@ class RootActivity : AppCompatActivity(),
 
         initTopFragments()
         initNavigationListener()
-        //loadFragment(fragmentHome,fragmentHomeTag,false)
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        //removeBackStackChangeListener()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-       // addBackStackChangeListener()
     }
 
     // métodos de fragments
@@ -112,37 +75,47 @@ class RootActivity : AppCompatActivity(),
 
         RootNavView.setOnNavigationItemSelectedListener { menuItem ->
 
-            Log.i("FRAGMENT","Current Menu item: $currentMenuItemId, menu item: ${menuItem.itemId}")
-
             if (currentMenuItemId != menuItem.itemId) {
 
                 val fragment: Fragment
+                val prevOldTag = oldTag
                 oldTag = currentTag
+                Log.i("FCYCLE","1. Oldtag es: $oldTag, CurrentTag es: $currentTag")
 
                 currentMenuItemId = menuItem.itemId
 
                 when (currentMenuItemId) {
                     R.id.navigation_home -> {
                         currentTag = TAG_ONE
+                        if (currentTag == oldTag) oldTag = prevOldTag
+                        Log.i("FCYCLE","1.1 Ahora CurrentTag pasará a ser: $currentTag")
                         fragment = fragmentHome!!
                         loadFragment(fragment, currentTag)
                     }
                     R.id.navigation_event -> {
                         currentTag = TAG_SECOND
+                        if (currentTag == oldTag) oldTag = prevOldTag
+                        Log.i("FCYCLE","1.1 Ahora CurrentTag pasará a ser: $currentTag")
                         fragment = fragmentEvent!!
                         loadFragment(fragment, currentTag)
                     }
                     R.id.navigation_profile -> {
                         currentTag = TAG_THIRD
+                        if (currentTag == oldTag) oldTag = prevOldTag
+                        Log.i("FCYCLE","1.1 Ahora CurrentTag pasará a ser: $currentTag")
                         fragment = fragmentProfile!!
                         loadFragment(fragment, currentTag)
                     }
                     R.id.navigation_more -> {
                         currentTag = TAG_FOURTH
+                        if (currentTag == oldTag) oldTag = prevOldTag
+                        Log.i("FCYCLE","1.1 Ahora CurrentTag pasará a ser: $currentTag")
                         fragment = fragmentMore!!
                         loadFragment(fragment, currentTag)
                     }
                 }
+
+
 
                 return@setOnNavigationItemSelectedListener true
 
@@ -161,8 +134,6 @@ class RootActivity : AppCompatActivity(),
     }
 
     private fun loadFragment(fragment: Fragment, tag: String) {
-
-        Log.i("FRAGMENT","Current fragment: $currentFragment, fragment: $fragment")
 
         if (currentFragment !== fragment) {
             val ft = supportFragmentManager.beginTransaction()
@@ -191,6 +162,22 @@ class RootActivity : AppCompatActivity(),
         currentTag = lastState.currentFragmentTag
         oldTag = lastState.oldFragmentTag
 
+        Log.i("FCYCLE","3. Recuperamos la última entra del stack, que es $lastState, con CurrentTag: $currentTag y OldTag: $oldTag")
+        Log.i("BACKSTACK","CURRENT TAG: $currentTag , OLD TAG: $oldTag, LIST STATE SIZE : ${listState.size}")
+
+        if (listState.size > 0) {
+
+            val index = listState.size - 1
+            val actualState = listState[index]
+            if (actualState.currentFragmentTag == actualState.oldFragmentTag) {
+                listState.removeAt(index)
+            }
+            Log.i("FCYLCE","3.1 , el proximo elemento en la lista es $actualState, con CurrentTag: ${actualState.currentFragmentTag} y " +
+                    " Old tag: ${actualState.oldFragmentTag}")
+            Log.i("BACKSTACK","List state size menor que 0, ACTUAL STATE $actualState, SF current Tag: ${actualState.currentFragmentTag} , " +
+                    "SF Old tag: ${actualState.oldFragmentTag}")
+        }
+
         val ft = supportFragmentManager.beginTransaction()
 
         val currentFragment = supportFragmentManager.findFragmentByTag(currentTag)
@@ -201,9 +188,6 @@ class RootActivity : AppCompatActivity(),
         }
 
         ft.commit()
-
-        Log.d("FRAGMENT", "$currentTag - $oldTag")
-        Log.d("FRAGMENT", "Current Fragment $currentFragment - old fragment $oldFragment")
 
         this.currentFragment = oldFragment
 
@@ -230,11 +214,8 @@ class RootActivity : AppCompatActivity(),
 
     }
 
-    //Like YouTube
     private fun addBackStack() {
         if (RootNavView.scrollX != 0) RootNavView.scrollX = 0
-
-        Log.d("thr add", "$currentTag - $oldTag")
 
         when (listState.size) {
             MAX_HISTORIC -> {
@@ -254,10 +235,21 @@ class RootActivity : AppCompatActivity(),
             else -> {
                 listState.add(StateFragment(currentTag, oldTag))
 
+                Log.i("FCYCLE","2, Se ha añadido el SF con Currentag: $currentTag y oldTag: $oldTag")
+
+                Log.i("BACKSTACK","ADDED CURRENT TAG: $currentTag, OLD TAG: $oldTag")
+
                 val indexToEliminate = listState.indexOfFirst { it.oldFragmentTag == currentTag }
+
+                Log.i("BACKSTACK","index to elimate: $indexToEliminate")
+
                 if (indexToEliminate != -1 && indexToEliminate != 0){
+
+                    Log.i("FCYCLE","2.1 , anteriormente CurrentTag: $currentTag ya habia sido añadido en el indice $indexToEliminate, por ello se elimina")
                     val sfToEliminate = listState.first { it.oldFragmentTag == currentTag }
+                    Log.i("BACKSTACK","SF to eliminate $sfToEliminate")
                     val sfToElimanteCurrentFragment = sfToEliminate.currentFragmentTag
+
                     listState[indexToEliminate - 1].currentFragmentTag = sfToElimanteCurrentFragment
                     listState.removeAt(indexToEliminate)
                 }
@@ -281,71 +273,6 @@ class RootActivity : AppCompatActivity(),
         mainFragments.add(fragmentMore!!)
     }
 
-    /*
-    *
-    * val prev = childFragmentManager.findFragmentByTag(fragmentTag)
-                if (prev != null) {
-                    transaction.remove(prev)
-                }
-                transaction.addToBackStack(fragmentTag)
-    * */
-
-/*
-    //Esta función es la cargada de introducir los fragments en el contenedor de la actividad destinado a ello
-    private fun loadFragment(fragment: Fragment?, fragmentTag: String, shouldAddToBackStack: Boolean) : Boolean {
-
-
-        if (fragment != null && currentFragment != fragment) {
-
-            val entryToDelete = deleteFragmentFromBackStackIfIsInIt(fragmentTag)
-
-
-
-            /*entryToDelete?.let {
-                supportFragmentManager.popBackStack(it.id,FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            }*/
-
-            val prevFragment = supportFragmentManager.findFragmentByTag(fragmentTag)
-            if (prevFragment != null) {
-                /*val transaction2 = supportFragmentManager.beginTransaction()
-                transaction2.remove(prevFragment).commitNow()*/
-                val currentPosition = supportFragmentManager.fragments.indexOf(prevFragment)
-            }
-            val transaction = supportFragmentManager.beginTransaction()
-
-            transaction.setReorderingAllowed()
-            transaction.add(R.id.MainRootFragmentContainer,fragment,fragmentTag)
-
-            if (shouldAddToBackStack && prevFragment == null) {
-                transaction.addToBackStack(fragmentTag)
-            }
-
-            transaction.setPrimaryNavigationFragment(fragment)
-            transaction.commit()
-
-            if (prevFragment != null){
-                currentFragment = fragment
-            }
-            //
-
-            return true
-        }
-
-        return false
-    }*/
-
-    /*private fun deleteFragmentFromBackStackIfIsInIt(newTag: String) : FragmentManager.BackStackEntry?{
-        var entryToDelete: FragmentManager.BackStackEntry? = null
-
-        for (index in 0 until supportFragmentManager.backStackEntryCount) {
-
-            if (supportFragmentManager.getBackStackEntryAt(index).name.equals(newTag,true)) {
-                entryToDelete = supportFragmentManager.getBackStackEntryAt(index)
-            }
-        }
-
-        return entryToDelete
-    }*/
 
     //Métodos de navegación
 
@@ -373,38 +300,6 @@ class RootActivity : AppCompatActivity(),
         }
     }
 
-    //Métodos de los delegados
-
-    // Métodos delegados de navegación
-
-    //Este método es llamado cuando se selecciona algun menu item del navigation view
-    /*override fun onNavigationItemSelected(p0: MenuItem): Boolean {
-        var fragment: Fragment? = null
-        val fragmentTag: String
-
-        when (p0.itemId) {
-            R.id.navigation_home -> {
-                fragment = fragmentHome
-                fragmentTag = fragmentHomeTag
-            }
-            R.id.navigation_event -> {
-                fragment = fragmentEvent
-                fragmentTag = fragmentEventTag
-            }
-            R.id.navigation_profile -> {
-                fragment = fragmentProfile
-                fragmentTag = fragmentProfileTag
-            }
-            else -> {
-                fragment = fragmentMore
-                fragmentTag = fragmentMoreTag
-            }
-        }
-
-        return loadFragment(fragment,fragmentTag,true)
-    }*/
-
-
     private fun slideToMatchPlace(currentPosition: Int){
         if (currentPosition == 1) {
             val display = windowManager.defaultDisplay
@@ -415,52 +310,6 @@ class RootActivity : AppCompatActivity(),
         }
     }
 
-    //Estos dos métodos añaden o eliminan el listener encargado de gestionar que fragmento se está visualizando al
-    //Usar el boton de navegación hacia atras
-   /* private fun addBackStackChangeListener(){
-        if (!backStackListening) {
-            supportFragmentManager.addOnBackStackChangedListener(backStackChangeListener)
-            backStackListening = true
-        }
-    }
-
-    private fun removeBackStackChangeListener(){
-        if (backStackListening) {
-            supportFragmentManager.removeOnBackStackChangedListener(backStackChangeListener)
-            backStackListening = false
-        }
-    }*/
-
-    //Este método es llamado cada vez que un nuevo fragment principal es cargado para indicar de forma consistente
-    //cual es el fragment visible actualmente
-    override fun tabChangeTo(number: Int) {
-        /*val menu = RootNavView.menu
-        val fragment = mainFragments[number]
-        menu.getItem(number).isChecked = true
-        currentFragment = fragment
-        if (RootNavView.scrollX != 0) RootNavView.scrollX = 0*/
-
-    }
-
-    fun tabChangedOnBackStackPop(){
-        var number = 0
-        (currentFragment as? HomeFragment)?.let {
-            number = 0
-        }
-        (currentFragment as? EventFragment)?.let {
-            number = 1
-        }
-        (currentFragment as? UserProfileFragment)?.let {
-            number = 2
-        }
-        (currentFragment as? MoreFragment)?.let {
-            number = 3
-        }
-
-        val menu = RootNavView.menu
-        menu.getItem(number).isChecked = true
-        if (RootNavView.scrollX != 0) RootNavView.scrollX = 0
-    }
 
     //Métodos delegados del fragment profile
 
@@ -485,7 +334,7 @@ class RootActivity : AppCompatActivity(),
             super.onBackPressed()
         } else {
             if (backOnPagerIfNeed()){
-                if (listState.size > 1){
+                if (listState.size >= 1){
                     recoverFragment()
                 } else {
                     super.onBackPressed()
@@ -560,6 +409,7 @@ class RootActivity : AppCompatActivity(),
     }
 
     override fun slideWithScrollView(offset: Int) {
+        Log.i("LOAD", "llamado a slidewithscroll")
         RootNavView.scrollX = offset
     }
 
@@ -593,10 +443,22 @@ class RootActivity : AppCompatActivity(),
     }
 
     override fun homePagerLoadedWithCurrentItem(item: Int) {
+        Log.i("BARRA","Delegado recibe pedido de home pager, con item numero $item")
         slideToMatchPlace(item)
     }
 
     override fun homeMapInitMap() {
         //(currentFragment as? HomePagerFragment)?.moveToUserPosition()
+    }
+
+    override fun fragmentLoaded(fragmentTag: String) {
+        Log.i("LOAD","Deberia cambiar scroll, actual scroll ${RootNavView.scrollX}")
+        runOnUiThread {
+            if (RootNavView.scrollX != 0) RootNavView.scrollX = 0
+        }
+    }
+
+    override fun fragmentUnLoaded(fragmentTag: String) {
+
     }
 }

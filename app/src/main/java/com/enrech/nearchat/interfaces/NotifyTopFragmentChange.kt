@@ -1,5 +1,6 @@
 package com.enrech.nearchat.interfaces
 
 interface NotifyTopFragmentChange {
-    fun tabChangeTo(number: Int)
+    fun fragmentLoaded(fragmentTag: String)
+    fun fragmentUnLoaded(fragmentTag: String)
 }

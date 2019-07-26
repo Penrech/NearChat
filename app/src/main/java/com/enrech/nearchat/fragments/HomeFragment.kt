@@ -12,7 +12,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 
 import com.enrech.nearchat.R
+import com.enrech.nearchat.activities.RootActivity
+import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
+import kotlinx.android.synthetic.main.fragment_home_pager.*
 
 //Este fragment gestiona la UI y las diferentes funcionalidades encargadas de mostrar los eventos cercanos
 class HomeFragment : Fragment() {
@@ -65,7 +68,8 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        changeTabListener?.tabChangeTo(topFragmentNumber)
+        Log.i("LOAD","CARGADO: $this")
+        changeTabListener?.fragmentLoaded(RootActivity.TAG_ONE)
     }
 
     override fun onDestroyView() {
@@ -78,7 +82,8 @@ class HomeFragment : Fragment() {
         super.onAttach(context)
         if (context is NotifyTopFragmentChange) {
             changeTabListener = context
-        } else {
+        }
+        else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
     }
@@ -88,9 +93,35 @@ class HomeFragment : Fragment() {
         changeTabListener = null
     }
 
+    override fun onResume() {
+        super.onResume()
+
+    }
+
     override fun onPause() {
         super.onPause()
         Log.i("FRAGMENT","Home fragment pause")
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+
+        if (hidden) {
+            Log.i("LOAD","DESCARGADO: $this")
+            changeTabListener?.fragmentLoaded(RootActivity.TAG_ONE)
+        } else {
+            Log.i("LOAD","CARGADO: $this")
+        }
+
+        propageDeeperHideEvent(hidden)
+    }
+
+    private fun propageDeeperHideEvent(hide: Boolean){
+        when (currentFragment) {
+            is HomePagerFragment -> {
+                pagerFragment?.receiveHidePropagation(hide)
+            }
+        }
     }
 
     //Métodos

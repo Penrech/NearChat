@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 
 import com.enrech.nearchat.R
+import com.enrech.nearchat.activities.RootActivity
+import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
 import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
 import com.enrech.nearchat.models.EventHelper
@@ -67,7 +69,9 @@ class EventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        changeTabListener?.tabChangeTo(topFragmentNumber)
+        Log.i("LOAD","CARGADO: $this")
+
+        changeTabListener?.fragmentLoaded(RootActivity.TAG_SECOND)
     }
 
     override fun onDestroyView() {
@@ -98,6 +102,16 @@ class EventFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.i("EVENTLOG","Guardo instancia")
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            Log.i("LOAD","DESCARGADO: $this")
+        } else {
+            changeTabListener?.fragmentLoaded(RootActivity.TAG_SECOND)
+            Log.i("LOAD","CARGADO: $this")
+        }
     }
 
     //Métodos

@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.transition.Slide
 import android.transition.TransitionManager
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,6 +20,13 @@ import kotlinx.android.synthetic.main.fragment_event_list.*
 //Este fragment contiene la interfaz y parte de la funcionalidad de la lista de eventos cercanos
 class EventListFragment : Fragment() {
 
+    private fun setClickOnScreenListener(){
+        eventListRootContainer.setOnTouchListener { _, _ ->
+            hideSoftKeyboard(activity as Activity)
+            false
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,12 +39,32 @@ class EventListFragment : Fragment() {
         setClickOnScreenListener()
     }
 
-    private fun setClickOnScreenListener(){
-        eventListRootContainer.setOnTouchListener { _, _ ->
-            hideSoftKeyboard(activity as Activity)
-            false
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    fun receiveDeepHidePropagation(hide: Boolean) {
+        if (hide) {
+            onPause()
+        } else {
+            onResume()
         }
     }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        Log.i("HOMEMAPVISIBLE","home map is visible : $isVisibleToUser")
+        if (isVisibleToUser) {
+            onResume()
+        } else {
+            onPause()
+        }
+    }
+
 
     //Esta función oculta el teclado al apretar fuera de los límites del textEdit
     private fun hideSoftKeyboard(activity: Activity) {

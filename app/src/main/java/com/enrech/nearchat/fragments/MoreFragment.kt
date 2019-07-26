@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.enrech.nearchat.R
+import com.enrech.nearchat.activities.RootActivity
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
 
 //Este fragment será el encargado de incorporar nuevas funcionalidades en un futuro
@@ -33,12 +34,14 @@ class MoreFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        Log.i("LOAD","CARGADO: $this")
         return inflater.inflate(R.layout.fragment_more, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        changeTabListener?.tabChangeTo(topFragmentNumber)
+
+        changeTabListener?.fragmentLoaded(RootActivity.TAG_FOURTH)
     }
 
     override fun onAttach(context: Context) {
@@ -53,6 +56,16 @@ class MoreFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         changeTabListener = null
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            Log.i("LOAD","DESCARGADO: $this")
+        } else {
+            changeTabListener?.fragmentLoaded(RootActivity.TAG_FOURTH)
+            Log.i("LOAD","CARGADO: $this")
+        }
     }
 
 }

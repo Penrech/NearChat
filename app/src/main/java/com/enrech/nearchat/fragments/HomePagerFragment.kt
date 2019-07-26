@@ -208,9 +208,32 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         notifyInteractionHomeTab = null
     }
 
+
     override fun onResume() {
         super.onResume()
 
+        startListenersOnFragmentVisibleOrInResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        stopListenersOnFragmentNotVisibleOrInPause()
+    }
+
+    fun receiveHidePropagation(hide: Boolean) {
+        if (hide) {
+            onPause()
+        } else {
+            Log.i("BARRA","Aparece home pager, y llamo a delegado")
+            notifyInteractionHomeTab?.homePagerLoadedWithCurrentItem(mPager!!.currentItem)
+            onResume()
+        }
+
+        propageDarkDeeperHideEvent(hide)
+    }
+
+    private fun startListenersOnFragmentVisibleOrInResume(){
         listenPagerEvents()
 
         trackGoogleLocation()
@@ -220,11 +243,20 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-
+    private fun stopListenersOnFragmentNotVisibleOrInPause(){
         unTrackGoogleLocation()
         deleteListenerPagerEvents()
+    }
+
+    private fun propageDarkDeeperHideEvent(hide: Boolean){
+        when(mPager!!.currentItem) {
+            0 -> {
+                homeMapFragment?.receiveDeepHidePropagation(hide)
+            }
+            1 -> {
+                homeListFragment?.receiveDeepHidePropagation(hide)
+            }
+        }
     }
 
     //Métodos

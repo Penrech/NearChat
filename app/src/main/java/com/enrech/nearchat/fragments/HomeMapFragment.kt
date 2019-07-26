@@ -82,6 +82,44 @@ class HomeMapFragment : Fragment(), OnMapReadyCallback {
         notifyInteractionHomeTab = null
     }
 
+    override fun onPause() {
+        super.onPause()
+        Log.i("PAGERFRAGMENTVISIBLE", "Home Map fragment pause")
+        turnOffListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.i("PAGERFRAGMENTVISIBLE", "Home Map fragment resume")
+        turnOnListeners()
+    }
+
+    fun receiveDeepHidePropagation(hide: Boolean) {
+        if (hide) {
+            turnOffListeners()
+        } else {
+            turnOnListeners()
+        }
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        Log.i("HOMEMAPVISIBLE","home map is visible : $isVisibleToUser")
+        if (isVisibleToUser) {
+            turnOnListeners()
+        } else {
+            turnOffListeners()
+        }
+    }
+
+    private fun turnOnListeners(){
+        Log.i("PAGERFRAGMENTVISIBLE", "Home Map fragment turn on listeners")
+    }
+
+    private fun turnOffListeners(){
+        Log.i("PAGERFRAGMENTVISIBLE", "Home Map fragment turn off listeners")
+    }
+
     override fun onMapReady(p0: GoogleMap?) {
         gMap = p0
 
@@ -127,11 +165,6 @@ class HomeMapFragment : Fragment(), OnMapReadyCallback {
         myPositionMarker = null
     }
 
-    fun setInitialLocationFromGps(initalLocation: LatLng){
-        initMoveMyPositionUser(latLng = initalLocation)
-        this.initialLocationFromGps = initalLocation
-    }
-
     private fun getInitMapLocation(): LatLng {
         locationWithoutGPSUtils = LocationWithoutGPSUtils()
         val countryCode = locationWithoutGPSUtils?.getDeviceCountryCode(context!!)
@@ -146,7 +179,6 @@ class HomeMapFragment : Fragment(), OnMapReadyCallback {
         val id = context!!.resources.getIdentifier(name,"drawable",context!!.packageName)
         return context!!.resources.getDrawable(id,context!!.theme)
     }
-
 
     private fun loadAndResizeMarker(drawableId: Int, newSize: Int): BitmapDescriptor {
         val vectorDrawable = ContextCompat.getDrawable(context!!, drawableId)

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 
 import com.enrech.nearchat.R
+import com.enrech.nearchat.activities.RootActivity
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
 
 //Este fragment gestiona todos los fragments encargados de mostrar o editar información del usuario
@@ -50,6 +51,7 @@ class UserProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        Log.i("LOAD","CARGADO: $this")
         addBackStackChangeListener()
 
         if (currentFragment == null || currentFragment is ProfileDetailsFragment) {
@@ -62,7 +64,7 @@ class UserProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        changeTabListener?.tabChangeTo(topFragmentNumber)
+        changeTabListener?.fragmentLoaded(RootActivity.TAG_THIRD)
     }
 
     override fun onDestroyView() {
@@ -83,6 +85,16 @@ class UserProfileFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         changeTabListener = null
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (hidden) {
+            Log.i("LOAD","DESCARGADO: $this")
+        } else {
+            changeTabListener?.fragmentLoaded(RootActivity.TAG_THIRD)
+            Log.i("LOAD","CARGADO: $this")
+        }
     }
 
     //Métodos
