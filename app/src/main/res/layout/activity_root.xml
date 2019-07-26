@@ -12,6 +12,7 @@
             android:layout_height="match_parent"
             android:id="@+id/MainRootFragmentContainer">
     </FrameLayout>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/RootNavView"
             android:layout_width="wrap_content"

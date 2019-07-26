@@ -1,8 +1,6 @@
 package com.enrech.nearchat.fragments
 
 import android.content.Context
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,16 +11,12 @@ import androidx.fragment.app.FragmentManager
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.activities.RootActivity
-import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
-import kotlinx.android.synthetic.main.fragment_home_pager.*
 
 //Este fragment gestiona la UI y las diferentes funcionalidades encargadas de mostrar los eventos cercanos
 class HomeFragment : Fragment() {
 
     //Variables
-
-    private val topFragmentNumber = 0
 
     var currentFragment: Fragment? = null
 
@@ -47,7 +41,6 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.i("FRAGMENTLOADER","FRAGMENT $this")
         initFragments()
     }
 
@@ -68,7 +61,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.i("LOAD","CARGADO: $this")
         changeTabListener?.fragmentLoaded(RootActivity.TAG_ONE)
     }
 
@@ -100,17 +92,14 @@ class HomeFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        Log.i("FRAGMENT","Home fragment pause")
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
 
         if (hidden) {
-            Log.i("LOAD","DESCARGADO: $this")
             changeTabListener?.fragmentLoaded(RootActivity.TAG_ONE)
         } else {
-            Log.i("LOAD","CARGADO: $this")
         }
 
         propageDeeperHideEvent(hidden)

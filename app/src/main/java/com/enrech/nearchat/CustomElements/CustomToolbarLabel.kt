@@ -3,7 +3,6 @@ package com.enrech.nearchat.CustomElements
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.util.Log
 import androidx.appcompat.widget.LinearLayoutCompat
 
 //Esta clase permite guardar todos los métodos y propiedades necesarias para el textview del

@@ -2,7 +2,6 @@ package com.enrech.nearchat.fragments
 
 import android.app.Activity
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
 import androidx.fragment.app.Fragment

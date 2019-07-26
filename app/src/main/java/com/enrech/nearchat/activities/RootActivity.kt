@@ -79,8 +79,8 @@ class RootActivity : AppCompatActivity(),
 
                 val fragment: Fragment
                 val prevOldTag = oldTag
+
                 oldTag = currentTag
-                Log.i("FCYCLE","1. Oldtag es: $oldTag, CurrentTag es: $currentTag")
 
                 currentMenuItemId = menuItem.itemId
 
@@ -88,28 +88,28 @@ class RootActivity : AppCompatActivity(),
                     R.id.navigation_home -> {
                         currentTag = TAG_ONE
                         if (currentTag == oldTag) oldTag = prevOldTag
-                        Log.i("FCYCLE","1.1 Ahora CurrentTag pasará a ser: $currentTag")
+
                         fragment = fragmentHome!!
                         loadFragment(fragment, currentTag)
                     }
                     R.id.navigation_event -> {
                         currentTag = TAG_SECOND
                         if (currentTag == oldTag) oldTag = prevOldTag
-                        Log.i("FCYCLE","1.1 Ahora CurrentTag pasará a ser: $currentTag")
+
                         fragment = fragmentEvent!!
                         loadFragment(fragment, currentTag)
                     }
                     R.id.navigation_profile -> {
                         currentTag = TAG_THIRD
                         if (currentTag == oldTag) oldTag = prevOldTag
-                        Log.i("FCYCLE","1.1 Ahora CurrentTag pasará a ser: $currentTag")
+
                         fragment = fragmentProfile!!
                         loadFragment(fragment, currentTag)
                     }
                     R.id.navigation_more -> {
                         currentTag = TAG_FOURTH
                         if (currentTag == oldTag) oldTag = prevOldTag
-                        Log.i("FCYCLE","1.1 Ahora CurrentTag pasará a ser: $currentTag")
+
                         fragment = fragmentMore!!
                         loadFragment(fragment, currentTag)
                     }
@@ -160,9 +160,6 @@ class RootActivity : AppCompatActivity(),
         currentTag = lastState.currentFragmentTag
         oldTag = lastState.oldFragmentTag
 
-        Log.i("FCYCLE","3. Recuperamos la última entra del stack, que es $lastState, con CurrentTag: $currentTag y OldTag: $oldTag")
-        Log.i("BACKSTACK","CURRENT TAG: $currentTag , OLD TAG: $oldTag, LIST STATE SIZE : ${listState.size}")
-
         if (listState.size > 0) {
 
             val index = listState.size - 1
@@ -170,10 +167,6 @@ class RootActivity : AppCompatActivity(),
             if (actualState.currentFragmentTag == actualState.oldFragmentTag) {
                 listState.removeAt(index)
             }
-            Log.i("FCYLCE","3.1 , el proximo elemento en la lista es $actualState, con CurrentTag: ${actualState.currentFragmentTag} y " +
-                    " Old tag: ${actualState.oldFragmentTag}")
-            Log.i("BACKSTACK","List state size menor que 0, ACTUAL STATE $actualState, SF current Tag: ${actualState.currentFragmentTag} , " +
-                    "SF Old tag: ${actualState.oldFragmentTag}")
         }
 
         val ft = supportFragmentManager.beginTransaction()
@@ -233,19 +226,12 @@ class RootActivity : AppCompatActivity(),
             else -> {
                 listState.add(StateFragment(currentTag, oldTag))
 
-                Log.i("FCYCLE","2, Se ha añadido el SF con Currentag: $currentTag y oldTag: $oldTag")
-
-                Log.i("BACKSTACK","ADDED CURRENT TAG: $currentTag, OLD TAG: $oldTag")
-
                 val indexToEliminate = listState.indexOfFirst { it.oldFragmentTag == currentTag }
 
-                Log.i("BACKSTACK","index to elimate: $indexToEliminate")
 
                 if (indexToEliminate != -1 && indexToEliminate != 0){
 
-                    Log.i("FCYCLE","2.1 , anteriormente CurrentTag: $currentTag ya habia sido añadido en el indice $indexToEliminate, por ello se elimina")
                     val sfToEliminate = listState.first { it.oldFragmentTag == currentTag }
-                    Log.i("BACKSTACK","SF to eliminate $sfToEliminate")
                     val sfToElimanteCurrentFragment = sfToEliminate.currentFragmentTag
 
                     listState[indexToEliminate - 1].currentFragmentTag = sfToElimanteCurrentFragment
@@ -287,10 +273,6 @@ class RootActivity : AppCompatActivity(),
             val iconView = itemView.getChildAt(0)
             iconView.background = getDrawable(R.drawable.bottom_item_switchable_background)
         }
-
-       // RootNavView.setOnNavigationItemSelectedListener(this)
-
-        Log.i("BOTTOMNAV","anchura de nav: ${RootNavView.width}")
     }
 
     fun hideBottomNavigation(hide: Boolean){
@@ -310,10 +292,9 @@ class RootActivity : AppCompatActivity(),
         }
     }
 
-
     //Métodos delegados del fragment profile
 
-    //Ya que los listener de cada uno de los fragments y subfragments han de estar reflajados en la activity que nos
+    //Ya que los listener de cada uno de los fragments y subfragments han de estar reflajados en la activity que los
     //anida, estos métodos responden a diferentes acciones realizadas sobre estos diferentes fragments.
 
     override fun profileOpenEditUserClick(boolean: Boolean) {
@@ -414,7 +395,6 @@ class RootActivity : AppCompatActivity(),
     }
 
     override fun slideWithScrollView(offset: Int) {
-        Log.i("LOAD", "llamado a slidewithscroll")
         RootNavView.scrollX = offset
     }
 
@@ -448,22 +428,16 @@ class RootActivity : AppCompatActivity(),
     }
 
     override fun homePagerLoadedWithCurrentItem(item: Int) {
-        Log.i("BARRA","Delegado recibe pedido de home pager, con item numero $item")
         slideToMatchPlace(item)
     }
 
-    override fun homeMapInitMap() {
-        //(currentFragment as? HomePagerFragment)?.moveToUserPosition()
-    }
+    override fun homeMapInitMap() {}
 
     override fun fragmentLoaded(fragmentTag: String) {
-        Log.i("LOAD","Deberia cambiar scroll, actual scroll ${RootNavView.scrollX}")
         runOnUiThread {
             if (RootNavView.scrollX != 0) RootNavView.scrollX = 0
         }
     }
 
-    override fun fragmentUnLoaded(fragmentTag: String) {
-
-    }
+    override fun fragmentUnLoaded(fragmentTag: String) {}
 }

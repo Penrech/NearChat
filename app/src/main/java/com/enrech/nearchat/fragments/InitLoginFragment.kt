@@ -2,7 +2,6 @@ package com.enrech.nearchat.fragments
 
 import android.app.Activity
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,7 +12,6 @@ import android.view.inputmethod.InputMethodManager
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.InitActivityInterface
 import kotlinx.android.synthetic.main.fragment_init_login.*
-
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"

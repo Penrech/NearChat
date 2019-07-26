@@ -2,7 +2,6 @@ package com.enrech.nearchat.fragments
 
 import android.app.Activity
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
 import androidx.fragment.app.Fragment
@@ -10,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments

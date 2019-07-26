@@ -1,7 +1,6 @@
 package com.enrech.nearchat.fragments
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,8 +17,6 @@ import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
 class UserProfileFragment : Fragment() {
 
     //Variables
-
-    private val topFragmentNumber = 2
 
     var currentFragment: Fragment? = null
 
@@ -42,7 +39,6 @@ class UserProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.i("FRAGMENTLOADER","FRAGMENT $this")
         initFragments()
     }
 
@@ -51,7 +47,6 @@ class UserProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        Log.i("LOAD","CARGADO: $this")
         addBackStackChangeListener()
 
         if (currentFragment == null || currentFragment is ProfileDetailsFragment) {
@@ -90,10 +85,8 @@ class UserProfileFragment : Fragment() {
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (hidden) {
-            Log.i("LOAD","DESCARGADO: $this")
         } else {
             changeTabListener?.fragmentLoaded(RootActivity.TAG_THIRD)
-            Log.i("LOAD","CARGADO: $this")
         }
     }
 

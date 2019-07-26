@@ -3,12 +3,10 @@ package com.enrech.nearchat
 import android.app.Application
 import com.enrech.nearchat.models.Country
 import com.enrech.nearchat.utils.CountriesObject.listOfAllCountries
-import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.BufferedReader
 import java.io.InputStreamReader
-
 
 class CustomApplication: Application() {
 

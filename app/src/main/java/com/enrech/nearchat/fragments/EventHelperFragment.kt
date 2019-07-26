@@ -47,10 +47,7 @@ class EventHelperFragment : Fragment() {
             }
             EventHelper.TypeOFHelper.LOADINGEVENT -> {}
         }
-
     }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

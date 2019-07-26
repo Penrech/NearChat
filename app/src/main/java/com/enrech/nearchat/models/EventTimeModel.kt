@@ -1,6 +1,5 @@
 package com.enrech.nearchat.models
 
-import android.content.Context
 import java.text.SimpleDateFormat
 import java.util.*
 

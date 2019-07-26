@@ -1,7 +1,6 @@
 package com.enrech.nearchat.fragments
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -26,15 +25,12 @@ class MoreFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i("FRAGMENTLOADER","FRAGMENT $this")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        Log.i("LOAD","CARGADO: $this")
         return inflater.inflate(R.layout.fragment_more, container, false)
     }
 
@@ -61,10 +57,9 @@ class MoreFragment : Fragment() {
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (hidden) {
-            Log.i("LOAD","DESCARGADO: $this")
+
         } else {
             changeTabListener?.fragmentLoaded(RootActivity.TAG_FOURTH)
-            Log.i("LOAD","CARGADO: $this")
         }
     }
 

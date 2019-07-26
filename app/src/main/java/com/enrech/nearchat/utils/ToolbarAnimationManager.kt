@@ -25,9 +25,8 @@ class ToolbarAnimationManager(private val currentActivity: Activity?) {
     //La implementación se ha diseñado a base de cálculos y prueba y error hasta conseguir un resultado sólido.
     fun changeIconsDinamically(actualPosition: Int, offset: Float) {
         if (actualPosition == 0) {
-            Log.i("CUSTOM","Toolbar elements count ${toolbarElementsData.size}")
+
             toolbarElementsData.forEach {
-                Log.i("CUSTOM","ES CustomButton: ${it is CustomToolbarButton}")
                 if (it is CustomToolbarLabel) {
                     val textLeftPosition = it.leftSideBound ?: 0.5f
                     val textRightPosition = it.rightSideBound ?: 0.6f
@@ -41,7 +40,6 @@ class ToolbarAnimationManager(private val currentActivity: Activity?) {
                             it.visibilityStored = View.VISIBLE
                         }
                         it.alphaStored = 1 - (maxOf((offset), 0f) / difference)
-                        Log.i("OFFSET","alpha ${it.alphaStored}")
                     } else {
                         it.alphaStored = 0f
                         if (it.visibilityStored == View.VISIBLE) {
@@ -83,7 +81,6 @@ class ToolbarAnimationManager(private val currentActivity: Activity?) {
                             }
                         }
 
-
                     } else {
                         if (it.shouldChangeColor!!) {
                             it.elementBackgroundColor = it.initialBackgroundColor
@@ -105,9 +102,7 @@ class ToolbarAnimationManager(private val currentActivity: Activity?) {
                                 it.actualDrawable = it.initialDrawable
                             }
                         }
-
                     }
-
                 }
 
                 //Esta función se llama desde el page change listener de un view pager concreto, y se hace en un thread diferente

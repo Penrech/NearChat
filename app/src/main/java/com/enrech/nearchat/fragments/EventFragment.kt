@@ -11,10 +11,8 @@ import androidx.fragment.app.FragmentManager
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.activities.RootActivity
-import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
 import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
-import com.enrech.nearchat.models.EventHelper
 
 //Este fragment gestiona la UI y las diferentes funcionalidades dentro de un evento
 class EventFragment : Fragment() {
@@ -50,7 +48,6 @@ class EventFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.i("FRAGMENTLOADER","FRAGMENT $this")
         initFragments()
     }
 
@@ -58,8 +55,6 @@ class EventFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
 
         whatShouldThisLoad()
 
@@ -69,16 +64,9 @@ class EventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.i("LOAD","CARGADO: $this")
-
         changeTabListener?.fragmentLoaded(RootActivity.TAG_SECOND)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -109,13 +97,9 @@ class EventFragment : Fragment() {
         initListeners()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        Log.i("EVENTLOG","Guardo instancia")
-    }
-
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
+
         if (hidden) {
             deInitListeners()
         } else {
@@ -127,6 +111,7 @@ class EventFragment : Fragment() {
     }
 
     private fun propageDeeperHideEvent(hide: Boolean){
+
         when (currentFragment) {
             is EventPagerFragment -> {
                 pagerFragment?.receiveHidePropagation(hide)

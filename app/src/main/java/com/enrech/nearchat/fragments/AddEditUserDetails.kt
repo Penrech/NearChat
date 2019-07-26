@@ -112,9 +112,6 @@ class AddEditUserDetails : Fragment() {
         if (context is ModifyNavigationBarFromFragments){
             bottomNavigationListener = context
         }
-        else {
-
-        }
     }
 
     override fun onDetach() {

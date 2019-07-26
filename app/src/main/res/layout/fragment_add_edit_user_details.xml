@@ -17,8 +17,8 @@
             android:fitsSystemWindows="true"
             app:elevation="0dp"
             android:padding="0dp"
-            android:layout_margin="0dp" android:id="@+id/AddEditProfileAppBar">
-
+            android:layout_margin="0dp"
+            android:id="@+id/AddEditProfileAppBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/editProfilePictureCollapsingToolbar"
@@ -43,7 +43,7 @@
                         app:autoSizeTextType="uniform"
                         app:autoSizeStepGranularity="2sp"
                         app:autoSizeMaxTextSize="20sp"
-                        android:text="Cambiar foto de perfil"
+                        android:text="@string/edit_profile_change_profile_photo_label"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:id="@+id/changePhotoButton"
@@ -128,8 +128,9 @@
                             android:background="@drawable/bottom_item_ripple_checked"
                             android:padding="10dp"
                             android:elevation="0dp"
-                            android:contentDescription="edit user profile close button"
+                            android:contentDescription="@string/edit_profile_close_button_descriptor"
                             android:layout_marginEnd="12dp"/>
+
                     <TextView
                             android:maxLines="2"
                             app:autoSizeTextType="uniform"
@@ -144,7 +145,7 @@
                             android:textColor="@color/brokenBlack"
                             android:textAlignment="center"
                             android:gravity="center_vertical"
-                            android:text="Editar Perfil"/>
+                            android:text="@string/edit_profile_title_label"/>
 
                     <ImageButton
                             android:layout_width="@dimen/custom_toolbar_item_height"
@@ -156,7 +157,7 @@
                             android:background="@drawable/bottom_item_ripple_checked"
                             android:padding="10dp"
                             android:elevation="0dp"
-                            android:contentDescription="save changes edit profile toolbar button"/>
+                            android:contentDescription="@string/edit_profile_save_button_descriptor"/>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -180,7 +181,7 @@
                 android:layout_height="wrap_content">
 
             <TextView
-                    android:text="Nombre de usuario"
+                    android:text="@string/edit_profile_username_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/editProfileUserNameLabel"
@@ -212,7 +213,7 @@
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
                     android:singleLine="true"
-                    android:hint="Username"/>
+                    android:hint="@string/edit_profile_username_hint"/>
 
             <ImageView
                     android:layout_width="40dp"

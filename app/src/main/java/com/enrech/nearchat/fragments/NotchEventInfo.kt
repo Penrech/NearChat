@@ -1,6 +1,5 @@
 package com.enrech.nearchat.fragments
 
-
 import android.content.Context
 import android.os.Bundle
 import android.view.*
@@ -10,7 +9,6 @@ import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
 import com.enrech.nearchat.interfaces.NotifyInteractionHomeTab
 import kotlinx.android.synthetic.main.fragment_notch_event_info.*
-
 
 private const val WILLENTER = "willEnter"
 private const val EVENTID = "eventID"

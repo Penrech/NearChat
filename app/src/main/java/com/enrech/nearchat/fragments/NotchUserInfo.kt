@@ -2,7 +2,6 @@ package com.enrech.nearchat.fragments
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.DialogFragment
 
 import com.enrech.nearchat.R
@@ -68,7 +67,6 @@ class NotchUserInfo : DialogFragment() {
     private fun setUpButtons(){
         fragmentNotchEventDismissButton.setOnClickListener(closeEventInfoListener)
     }
-
 
     companion object {
 

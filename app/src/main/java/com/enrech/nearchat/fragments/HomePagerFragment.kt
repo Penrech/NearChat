@@ -3,16 +3,12 @@ package com.enrech.nearchat.fragments
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.viewpager.widget.ViewPager
@@ -21,19 +17,12 @@ import com.enrech.nearchat.R
 import com.enrech.nearchat.adapters.DefaultPagerAdapter
 import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
 import com.enrech.nearchat.interfaces.NotifyInteractionHomeTab
-import com.enrech.nearchat.utils.CountriesObject
-import com.enrech.nearchat.utils.LocationWithoutGPSUtils
 import com.enrech.nearchat.utils.ToolbarAnimationManager
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_home_pager.*
 import kotlinx.android.synthetic.main.fragment_home_pager.view.*
-import kotlinx.android.synthetic.main.fragment_home_pager.view.LinerLayoutHomeToolbar
-import kotlin.math.max
 
 private const val LOCATION_REQUEST_CODE = 101
 private const val MAX_RESTORE_LOCATION_TRYS = 5
@@ -137,20 +126,18 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
             if (p0?.isLocationAvailable!! && p0.isLocationAvailable != lastStatus) {
                 if (googleLocationManager != null) {
-                    val permiso = ContextCompat.checkSelfPermission(activity!!.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
                     restoreUserPosition()
                 }
+
             } else if (!p0.isLocationAvailable && p0.isLocationAvailable != lastStatus){
                 if (googleLocationManager != null) {
                     val permiso = ContextCompat.checkSelfPermission(activity!!.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
                     if (permiso == PackageManager.PERMISSION_GRANTED) {
-                        //mMap.isMyLocationEnabled = false
-                        //No mostrar posicion
+
                         homeMapFragment?.removeMyPositionUserMarker()
                     }
                 }
             }
-
             lastStatus = p0.isLocationAvailable
         }
     }
@@ -225,7 +212,6 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         if (hide) {
             onPause()
         } else {
-            Log.i("BARRA","Aparece home pager, y llamo a delegado")
             notifyInteractionHomeTab?.homePagerLoadedWithCurrentItem(mPager!!.currentItem)
             onResume()
         }

@@ -6,12 +6,13 @@ import android.widget.TimePicker
 import java.util.*
 
 
-class CustomTimePickerDialog @JvmOverloads constructor(context: Context,
-                                                       onTimeSetListener : OnTimeSetListener,
-                                                       hourOfDay: Int,
-                                                       minute: Int,
-                                                       is24HourView: Boolean,
-                                                       private val isActualDay: Boolean) : TimePickerDialog(context,onTimeSetListener,hourOfDay,minute,is24HourView){
+class CustomTimePickerDialog @JvmOverloads constructor(
+    context: Context,
+    onTimeSetListener : OnTimeSetListener,
+    hourOfDay: Int,
+    minute: Int,
+    is24HourView: Boolean,
+    private val isActualDay: Boolean) : TimePickerDialog(context,onTimeSetListener,hourOfDay,minute,is24HourView){
 
     private var lastHour: Int? = null
     private var lastMinute: Int? = null

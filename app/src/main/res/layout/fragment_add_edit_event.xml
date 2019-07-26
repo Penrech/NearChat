@@ -44,7 +44,7 @@
                         app:autoSizeTextType="uniform"
                         app:autoSizeStepGranularity="2sp"
                         app:autoSizeMaxTextSize="20sp"
-                        android:text="Cambiar foto"
+                        android:text="@string/edit_event_change_photo"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:id="@+id/changePhotoButton"
@@ -129,7 +129,7 @@
                             android:background="@drawable/bottom_item_ripple_checked"
                             android:padding="10dp"
                             android:elevation="0dp"
-                            android:contentDescription="edit user profile close button"
+                            android:contentDescription="@string/edit_event_close_button_descriptor"
                             android:layout_marginEnd="12dp"/>
                     <TextView
                             android:maxLines="2"
@@ -145,7 +145,7 @@
                             android:textColor="@color/brokenBlack"
                             android:textAlignment="center"
                             android:gravity="center_vertical"
-                            android:text="Editar Evento"/>
+                            android:text="@string/edit_event_title"/>
 
                     <ImageButton
                             android:layout_width="@dimen/custom_toolbar_item_height"
@@ -157,7 +157,7 @@
                             android:background="@drawable/bottom_item_ripple_checked"
                             android:padding="10dp"
                             android:elevation="0dp"
-                            android:contentDescription="save changes edit profile toolbar button"/>
+                            android:contentDescription="@string/edit_event_save_button_descriptor"/>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -181,7 +181,7 @@
                 android:layout_height="wrap_content">
 
             <TextView
-                    android:text="Nombre del Evento"
+                    android:text="@string/edit_event_event_name_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/editEventTitleLabel"
@@ -212,11 +212,11 @@
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
                     android:singleLine="true"
-                    android:hint="Nombre del evento"
+                    android:hint="@string/edit_event_event_name_hint"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
             <TextView
-                    android:text="Fecha de finalización"
+                    android:text="@string/edit_event_end_date_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/editEventEndDateLabel"
@@ -251,7 +251,7 @@
                     android:singleLine="true"/>
 
             <TextView
-                    android:text="Rango del evento"
+                    android:text="@string/edit_event_range_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/editEventRangeLabel"
@@ -284,11 +284,11 @@
                     android:singleLine="true"
                     android:gravity="bottom"
                     android:paddingBottom="10dp"
-                    android:hint="50"
+                    android:hint="@string/edit_event_range_hint"
                     app:layout_constraintEnd_toStartOf="@+id/editEventMeassureChangeButton"/>
             <Button
                     android:textAllCaps="false"
-                    android:text="M"
+                    android:text="@string/edit_event_change_meassure_type_button"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:id="@+id/editEventMeassureChangeButton"
@@ -304,7 +304,7 @@
                     app:autoSizeTextType="uniform"
                     app:autoSizeStepGranularity="2sp"
                     app:autoSizeMaxTextSize="15sp"
-                    android:text="Mínimo 10 metros, máximo 1000 metros"
+                    android:text="@string/edit_event_range_helper"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/editEventHelperRangeLabel"
@@ -320,7 +320,7 @@
                     app:layout_constraintHorizontal_bias="0.0"/>
 
             <TextView
-                    android:text="Localización"
+                    android:text="@string/edit_event_location_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/editLocationLabel"
@@ -351,7 +351,7 @@
                     android:id="@+id/editEventLocationCardView"/>
 
             <TextView
-                    android:text="Aforo máximo virtual"
+                    android:text="@string/edit_event_max_people_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/editCapacityLabel"

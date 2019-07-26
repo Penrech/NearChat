@@ -1,6 +1,5 @@
 package com.enrech.nearchat.models
 
-import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 
 class Country (val CountryName: String,

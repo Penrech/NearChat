@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.format.DateUtils
@@ -15,14 +14,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.core.view.get
 import androidx.core.widget.NestedScrollView
 import com.enrech.nearchat.CustomElements.CustomTimePickerDialog
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
 import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
-import com.enrech.nearchat.interfaces.NotifyInteractionUserProfile
 import com.enrech.nearchat.models.EventTimeModel
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_add_edit_event.*

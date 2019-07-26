@@ -2,7 +2,6 @@ package com.enrech.nearchat.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import androidx.fragment.app.DialogFragment
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
 import com.enrech.nearchat.interfaces.TypeOfComunication
-import kotlinx.android.synthetic.main.fragment_event_chat.*
 import kotlinx.android.synthetic.main.fragment_notch_event_chat_conversation_type.*
 
 private const val COMMUNICATION_TYPE = "ComunicationType"

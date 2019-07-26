@@ -77,13 +77,11 @@ class HomeMapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onPause() {
         super.onPause()
-        Log.i("PAGERFRAGMENTVISIBLE", "Home Map fragment pause")
         turnOffListeners()
     }
 
     override fun onResume() {
         super.onResume()
-        Log.i("PAGERFRAGMENTVISIBLE", "Home Map fragment resume")
         turnOnListeners()
     }
 
@@ -97,7 +95,6 @@ class HomeMapFragment : Fragment(), OnMapReadyCallback {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        Log.i("HOMEMAPVISIBLE","home map is visible : $isVisibleToUser")
         if (isVisibleToUser) {
             turnOnListeners()
         } else {
@@ -105,13 +102,9 @@ class HomeMapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun turnOnListeners(){
-        Log.i("PAGERFRAGMENTVISIBLE", "Home Map fragment turn on listeners")
-    }
+    private fun turnOnListeners(){}
 
-    private fun turnOffListeners(){
-        Log.i("PAGERFRAGMENTVISIBLE", "Home Map fragment turn off listeners")
-    }
+    private fun turnOffListeners(){}
 
     override fun onMapReady(p0: GoogleMap?) {
         gMap = p0
@@ -140,7 +133,6 @@ class HomeMapFragment : Fragment(), OnMapReadyCallback {
     }
 
     fun initMoveMyPositionUser(latLng: LatLng){
-        Log.i("MARKER","My position markers is : $myPositionMarker, In location $latLng")
         if (gMap == null) return
 
         if (myPositionMarker == null) {

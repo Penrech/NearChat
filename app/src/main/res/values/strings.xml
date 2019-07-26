@@ -28,4 +28,23 @@
     <string name="cant_enter_button_label">Intentar de nuevo</string>
     <string name="too_far_button_label">Entrar de nuevo</string>
     <string name="title_activity_maps">Map</string>
+    <string name="edit_event_change_photo">Cambiar foto</string>
+    <string name="edit_event_close_button_descriptor">edit user profile close button</string>
+    <string name="edit_event_title">Editar Evento</string>
+    <string name="edit_event_save_button_descriptor">save changes edit event toolbar button</string>
+    <string name="edit_event_event_name_label">Nombre del Evento</string>
+    <string name="edit_event_event_name_hint">Nombre del evento</string>
+    <string name="edit_event_end_date_label">Fecha de finalización</string>
+    <string name="edit_event_range_label">Rango del evento</string>
+    <string name="edit_event_range_hint">50</string>
+    <string name="edit_event_change_meassure_type_button">M</string>
+    <string name="edit_event_range_helper">Mínimo 10 metros, máximo 1000 metros</string>
+    <string name="edit_event_location_label">Localización</string>
+    <string name="edit_event_max_people_label">Aforo máximo virtual</string>
+    <string name="edit_profile_change_profile_photo_label">Cambiar foto de perfil</string>
+    <string name="edit_profile_close_button_descriptor">edit user profile close button</string>
+    <string name="edit_profile_title_label">Editar Perfil</string>
+    <string name="edit_profile_save_button_descriptor">save changes edit profile toolbar button</string>
+    <string name="edit_profile_username_label">Nombre de usuario</string>
+    <string name="edit_profile_username_hint">Username</string>
 </resources>

@@ -69,7 +69,6 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
     override fun onPageSelected(position: Int) {
         currentPage = position
-        Log.i("EVENTLOG","CurrentPage: $currentPage")
     }
 
     private var changePageButtonListener = View.OnClickListener {
@@ -103,7 +102,6 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.i("EVENTLOG","CreoPager: $currentPage")
         initPagerFragments()
     }
 
@@ -155,7 +153,7 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
     override fun onPause() {
         super.onPause()
-        deleteListenerPagerEvents()
+        stopListenersOnFragmentNotVisibleOrInPause()
     }
 
     override fun onDetach() {
@@ -168,7 +166,6 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         if (hide) {
             onPause()
         } else {
-            Log.i("BARRA","Aparece home pager, y llamo a delegado")
             notifyInteractionEventTab?.eventPagerLoadedWithCurrentItem(mPager!!.currentItem)
             onResume()
         }

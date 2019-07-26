@@ -60,7 +60,6 @@ class EventChatFragment : Fragment() {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        Log.i("HOMEMAPVISIBLE","event list is visible : $isVisibleToUser")
         if (isVisibleToUser) {
             turnOnListeners()
         } else {
@@ -76,13 +75,9 @@ class EventChatFragment : Fragment() {
         }
     }
 
-    private fun turnOnListeners(){
-        Log.i("PAGERFRAGMENTVISIBLE", "Event list fragment turn on listeners")
-    }
+    private fun turnOnListeners(){}
 
-    private fun turnOffListeners(){
-        Log.i("PAGERFRAGMENTVISIBLE", "Event list fragment turn off listeners")
-    }
+    private fun turnOffListeners(){}
 
 
     private fun initDrawables(){
