@@ -3,6 +3,7 @@ package com.enrech.nearchat.fragments
 import android.app.Activity
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,9 +23,16 @@ class EventChatFragment : Fragment() {
     private var shoutDrawable: Drawable? = null
     private var broadcastDrawable: Drawable? = null
 
+    private var actualComunicationType = TypeOfComunication.TALK
+
     //Listener
 
-    private var actualComunicationType = TypeOfComunication.TALK
+    private fun setClickOnScreenListener(){
+        eventChatRootContainer.setOnTouchListener { _, _ ->
+            hideSoftKeyboard(activity as Activity)
+            false
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,12 +48,42 @@ class EventChatFragment : Fragment() {
         setClickOnScreenListener()
     }
 
-    private fun setClickOnScreenListener(){
-        eventChatRootContainer.setOnTouchListener { _, _ ->
-            hideSoftKeyboard(activity as Activity)
-            false
+    override fun onResume() {
+        super.onResume()
+        turnOnListeners()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        turnOffListeners()
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        Log.i("HOMEMAPVISIBLE","event list is visible : $isVisibleToUser")
+        if (isVisibleToUser) {
+            turnOnListeners()
+        } else {
+            turnOffListeners()
         }
     }
+
+    fun receiveDeepHidePropagation(hide: Boolean) {
+        if (hide) {
+            turnOffListeners()
+        } else {
+            turnOnListeners()
+        }
+    }
+
+    private fun turnOnListeners(){
+        Log.i("PAGERFRAGMENTVISIBLE", "Event list fragment turn on listeners")
+    }
+
+    private fun turnOffListeners(){
+        Log.i("PAGERFRAGMENTVISIBLE", "Event list fragment turn off listeners")
+    }
+
 
     private fun initDrawables(){
 

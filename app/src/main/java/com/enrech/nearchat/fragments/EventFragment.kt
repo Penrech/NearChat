@@ -59,7 +59,7 @@ class EventFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        addBackStackChangeListener()
+
 
         whatShouldThisLoad()
 
@@ -77,7 +77,7 @@ class EventFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        removeBackStackChangeListener()
+
     }
 
     override fun onAttach(context: Context) {
@@ -99,6 +99,16 @@ class EventFragment : Fragment() {
         notifyInteractionEventTab = null
     }
 
+    override fun onPause() {
+        super.onPause()
+        deInitListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initListeners()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.i("EVENTLOG","Guardo instancia")
@@ -107,11 +117,29 @@ class EventFragment : Fragment() {
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (hidden) {
-            Log.i("LOAD","DESCARGADO: $this")
+            deInitListeners()
         } else {
             changeTabListener?.fragmentLoaded(RootActivity.TAG_SECOND)
-            Log.i("LOAD","CARGADO: $this")
+            initListeners()
         }
+
+        propageDeeperHideEvent(hidden)
+    }
+
+    private fun propageDeeperHideEvent(hide: Boolean){
+        when (currentFragment) {
+            is EventPagerFragment -> {
+                pagerFragment?.receiveHidePropagation(hide)
+            }
+        }
+    }
+
+    private fun initListeners(){
+        addBackStackChangeListener()
+    }
+
+    private fun deInitListeners(){
+        removeBackStackChangeListener()
     }
 
     //Métodos

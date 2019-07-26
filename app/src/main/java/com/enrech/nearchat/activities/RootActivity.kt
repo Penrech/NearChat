@@ -1,11 +1,9 @@
 package com.enrech.nearchat.activities
 
 import android.graphics.Point
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
@@ -15,11 +13,8 @@ import com.enrech.nearchat.fragments.*
 import com.enrech.nearchat.interfaces.*
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_root.*
-import android.view.Display
 import com.enrech.nearchat.models.EventHelper
-import android.telephony.TelephonyManager
 import com.enrech.nearchat.models.StateFragment
 
 private const val MAX_HISTORIC = 5
@@ -49,6 +44,9 @@ class RootActivity : AppCompatActivity(),
 
     private var currentFragment: Fragment? = null
 
+    private var backButtonPress = false
+    private var navigationButtonPress = false
+
     private val listState = mutableListOf<StateFragment>()
     private var currentTag: String = TAG_ONE
     private var oldTag: String = TAG_ONE
@@ -75,7 +73,9 @@ class RootActivity : AppCompatActivity(),
 
         RootNavView.setOnNavigationItemSelectedListener { menuItem ->
 
-            if (currentMenuItemId != menuItem.itemId) {
+            if (currentMenuItemId != menuItem.itemId && !backButtonPress) {
+
+                navigationButtonPress = true
 
                 val fragment: Fragment
                 val prevOldTag = oldTag
@@ -114,8 +114,6 @@ class RootActivity : AppCompatActivity(),
                         loadFragment(fragment, currentTag)
                     }
                 }
-
-
 
                 return@setOnNavigationItemSelectedListener true
 
@@ -257,6 +255,8 @@ class RootActivity : AppCompatActivity(),
             }
         }
 
+        navigationButtonPress = false
+
     }
 
     //Este método inicializa los cuatro fragments principales de la aplicación, y se guarda siempre una instacia de ellos
@@ -330,6 +330,10 @@ class RootActivity : AppCompatActivity(),
 
     override fun onBackPressed() {
 
+        if (navigationButtonPress) return
+
+        backButtonPress = true
+
         if (currentFragment!!.childFragmentManager.backStackEntryCount > 0) {
             super.onBackPressed()
         } else {
@@ -342,6 +346,7 @@ class RootActivity : AppCompatActivity(),
             }
         }
 
+        backButtonPress = false
     }
 
     //Este método permite sincronizar la accion de backbutton con la posicion de las páginas en los view pager anidados

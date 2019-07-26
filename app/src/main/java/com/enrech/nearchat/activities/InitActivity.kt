@@ -101,8 +101,6 @@ class InitActivity : AppCompatActivity(), InitActivityInterface {
 
     override fun onBackPressed() {
         if (enableBack) super.onBackPressed()
-        else {
-
-        }
+        else { }
     }
 }

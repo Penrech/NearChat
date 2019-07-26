@@ -14,11 +14,20 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 
 import com.enrech.nearchat.R
+import com.enrech.nearchat.interfaces.EventCardInterface
 import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
 import kotlinx.android.synthetic.main.fragment_event_list.*
 
 //Este fragment contiene la interfaz y parte de la funcionalidad de la lista de eventos cercanos
 class EventListFragment : Fragment() {
+
+    //Listeners
+
+    private var clickDelegateImplementation = object : EventCardInterface {
+        override fun eventCardClick(cardId: String) {
+            //Load event info popup
+        }
+    }
 
     private fun setClickOnScreenListener(){
         eventListRootContainer.setOnTouchListener { _, _ ->
@@ -64,7 +73,6 @@ class EventListFragment : Fragment() {
             onPause()
         }
     }
-
 
     //Esta función oculta el teclado al apretar fuera de los límites del textEdit
     private fun hideSoftKeyboard(activity: Activity) {

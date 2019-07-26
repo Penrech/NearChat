@@ -29,34 +29,9 @@ class EventMapFragment : Fragment() {
 
     private var locationWithoutGPSUtils: LocationWithoutGPSUtils? = null
 
-    private var mapView: MapView? = null
-    private var gMap: GoogleMap? = null
-
-    private var mapViewBundle: Bundle? = null
-
-    private val MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey"
-
-    //Listener
-
-    private var onMapReadyCallback = object : OnMapReadyCallback {
-        override fun onMapReady(p0: GoogleMap?) {
-            gMap = p0
-
-            val mapSettings = gMap?.uiSettings
-            mapSettings?.isMapToolbarEnabled = false
-            mapSettings?.isMyLocationButtonEnabled = false
-            mapSettings?.isCompassEnabled = false
-
-            gMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(getInitMapLocation(), 12f))
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (savedInstanceState != null) {
-            mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY)
-        }
     }
 
     override fun onCreateView(
@@ -67,46 +42,40 @@ class EventMapFragment : Fragment() {
         return view
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        mapViewBundle = outState.getBundle(MAP_VIEW_BUNDLE_KEY)
-        if (mapViewBundle == null) {
-            mapViewBundle = Bundle()
-            outState.putBundle(MAP_VIEW_BUNDLE_KEY,mapViewBundle)
-        }
-
-        mapView?.onSaveInstanceState(mapViewBundle)
-    }
-
     override fun onResume() {
         super.onResume()
-        mapView?.onResume()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        mapView?.onStart()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        mapView?.onStop()
+        turnOnListeners()
     }
 
     override fun onPause() {
-        mapView?.onPause()
         super.onPause()
+        turnOffListeners()
     }
 
-    override fun onDestroy() {
-        mapView?.onDestroy()
-        super.onDestroy()
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        Log.i("HOMEMAPVISIBLE","event map is visible : $isVisibleToUser")
+        if (isVisibleToUser) {
+            turnOnListeners()
+        } else {
+            turnOffListeners()
+        }
     }
 
-    override fun onLowMemory() {
-        super.onLowMemory()
-        mapView?.onLowMemory()
+    fun receiveDeepHidePropagation(hide: Boolean) {
+        if (hide) {
+            turnOffListeners()
+        } else {
+            turnOnListeners()
+        }
+    }
+
+    private fun turnOnListeners(){
+        Log.i("PAGERFRAGMENTVISIBLE", "Event Map fragment turn on listeners")
+    }
+
+    private fun turnOffListeners(){
+        Log.i("PAGERFRAGMENTVISIBLE", "Event Map fragment turn off listeners")
     }
 
     fun getInitMapLocation(): LatLng{

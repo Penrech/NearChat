@@ -9,19 +9,6 @@
         tools:context=".fragments.EventListFragment"
         android:background="@color/defaultLightBlue">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Event List"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:textSize="30sp"
-            android:textAlignment="center"
-            android:gravity="center_vertical"
-            android:id="@+id/textView3"/>
-
     <androidx.appcompat.widget.Toolbar
             app:contentInsetStartWithNavigation="0dp"
             app:contentInsetEnd="0dp"
@@ -75,6 +62,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.Toolbar>
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/eventListSearchEventToolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="58dp" android:id="@+id/homeEvetListRV"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,8 +34,8 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
     private var pagerAdapter: DefaultPagerAdapter? = null
     private var pagerFragments: ArrayList<Fragment> = arrayListOf()
 
-    private var homeMapFragment: EventMapFragment? = null
-    private var homeListFragment: EventChatFragment? = null
+    private var eventMapFragment: EventMapFragment? = null
+    private var eventListFragment: EventChatFragment? = null
 
     private var toolbarElementsData = ArrayList<Any>()
 
@@ -92,7 +92,7 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         if (mPager?.currentItem == 0) {
 
         } else {
-            val actualCommunication = homeListFragment!!.getActualCommunicationType()
+            val actualCommunication = eventListFragment!!.getActualCommunicationType()
             loadDialogFragment(CONVERSATION_NOTCH,NotchEventChatConversationType.newInstance(actualCommunication))
 
         }
@@ -124,8 +124,6 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
         setUpPager()
 
-        listenPagerEvents()
-
         setUpButtons()
 
         notifyInteractionEventTab?.eventPagerLoadedWithCurrentItem(mPager!!.currentItem)
@@ -135,7 +133,6 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
     override fun onDestroyView() {
         super.onDestroyView()
 
-        deleteListenerPagerEvents()
     }
 
     override fun onAttach(context: Context) {
@@ -151,10 +148,51 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        startListenersOnFragmentVisibleOrInResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        deleteListenerPagerEvents()
+    }
+
     override fun onDetach() {
         super.onDetach()
         bottomNavigationListener = null
         notifyInteractionEventTab = null
+    }
+
+    fun receiveHidePropagation(hide: Boolean) {
+        if (hide) {
+            onPause()
+        } else {
+            Log.i("BARRA","Aparece home pager, y llamo a delegado")
+            notifyInteractionEventTab?.eventPagerLoadedWithCurrentItem(mPager!!.currentItem)
+            onResume()
+        }
+
+        propageDarkDeeperHideEvent(hide)
+    }
+
+    private fun startListenersOnFragmentVisibleOrInResume(){
+        listenPagerEvents()
+    }
+
+    private fun stopListenersOnFragmentNotVisibleOrInPause(){
+        deleteListenerPagerEvents()
+    }
+
+    private fun propageDarkDeeperHideEvent(hide: Boolean){
+        when(mPager!!.currentItem) {
+            0 -> {
+                eventMapFragment?.receiveDeepHidePropagation(hide)
+            }
+            1 -> {
+                eventListFragment?.receiveDeepHidePropagation(hide)
+            }
+        }
     }
 
     //Métodos
@@ -198,14 +236,14 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
     //Este método inicializa los fragments principales de para esta funcionalidad para tener su estado guardado
     private fun initPagerFragments(){
-        homeMapFragment = EventMapFragment()
-        homeListFragment = EventChatFragment()
-        pagerFragments.add(homeMapFragment!!)
-        pagerFragments.add(homeListFragment!!)
+        eventMapFragment = EventMapFragment()
+        eventListFragment = EventChatFragment()
+        pagerFragments.add(eventMapFragment!!)
+        pagerFragments.add(eventListFragment!!)
     }
 
     fun changeComunicationTypeFromChat(typeOfComunication: TypeOfComunication) {
-        homeListFragment?.changeComunication(typeOfComunication)
+        eventListFragment?.changeComunication(typeOfComunication)
     }
 
     //Estos dos métodos sirven para volver a la página anterior del pager en caso de presionar el botón atrás
