@@ -25,12 +25,9 @@ import com.enrech.nearchat.utils.CountriesObject
 import com.enrech.nearchat.utils.LocationWithoutGPSUtils
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
-import kotlinx.android.synthetic.main.fragment_home_map.view.*
-import java.lang.Exception
-
 
 //Este fragment contiene la interfaz y parte de la funcionalidad del mapa de eventos cercanos
-class HomeMapFragment : SupportMapFragment(), OnMapReadyCallback {
+class HomeMapFragment : Fragment(), OnMapReadyCallback {
 
     //Variables
 
@@ -66,7 +63,7 @@ class HomeMapFragment : SupportMapFragment(), OnMapReadyCallback {
 
         if (mapFragment == null) {
 
-            mapFragment = this
+            mapFragment = childFragmentManager.findFragmentById(R.id.homeMap) as SupportMapFragment
             mapFragment?.getMapAsync(this)
         }
 

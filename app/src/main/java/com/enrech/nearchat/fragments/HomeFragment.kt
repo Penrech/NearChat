@@ -44,6 +44,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Log.i("FRAGMENTLOADER","FRAGMENT $this")
         initFragments()
     }
 
@@ -85,6 +86,11 @@ class HomeFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         changeTabListener = null
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.i("FRAGMENT","Home fragment pause")
     }
 
     //Métodos

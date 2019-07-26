@@ -48,7 +48,7 @@ class EventFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.i("EVENTLOG","Creo Evento principal")
+        Log.i("FRAGMENTLOADER","FRAGMENT $this")
         initFragments()
     }
 

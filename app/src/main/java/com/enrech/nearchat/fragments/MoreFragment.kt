@@ -3,6 +3,7 @@ package com.enrech.nearchat.fragments
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,11 @@ class MoreFragment : Fragment() {
     private var changeTabListener: NotifyTopFragmentChange? = null
 
     //Métodos lifecycle
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.i("FRAGMENTLOADER","FRAGMENT $this")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

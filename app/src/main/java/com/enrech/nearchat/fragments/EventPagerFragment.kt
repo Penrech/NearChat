@@ -220,6 +220,7 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
     private fun isFragmentInTheBackStack(): Boolean {
         for (index in 0 until childFragmentManager.backStackEntryCount) {
+
             if (childFragmentManager.getBackStackEntryAt(index).name.equals(INFO_NOTCH,true)) {
                 return true
             }
