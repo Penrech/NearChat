@@ -25,7 +25,7 @@ class CustomTextInputLayout @JvmOverloads constructor(
     var initialHelperTextColor: Int? = null
     var initErrorText: String? = null
 
-    var initialYPosition: Int? = null
+    var ScrollRect: Rect? = null
 
     var parentScrollID: Int? = null
     var parentScrollView: NestedScrollView? = null
@@ -92,9 +92,6 @@ class CustomTextInputLayout @JvmOverloads constructor(
                 errorText?.visibility = View.VISIBLE
             }
 
-            /*parentScrollView?.let {
-                it.smoothScrollTo(it.scrollX,initialYPosition ?: it.scrollY)
-            }*/
             scrollToElementPosition()
             inputElement?.startAnimation(errorAnimation)
         } else {
@@ -112,22 +109,42 @@ class CustomTextInputLayout @JvmOverloads constructor(
         val rootView = this.rootView as? ViewGroup
 
         if (rootView != null) {
-            val rect = Rect()
-            getDrawingRect(rect)
-            rootView.offsetDescendantRectToMyCoords(this,rect)
-            initialYPosition = rect.top
 
             if (parentScrollID != null && parentScrollID != -1) parentScrollView = rootView.findViewById(parentScrollID!!) ?: null
 
-            Log.i("ROOTVIEW","parentScrollView $parentScrollView")
+            parentScrollView?.let {
+                val rect = Rect()
+                getDrawingRect(rect)
+
+                rootView.offsetDescendantRectToMyCoords(it,rect)
+                ScrollRect = rect
+            }
         }
 
     }
 
-    private fun scrollToElementPosition(){
-        val rect = Rect()
-        parentScrollView?.offsetDescendantRectToMyCoords(this,rect)
-        Log.i("ROOTVIEW","Position in scrollView: ${rect.top}, scrollView ScrollY: ${parentScrollView?.scrollY}")
+    private fun scrollToElementPosition() {
+        if (parentScrollView == null) return
+
+        val rectElement = Rect()
+        val rectScrollview = Rect()
+        parentScrollView!!.offsetDescendantRectToMyCoords(this, rectElement)
+        parentScrollView!!.getLocalVisibleRect(rectScrollview)
+
+        val elementTop = rectElement.top
+        val elementBottom = elementTop + this.height
+
+        val scrollViewScroll = parentScrollView!!.scrollY
+        val scrollViewBottom = rectScrollview.bottom
+
+        if (scrollViewScroll > elementTop) {
+            parentScrollView!!.smoothScrollTo(0, elementTop)
+        }
+
+        if (elementBottom > scrollViewBottom) {
+            parentScrollView!!.smoothScrollTo(0, elementBottom)
+        }
+
     }
 
 }
