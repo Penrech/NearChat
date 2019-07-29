@@ -9,33 +9,6 @@ data class PrivateChat(
     var messages: ArrayList<PrivateChatMessageSubModel>?)
 {
 
-    var isPinned: Boolean? = null
-    @Exclude get
-
-    fun isPinned(loggedUser: String): Boolean? {
-        if (isPinned != null) return isPinned
-
-       val userInChat = users?.indexOfFirst { it.userID == loggedUser }
-
-        if (userInChat != null && userInChat != -1 ){
-            val userRef = users!![userInChat]
-            isPinned = userRef.hasThisChatPinned
-            return isPinned
-        }
-
-        isPinned = false
-        return isPinned
-    }
-
-    fun setPinned(loggedUser: String, pinned: Boolean) {
-        val userInChat = users?.indexOfFirst { it.userID == loggedUser }
-
-        if (userInChat != null && userInChat != -1){
-             isPinned = pinned
-             users!![userInChat].hasThisChatPinned = isPinned
-        }
-    }
-
     fun isCurrentUserBaned(loggedUser: String) : Boolean {
         val userInChat = users?.indexOfFirst { it.userID == loggedUser }
 

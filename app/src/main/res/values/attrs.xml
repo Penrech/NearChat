@@ -10,4 +10,8 @@
         <attr name="secundary_elevation" format="float"/>
     </declare-styleable>
 
+    <declare-styleable name="CustomTextInputLayout">
+        <attr name="parent_scrollview" format="integer"/>
+    </declare-styleable>
+
 </resources>

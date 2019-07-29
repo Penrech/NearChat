@@ -5,7 +5,6 @@ data class PrivateChatUserSubModel(
     var userID: String?,
     var typing: Boolean?,
     var hasReferenceToThisChat: Boolean?,
-    var hasThisChatPinned: Boolean?,
     var isBanned: Boolean?
 ) {
 }

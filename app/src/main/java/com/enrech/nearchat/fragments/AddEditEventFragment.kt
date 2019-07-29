@@ -66,7 +66,8 @@ class AddEditEventFragment : Fragment() {
     }
 
     private var closeSaveButtonListener = View.OnClickListener {
-        listener?.eventPropagateBackButton()
+        //listener?.eventPropagateBackButton()
+        checkDataBeforeSave()
     }
 
     private var enableCapacityLimit = object : CompoundButton.OnCheckedChangeListener {
@@ -309,6 +310,10 @@ class AddEditEventFragment : Fragment() {
         } else {
             return context.resources.configuration.locale
         }
+    }
+
+    private fun checkDataBeforeSave(){
+        editEventNameLayout.showError = true
     }
 
     //Este objeto permite inicializar el fragment en un estado u otro, en este caso en modo edit o modo add

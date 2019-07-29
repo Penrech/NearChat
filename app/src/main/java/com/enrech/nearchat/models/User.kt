@@ -21,7 +21,7 @@ data class User(
     var privateChats: ArrayList<String>?,
     var contacts: ArrayList<String>?,
     var bloquedUsers: ArrayList<String>?,
-    var events: ArrayList<String>?,
+    var events: ArrayList<UserEventFormat>?,
     var showNotifications: Boolean?,
     var showNearEventsNotifications: Boolean?,
     var showNewPrivateChatMessagesNotifications: Boolean?,

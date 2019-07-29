@@ -29,7 +29,7 @@ class EventFragment : Fragment() {
 
     private var notifyInteractionEventTab: NotifyInteractionEventTab? = null
 
-    var userInEvent = true
+    var userInEvent = false
 
     //Listeners
 
