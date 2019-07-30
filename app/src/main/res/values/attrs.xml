@@ -12,6 +12,7 @@
 
     <declare-styleable name="CustomTextInputLayout">
         <attr name="parent_scrollview" format="integer"/>
+        <attr name="hasHelper" format="boolean"/>
     </declare-styleable>
 
 </resources>

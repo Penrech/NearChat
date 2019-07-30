@@ -21,6 +21,7 @@ import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
 import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
 import com.enrech.nearchat.models.EventTimeModel
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_add_edit_event.*
 import java.util.*
@@ -50,6 +51,10 @@ class AddEditEventFragment : Fragment() {
     private var scrollOffset: Int? = null
     
     private var dateTimeModel: EventTimeModel? = null
+
+    private var selectedDate: Date? = null
+
+    private var selectedLatLon: LatLng? = null
 
     //Listener objects
 
@@ -296,6 +301,7 @@ class AddEditEventFragment : Fragment() {
             calendar.set(year, month, day, hour, minute)
             dateTimeModel = EventTimeModel(getCurrentLocale(context!!),calendar.timeInMillis)
             editEventEndDateEdiText.setText(dateTimeModel!!.getTimeInString())
+            selectedDate = Date(calendar.timeInMillis)
 
         }, mHour,mMinute,true,isCurrentDay)
 
@@ -313,7 +319,26 @@ class AddEditEventFragment : Fragment() {
     }
 
     private fun checkDataBeforeSave(){
-        editEventNameLayout.showError = true
+        val eventName = editEventNameEditText.text?.toString()
+        val eventDate = selectedDate
+        val eventRange = editEventRangeEditText.text?.toString()
+        val eventPosition = selectedLatLon
+        val eventMaxPeople = editEventCapacityEditText.text?.toString()
+
+        editEventNameLayout.showError(false)
+        editEventDateLayout.showError(false)
+        editRangeLayout.showError(false)
+        editEventLocationLayout.showError(false)
+        eventMaxPeopleLayout.showError(false)
+
+        if (eventName == null || eventName.length < 4) {
+            editEventNameLayout.showError(true,"El nombre debe tener mínimo 4 caracteres")
+        } else if (eventDate == null) {
+            editEventDateLayout.showError(true,"Es necesaria una fecha de finalización")
+        } else if (eventDate.after(Date(Calendar.getInstance().timeInMillis))) {
+            editEventDateLayout.showError(true,"La fecha de finalización debe ser superior a la fecha y hora actual")
+        }
+
     }
 
     //Este objeto permite inicializar el fragment en un estado u otro, en este caso en modo edit o modo add

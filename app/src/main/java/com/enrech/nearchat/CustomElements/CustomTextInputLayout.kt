@@ -20,10 +20,10 @@ class CustomTextInputLayout @JvmOverloads constructor(
 
     var label: TextView? = null
     var inputElement: View? = null
-    var errorText: CustomErrorTextView? = null
-    var helperText: CustomHelperTextView? = null
+    var helperErrorTextView: CustomHelperTextView? = null
+    var hasHelper = false
     var initialHelperTextColor: Int? = null
-    var initErrorText: String? = null
+    var initialHelperText: String? = null
 
     var ScrollRect: Rect? = null
 
@@ -42,19 +42,34 @@ class CustomTextInputLayout @JvmOverloads constructor(
 
             parentScrollID = ta.getResourceId(R.styleable.CustomTextInputLayout_parent_scrollview,-1)
 
+            hasHelper = ta.getBoolean(R.styleable.CustomTextInputLayout_hasHelper, false)
+
             ta.recycle()
         }
 
         errorAnimation = AnimationUtils.loadAnimation(context,R.anim.shake_edit_text)
     }
 
-    var showError: Boolean? = null
-    set(value) {
-        field = value
+    fun showError(show: Boolean, errorMessage: String? = null) {
+        if (show) {
+            helperErrorTextView?.setTextColor(context.getColor(R.color.defaultRed))
 
-        if (value == null) return
+            if (errorMessage != null) helperErrorTextView?.text = errorMessage
 
-        setErrorUI(value)
+            if (!hasHelper) helperErrorTextView?.visibility = View.VISIBLE
+
+            scrollToElementPosition()
+            inputElement?.startAnimation(errorAnimation)
+        } else {
+            helperErrorTextView?.setTextColor(initialHelperTextColor ?: context.getColor(R.color.defaultWhite))
+
+            if (!hasHelper) {
+                helperErrorTextView?.visibility = View.GONE
+                helperErrorTextView?.text = ""
+            }
+            else helperErrorTextView?.text = initialHelperText
+
+        }
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -67,43 +82,22 @@ class CustomTextInputLayout @JvmOverloads constructor(
 
         label = children.first() as? TextView
         inputElement = children.elementAtOrNull(1)
-        errorText = children.firstOrNull { it is CustomErrorTextView } as? CustomErrorTextView
-        errorText?.setTextColor(context.getColor(R.color.defaultRed))
-        helperText = children.firstOrNull{ it is CustomHelperTextView} as? CustomHelperTextView
-        initialHelperTextColor = helperText?.currentTextColor
+
+        helperErrorTextView = children.firstOrNull{ it is CustomHelperTextView} as? CustomHelperTextView
+        initialHelperTextColor = helperErrorTextView?.currentTextColor
+
+        if (hasHelper) {
+            helperErrorTextView?.visibility = View.VISIBLE
+            initialHelperText = helperErrorTextView?.text as String
+        } else {
+            helperErrorTextView?.visibility = View.GONE
+        }
 
         getBoundaries()
 
         layoutSet = true
     }
 
-    private fun changeErrorText(errorText: String?) {
-        if (errorText == null) return
-
-        this.errorText?.text = errorText
-    }
-
-    private fun setErrorUI(error: Boolean) {
-        if (error) {
-            if (errorText == null) {
-                helperText?.setTextColor(context.getColor(R.color.defaultRed))
-            } else {
-                helperText?.visibility = View.GONE
-                errorText?.visibility = View.VISIBLE
-            }
-
-            scrollToElementPosition()
-            inputElement?.startAnimation(errorAnimation)
-        } else {
-            if (errorText == null) {
-                helperText?.setTextColor(initialHelperTextColor ?: context.getColor(R.color.brokenBlack))
-            }
-
-            errorText?.visibility = View.GONE
-            helperText?.visibility = View.VISIBLE
-            changeErrorText(initErrorText)
-        }
-    }
 
     private fun getBoundaries(){
         val rootView = this.rootView as? ViewGroup
@@ -120,7 +114,6 @@ class CustomTextInputLayout @JvmOverloads constructor(
                 ScrollRect = rect
             }
         }
-
     }
 
     private fun scrollToElementPosition() {
@@ -142,9 +135,8 @@ class CustomTextInputLayout @JvmOverloads constructor(
         }
 
         if (elementBottom > scrollViewBottom) {
-            parentScrollView!!.smoothScrollTo(0, elementBottom)
+            parentScrollView!!.smoothScrollTo(0, scrollViewBottom)
         }
 
     }
-
 }
