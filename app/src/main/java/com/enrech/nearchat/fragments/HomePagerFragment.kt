@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.viewpager.widget.ViewPager
+import com.enrech.nearchat.CustomApplication
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.adapters.DefaultPagerAdapter
@@ -365,7 +366,7 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         when(requestCode){
             LOCATION_REQUEST_CODE -> {
                 if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                    showMessage("No se ha permitido la ubicación")
+                    (activity?.application as? CustomApplication)?.showMessage("No se ha permitido la ubicación")
                 }
                 else{
                     requestPermission()
@@ -387,16 +388,16 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
                                 val localizacionUsuario = LatLng(currentLocation.latitude,currentLocation.longitude)
                                 homeMapFragment?.animateCameraToLocation(localizacionUsuario)
                             } else {
-                                showMessage("Ubicación desactivada")
+                                (activity?.application as? CustomApplication)?.showMessage("Ubicación desactivada")
                             }
                         }
                     } else {
-                        showMessage("Ubicación desactivada")
+                        (activity?.application as? CustomApplication)?.showMessage("Ubicación desactivada")
                     }
                 }
             }
         } else {
-            showMessage("No se ha permitido la ubicación")
+            (activity?.application as? CustomApplication)?.showMessage("No se ha permitido la ubicación")
         }
     }
 
@@ -427,7 +428,7 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
                 }
             }
         } else {
-            showMessage("No se ha permitido la ubicación")
+            (activity?.application as? CustomApplication)?.showMessage("No se ha permitido la ubicación")
             currentRestoreLocationTrys = 0
         }
     }
@@ -466,8 +467,4 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         }
     }
 
-    fun showMessage(message: String) {
-        val snack = Snackbar.make(pagerRootView!! ,message, Snackbar.LENGTH_LONG)
-        snack.show()
-    }
 }

@@ -1,9 +1,12 @@
 package com.enrech.nearchat.fragments
 
+import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.text.format.DateUtils
@@ -14,15 +17,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
+import com.enrech.nearchat.CustomApplication
 import com.enrech.nearchat.CustomElements.CustomTimePickerDialog
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
 import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
-import com.enrech.nearchat.models.EventTimeModel
+import com.enrech.nearchat.models.*
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.appbar.AppBarLayout
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.android.synthetic.main.fragment_add_edit_event.*
 import java.util.*
 import kotlin.math.round
@@ -33,6 +41,7 @@ private const val FEET = "Ft"
 private const val HELPER_TEXT = "Mínimo %d %s , máximo %d %s"
 private const val MIN_RANGE = 100
 private const val MAX_RANGE = 1000
+private const val LOCATION_REQUEST_CODE = 101
 
 class AddEditEventFragment : Fragment() {
 
@@ -56,6 +65,8 @@ class AddEditEventFragment : Fragment() {
 
     private var selectedLatLon: LatLng? = null
 
+    private var googleLocationManager: FusedLocationProviderClient? = null
+
     //Listener objects
 
     private var onScrollChangeListener = NestedScrollView.OnScrollChangeListener { view, scrollX, scrollY, oldScrollX, oldScrollY ->
@@ -72,7 +83,7 @@ class AddEditEventFragment : Fragment() {
 
     private var closeSaveButtonListener = View.OnClickListener {
         //listener?.eventPropagateBackButton()
-        checkDataBeforeSave()
+        getCurrentPositionAndCalculateDistance()
     }
 
     private var enableCapacityLimit = object : CompoundButton.OnCheckedChangeListener {
@@ -120,6 +131,8 @@ class AddEditEventFragment : Fragment() {
         arguments?.let {
             isAdd = it.getBoolean(ISADD)
         }
+
+        requestPermission()
     }
 
     override fun onCreateView(
@@ -177,6 +190,80 @@ class AddEditEventFragment : Fragment() {
 
 
     //métodos
+
+    private fun getCurrentPositionAndCalculateDistance(){
+        val permiso = ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (permiso == PackageManager.PERMISSION_GRANTED){
+            googleLocationManager?.let { location ->
+                location.locationAvailability.addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        location.lastLocation.addOnCompleteListener { locationTask ->
+                            val currentLocation = locationTask.result
+                            if (currentLocation != null) {
+                                val localizacionUsuario = LatLng(currentLocation.latitude,currentLocation.longitude)
+                                if (calculateDistance(localizacionUsuario)) {
+                                    checkDataBeforeSave()
+                                } else {
+                                    (activity?.application as? CustomApplication)?.showMessage("No es posible crear un evento sin estar dentro de su rango")
+                                }
+                            } else {
+                                (activity?.application as? CustomApplication)?.showMessage("No se ha podido determinar la ubicación")
+                            }
+                        }
+                    } else {
+                        (activity?.application as? CustomApplication)?.showMessage("La ubicación está desactivada")
+                    }
+                }
+            }
+        } else {
+            (activity?.application as? CustomApplication)?.showMessage("No se ha permitido la ubicación")
+        }
+    }
+
+    private fun calculateDistance(currentLocation: LatLng): Boolean {
+        val userLocation = Location("")
+        userLocation.latitude = currentLocation.latitude
+        userLocation.longitude = currentLocation.longitude
+
+        if (selectedLatLon == null ||
+            editEventRangeEditText.text == null ||
+            (editEventRangeEditText.text!!.toString().toInt() < calculateRange(true ) ||
+                    editEventRangeEditText.text!!.toString().toInt() > calculateRange(false ))) return true
+
+        val eventLocation = Location("")
+        eventLocation.latitude = selectedLatLon!!.latitude
+        eventLocation.longitude = selectedLatLon!!.longitude
+
+        val rangeDistance = editEventRangeEditText.text.toString().toInt()
+
+        return userLocation.distanceTo(eventLocation) < rangeDistance
+
+    }
+
+    private fun requestPermission(){
+        val permiso = ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (permiso == PackageManager.PERMISSION_GRANTED){
+            if (googleLocationManager == null) googleLocationManager = FusedLocationProviderClient(activity!!)
+        } else {
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_REQUEST_CODE)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when(requestCode){
+            LOCATION_REQUEST_CODE -> {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED){
+                    (activity?.application as? CustomApplication)?.showMessage("No se ha permitido la ubicación")
+                }
+                else{
+                    requestPermission()
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
 
     //Este método cambia la interfaz en función de si se usa el fragment para editar o para añadir datos de nuevo usuario
     private fun setUIIfAdd(){
@@ -323,6 +410,7 @@ class AddEditEventFragment : Fragment() {
         val eventDate = selectedDate
         val eventRange = editEventRangeEditText.text?.toString()
         val eventPosition = selectedLatLon
+        val eventMaxPeopleEnabled = editEventEnableCapacityLimit.isChecked
         val eventMaxPeople = editEventCapacityEditText.text?.toString()
 
         editEventNameLayout.showError(false)
@@ -337,8 +425,33 @@ class AddEditEventFragment : Fragment() {
             editEventDateLayout.showError(true,"Es necesaria una fecha de finalización")
         } else if (eventDate.after(Date(Calendar.getInstance().timeInMillis))) {
             editEventDateLayout.showError(true,"La fecha de finalización debe ser superior a la fecha y hora actual")
+        } else if (eventRange == null){
+            editRangeLayout.showError(true, "Es necesario especificar el rango de acción del evento")
+        } else if (eventRange.toInt() < calculateRange(true) || eventRange.toInt() > calculateRange(false))  {
+            editRangeLayout.showError(true)
+        } else if (eventPosition == null) {
+            editEventLocationLayout.showError(true, "Es necesario posicionar el evento en una localización")
+        } else{
+            //Enviar al servidor
+            if (isAdd!!) {
+                val maxUserActive = if (eventMaxPeopleEnabled && eventMaxPeople != null && eventMaxPeople.toIntOrNull() != null) eventMaxPeople.toInt() else null
+
+                val newEvent = Event.newInstance("currentUser","eventId",eventName,eventRange.toInt(),eventPosition,eventDate,
+                    null,null,maxUserActive)
+                //...
+            } else {
+
+            }
         }
 
+    }
+
+    private fun calculateRange(calculateMin: Boolean): Int{
+        if (calculateMin){
+            return if (editEventMeassureChangeButton.text == FEET) convertMetersToFeet(MIN_RANGE) else MIN_RANGE
+        } else {
+            return if (editEventMeassureChangeButton.text == FEET) convertMetersToFeet(MAX_RANGE) else MAX_RANGE
+        }
     }
 
     //Este objeto permite inicializar el fragment en un estado u otro, en este caso en modo edit o modo add

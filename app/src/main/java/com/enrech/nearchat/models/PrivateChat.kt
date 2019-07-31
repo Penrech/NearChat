@@ -4,7 +4,6 @@ import com.google.firebase.firestore.Exclude
 
 data class PrivateChat(
     var pChatID: String?,
-    var adminEvent: String?,
     var users: ArrayList<PrivateChatUserSubModel>?,
     var messages: ArrayList<PrivateChatMessageSubModel>?)
 {
