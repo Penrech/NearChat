@@ -2,8 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.enrech.nearchat">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
 
     <application
             android:name=".CustomApplication"
@@ -38,6 +41,13 @@
         <meta-data
                 android:name="preloaded_fonts"
                 android:resource="@array/preloaded_fonts"/>
+
+        <!-- Foreground services in Q+ require type. -->
+        <service
+                android:name=".LocationUpdatesService"
+                android:enabled="true"
+                android:exported="true"
+                android:foregroundServiceType="location" />
     </application>
 
 </manifest>

@@ -1,13 +1,23 @@
 package com.enrech.nearchat.activities
 
+import android.Manifest
+import android.content.*
+import android.content.pm.PackageManager
 import android.graphics.Point
+import android.location.Location
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.IBinder
+import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.enrech.nearchat.BuildConfig
 import com.enrech.nearchat.R
 import com.enrech.nearchat.fragments.*
 import com.enrech.nearchat.interfaces.*
@@ -16,6 +26,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import kotlinx.android.synthetic.main.activity_root.*
 import com.enrech.nearchat.models.EventHelper
 import com.enrech.nearchat.models.StateFragment
+import com.enrech.nearchat.services.LocationUpdatesService
+import com.enrech.nearchat.utils.Utils
+import com.google.android.material.snackbar.Snackbar
 
 private const val MAX_HISTORIC = 5
 
@@ -24,7 +37,8 @@ class RootActivity : AppCompatActivity(),
     NotifyInteractionUserProfile,
     NotifyInteractionEventTab,
     NotifyInteractionHomeTab,
-    ModifyNavigationBarFromFragments {
+    ModifyNavigationBarFromFragments,
+    SharedPreferences.OnSharedPreferenceChangeListener{
 
     companion object {
         const val TAG_ONE = "first"
@@ -34,6 +48,34 @@ class RootActivity : AppCompatActivity(),
     }
 
     //Variables
+    private val TAG = RootActivity::class.java.simpleName
+
+    // Used in checking for runtime permissions.
+    private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
+
+    // The BroadcastReceiver used to listen from broadcasts from the service.
+    private var myReceiver: MyReceiver? = null
+
+    // A reference to the service used to get location updates.
+    private var mService: LocationUpdatesService? = null
+
+    // Tracks the bound state of the service.
+    private var mBound = false
+
+    // Monitors the state of the connection to the service.
+    private val mServiceConnection = object : ServiceConnection {
+
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            val binder = service as LocationUpdatesService.LocalBinder
+            mService = binder.service
+            mBound = true
+        }
+
+        override fun onServiceDisconnected(name: ComponentName) {
+            mService = null
+            mBound = false
+        }
+    }
 
     private var fragmentHome: HomeFragment? = null
     private var fragmentEvent: EventFragment? = null
@@ -440,4 +482,106 @@ class RootActivity : AppCompatActivity(),
     }
 
     override fun fragmentUnLoaded(fragmentTag: String) {}
+
+    // Gestión servicio de localización
+
+    override fun onSharedPreferenceChanged(p0: SharedPreferences?, p1: String?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private inner class MyReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val location = intent.getParcelableExtra<Location>(LocationUpdatesService.EXTRA_LOCATION)
+            if (location != null) {
+                Toast.makeText(
+                    this@RootActivity, Utils.getLocationText(location),
+                    Toast.LENGTH_SHORT
+                ).show()
+                Log.i("TAG", "Recibo datos aun en background")
+            }
+        }
+    }
+
+    private fun checkPermissions(): Boolean {
+        return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+    }
+
+    private fun requestPermissions() {
+        val shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+
+        // Provide an additional rationale to the user. This would happen if the user denied the
+        // request previously, but didn't check the "Don't ask again" checkbox.
+        if (shouldProvideRationale) {
+            Log.i(TAG, "Displaying permission rationale to provide additional context.")
+            Snackbar.make(
+                rootActivityRoot,
+                R.string.permission_rationale,
+                Snackbar.LENGTH_INDEFINITE
+            )
+                .setAction(R.string.ok, View.OnClickListener {
+                    // Request permission
+                    ActivityCompat.requestPermissions(
+                        this@RootActivity,
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        REQUEST_PERMISSIONS_REQUEST_CODE
+                    )
+                })
+                .show()
+        } else {
+            Log.i(TAG, "Requesting permission")
+            // Request permission. It's possible this can be auto answered if device policy
+            // sets the permission in a given state or the user denied the permission
+            // previously and checked "Never ask again".
+            ActivityCompat.requestPermissions(
+                this@RootActivity,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_PERMISSIONS_REQUEST_CODE
+            )
+        }
+    }
+
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        Log.i(TAG, "onRequestPermissionResult")
+        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+            when {
+                grantResults.isEmpty() -> // If user interaction was interrupted, the permission request is cancelled and you
+                    // receive empty arrays.
+                    Log.i(TAG, "User interaction was cancelled.")
+                grantResults[0] == PackageManager.PERMISSION_GRANTED -> // Permission was granted.
+                    mService?.requestLocationUpdates()
+                else -> // Permission denied.
+                    //setButtonsState(false)
+                    Snackbar.make(
+                        rootActivityRoot,
+                        R.string.permission_denied_explanation,
+                        Snackbar.LENGTH_INDEFINITE
+                    )
+                        .setAction(R.string.settings, View.OnClickListener {
+                            // Build intent that displays the App settings screen.
+                            val intent = Intent()
+                            intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                            val uri = Uri.fromParts(
+                                "package",
+                                BuildConfig.APPLICATION_ID, null
+                            )
+                            intent.data = uri
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
+                        })
+                        .show()
+            }
+        }
+    }
 }
