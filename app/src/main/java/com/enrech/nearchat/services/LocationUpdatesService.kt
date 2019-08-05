@@ -23,12 +23,8 @@ import android.util.Log
 import com.enrech.nearchat.R
 import com.enrech.nearchat.activities.RootActivity
 import com.enrech.nearchat.utils.Utils
+import com.google.android.gms.location.*
 
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 
@@ -107,11 +103,11 @@ class LocationUpdatesService : Service() {
 
             val builder = NotificationCompat.Builder(this)
                 .addAction(
-                    R.drawable.ic_launch, getString(R.string.launch_activity),
+                    R.drawable.icon_logo, getString(R.string.launch_activity),
                     activityPendingIntent
                 )
                 .addAction(
-                    R.drawable.ic_cancel, getString(R.string.remove_location_updates),
+                    R.drawable.icon_cancel, getString(R.string.remove_location_updates),
                     servicePendingIntent
                 )
                 .setContentText(text)
@@ -135,6 +131,11 @@ class LocationUpdatesService : Service() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
                 onNewLocation(locationResult!!.lastLocation)
+            }
+
+            override fun onLocationAvailability(p0: LocationAvailability?) {
+                super.onLocationAvailability(p0)
+                onNewLocationState(p0!!)
             }
         }
 
@@ -285,6 +286,13 @@ class LocationUpdatesService : Service() {
         }
     }
 
+    private fun onNewLocationState(locationAvailability: LocationAvailability){
+
+        val intent = Intent(ACTION_BROADCAST)
+        intent.putExtra(EXTRA_LOCATION_STATUS,locationAvailability)
+        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+    }
+
     /**
      * Sets the location request parameters.
      */
@@ -339,6 +347,7 @@ class LocationUpdatesService : Service() {
         internal val ACTION_BROADCAST = "$PACKAGE_NAME.broadcast"
 
         internal val EXTRA_LOCATION = "$PACKAGE_NAME.location"
+        internal val EXTRA_LOCATION_STATUS = "$PACKAGE_NAME.location_status"
         private val EXTRA_STARTED_FROM_NOTIFICATION = "$PACKAGE_NAME.started_from_notification"
 
         /**

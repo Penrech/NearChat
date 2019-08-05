@@ -9,14 +9,17 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.IBinder
+import androidx.preference.PreferenceManager
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.enrech.nearchat.BuildConfig
 import com.enrech.nearchat.R
 import com.enrech.nearchat.fragments.*
@@ -28,6 +31,7 @@ import com.enrech.nearchat.models.EventHelper
 import com.enrech.nearchat.models.StateFragment
 import com.enrech.nearchat.services.LocationUpdatesService
 import com.enrech.nearchat.utils.Utils
+import com.google.android.gms.location.LocationAvailability
 import com.google.android.material.snackbar.Snackbar
 
 private const val MAX_HISTORIC = 5
@@ -45,10 +49,13 @@ class RootActivity : AppCompatActivity(),
         const val TAG_SECOND = "second"
         const val TAG_THIRD = "third"
         const val TAG_FOURTH = "fourth"
+        var lastLocation : Location? = null
+        var locationAvaliable: Boolean? = null
     }
 
     //Variables
-    private val TAG = RootActivity::class.java.simpleName
+    //private val TAG = RootActivity::class.java.simpleName
+    private val TAG = "mainTag"
 
     // Used in checking for runtime permissions.
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
@@ -69,6 +76,7 @@ class RootActivity : AppCompatActivity(),
             val binder = service as LocationUpdatesService.LocalBinder
             mService = binder.service
             mBound = true
+            startLocationUpdates()
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
@@ -100,6 +108,8 @@ class RootActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_root)
 
+        onCreateLocationServices()
+
         overridePendingTransition(0, 0)
 
         if (savedInstanceState == null) loadFirstFragment()
@@ -107,6 +117,26 @@ class RootActivity : AppCompatActivity(),
 
         initTopFragments()
         initNavigationListener()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        onStartLocationServices()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        onResumeLocationServices()
+    }
+
+    override fun onPause() {
+        onPauseLocationServices()
+        super.onPause()
+    }
+
+    override fun onStop() {
+        onStopLocationServices()
+        super.onStop()
     }
 
     // métodos de fragments
@@ -475,6 +505,18 @@ class RootActivity : AppCompatActivity(),
 
     override fun homeMapInitMap() {}
 
+    override fun checkWhyLastLocationIsNull() {
+        if (!checkPermissions()) {
+            requestPermissions()
+        } else {
+            if (locationAvaliable != null) {
+                if (!locationAvaliable!!) showMessage("Ubicación no disponible")
+            } else {
+                mService?.requestLocationUpdates()
+                }
+            }
+        }
+
     override fun fragmentLoaded(fragmentTag: String) {
         runOnUiThread {
             if (RootNavView.scrollX != 0) RootNavView.scrollX = 0
@@ -485,20 +527,83 @@ class RootActivity : AppCompatActivity(),
 
     // Gestión servicio de localización
 
+    private fun startLocationUpdates(){
+        if (!checkPermissions()) {
+            requestPermissions()
+        } else {
+            mService?.requestLocationUpdates()
+        }
+    }
+
+    private fun onCreateLocationServices(){
+        myReceiver = MyReceiver()
+        // Check that the user hasn't revoked permissions by going to Settings.
+        if (Utils.requestingLocationUpdates(this)) {
+            if (!checkPermissions()) {
+                requestPermissions()
+            }
+        }
+    }
+
+    private fun onStartLocationServices(){
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .registerOnSharedPreferenceChangeListener(this)
+
+        // Bind to the service. If the service is in foreground mode, this signals to the service
+        // that since this activity is in the foreground, the service can exit foreground mode.
+        bindService(
+            Intent(this, LocationUpdatesService::class.java), mServiceConnection,
+            Context.BIND_AUTO_CREATE
+        )
+    }
+
+    private fun onResumeLocationServices(){
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            myReceiver as BroadcastReceiver,
+            IntentFilter(LocationUpdatesService.ACTION_BROADCAST)
+        )
+    }
+
+    private fun onPauseLocationServices(){
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver as BroadcastReceiver)
+    }
+
+    private fun onStopLocationServices(){
+        if (mBound) {
+            // Unbind from the service. This signals to the service that this activity is no longer
+            // in the foreground, and the service can respond by promoting itself to a foreground
+            // service.
+            unbindService(mServiceConnection)
+            mBound = false
+        }
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .unregisterOnSharedPreferenceChangeListener(this)
+    }
+
     override fun onSharedPreferenceChanged(p0: SharedPreferences?, p1: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private inner class MyReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val location = intent.getParcelableExtra<Location>(LocationUpdatesService.EXTRA_LOCATION)
+            val locationAvaliable = intent.getParcelableExtra<LocationAvailability>(LocationUpdatesService.EXTRA_LOCATION_STATUS)
             if (location != null) {
-                Toast.makeText(
+               lastLocation = location
+                /*Toast.makeText(
                     this@RootActivity, Utils.getLocationText(location),
                     Toast.LENGTH_SHORT
-                ).show()
-                Log.i("TAG", "Recibo datos aun en background")
+                ).show()*/
             }
+            if (locationAvaliable != null){
+                if (!locationAvaliable.isLocationAvailable) {
+                    showMessage("Ubicación no disponible")
+                    RootActivity.locationAvaliable = true
+                } else {
+                    RootActivity.locationAvaliable = false
+                }
+            }
+            val locationIsActive = locationAvaliable?.isLocationAvailable ?: (location != null)
+            spreadLocationUpdateToChildren(location, locationIsActive)
         }
     }
 
@@ -560,7 +665,9 @@ class RootActivity : AppCompatActivity(),
                     // receive empty arrays.
                     Log.i(TAG, "User interaction was cancelled.")
                 grantResults[0] == PackageManager.PERMISSION_GRANTED -> // Permission was granted.
-                    mService?.requestLocationUpdates()
+                    if (!Utils.requestingLocationUpdates(this)) {
+                        mService?.requestLocationUpdates()
+                    }
                 else -> // Permission denied.
                     //setButtonsState(false)
                     Snackbar.make(
@@ -584,4 +691,33 @@ class RootActivity : AppCompatActivity(),
             }
         }
     }
+
+    fun spreadLocationUpdateToChildren(location: Location?, locationActive: Boolean) {
+        if (currentFragment == null) return
+        Log.i(TAG, "Location to children $location")
+
+        when (currentFragment) {
+            is HomeFragment -> {
+                Log.i(TAG, "Fragment is HomeFragment")
+                (currentFragment as HomeFragment).pagerFragment?.movePointerToUserPosition(location)
+                if (!locationActive) (currentFragment as HomeFragment).pagerFragment?.locationNotAvaliable()
+            }
+            is EventFragment -> {
+
+            }
+            is UserProfileFragment -> {
+
+            }
+        }
+
+    }
+
+    fun showMessage(message: String) {
+            val snack = Snackbar.make(rootActivityRoot,message, Snackbar.LENGTH_LONG)
+
+            snack.show()
+        }
+
+
+
 }

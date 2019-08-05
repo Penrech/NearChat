@@ -41,7 +41,6 @@ private const val FEET = "Ft"
 private const val HELPER_TEXT = "Mínimo %d %s , máximo %d %s"
 private const val MIN_RANGE = 100
 private const val MAX_RANGE = 1000
-private const val LOCATION_REQUEST_CODE = 101
 
 class AddEditEventFragment : Fragment() {
 
@@ -132,7 +131,6 @@ class AddEditEventFragment : Fragment() {
             isAdd = it.getBoolean(ISADD)
         }
 
-        requestPermission()
     }
 
     override fun onCreateView(
@@ -238,31 +236,6 @@ class AddEditEventFragment : Fragment() {
 
         return userLocation.distanceTo(eventLocation) < rangeDistance
 
-    }
-
-    private fun requestPermission(){
-        val permiso = ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)
-        if (permiso == PackageManager.PERMISSION_GRANTED){
-            if (googleLocationManager == null) googleLocationManager = FusedLocationProviderClient(activity!!)
-        } else {
-            requestPermissions(
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_REQUEST_CODE)
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when(requestCode){
-            LOCATION_REQUEST_CODE -> {
-                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                    (activity?.application as? CustomApplication)?.showMessage("No se ha permitido la ubicación")
-                }
-                else{
-                    requestPermission()
-                }
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     //Este método cambia la interfaz en función de si se usa el fragment para editar o para añadir datos de nuevo usuario

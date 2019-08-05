@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 
 import com.enrech.nearchat.R
+import com.enrech.nearchat.activities.RootActivity
 import com.enrech.nearchat.interfaces.NotifyInteractionHomeTab
 import com.enrech.nearchat.utils.CountriesObject
 import com.enrech.nearchat.utils.LocationWithoutGPSUtils
@@ -31,8 +33,6 @@ class HomeMapFragment : Fragment(), OnMapReadyCallback {
     private var mapFragment: SupportMapFragment? = null
 
     private var userMarkerDrawableID: Int? = null
-
-    private var initialLocationFromGps: LatLng? = null
 
     private var myPositionMarker: Marker? = null
 
@@ -62,7 +62,7 @@ class HomeMapFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is NotifyInteractionHomeTab) {
             notifyInteractionHomeTab = context
@@ -114,8 +114,10 @@ class HomeMapFragment : Fragment(), OnMapReadyCallback {
         mapSettings?.isMyLocationButtonEnabled = false
         mapSettings?.isCompassEnabled = false
 
-        if (initialLocationFromGps != null) {
-            gMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLocationFromGps, 18f))
+        if (RootActivity.lastLocation != null) {
+            val initialLocation = LatLng(RootActivity.lastLocation!!.latitude,RootActivity.lastLocation!!.longitude)
+            movePointerToUserLocation(initialLocation)
+            gMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLocation, 18f))
         } else {
             gMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(getInitMapLocation(), 18f))
         }
@@ -123,29 +125,23 @@ class HomeMapFragment : Fragment(), OnMapReadyCallback {
         notifyInteractionHomeTab?.homeMapInitMap()
     }
 
-    fun isGmapInit(): Boolean {
-        return gMap != null
-    }
-
     fun animateCameraToLocation(location: LatLng) {
-        initMoveMyPositionUser(location)
         gMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(location , 18f))
     }
 
-    fun initMoveMyPositionUser(latLng: LatLng){
-        if (gMap == null) return
-
+    fun movePointerToUserLocation(location: LatLng){
         if (myPositionMarker == null) {
             myPositionMarker = gMap?.addMarker(MarkerOptions()
-                .position(latLng)
+                .position(location)
                 .icon(loadAndResizeMarker(userMarkerDrawableID!!,120))
             )
+            animateCameraToLocation(location)
         } else {
-            myPositionMarker?.position = latLng
+            myPositionMarker?.position = location
         }
     }
 
-    fun removeMyPositionUserMarker(){
+    fun positionUnavaliable(){
         myPositionMarker?.remove()
         myPositionMarker = null
     }
@@ -174,5 +170,6 @@ class HomeMapFragment : Fragment(), OnMapReadyCallback {
         vectorDrawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
+
 
 }

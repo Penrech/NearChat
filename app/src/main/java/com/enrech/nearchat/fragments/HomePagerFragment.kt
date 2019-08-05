@@ -3,6 +3,7 @@ package com.enrech.nearchat.fragments
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import androidx.viewpager.widget.ViewPager
 import com.enrech.nearchat.CustomApplication
 
 import com.enrech.nearchat.R
+import com.enrech.nearchat.activities.RootActivity
 import com.enrech.nearchat.adapters.DefaultPagerAdapter
 import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
 import com.enrech.nearchat.interfaces.NotifyInteractionHomeTab
@@ -22,6 +24,7 @@ import com.enrech.nearchat.utils.ToolbarAnimationManager
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_root.*
 import kotlinx.android.synthetic.main.fragment_home_pager.*
 import kotlinx.android.synthetic.main.fragment_home_pager.view.*
 
@@ -56,16 +59,6 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
     private var pagerRootView: View? = null
 
-    private var locationListenerActive = false
-
-    private var booted: Boolean = false
-    private var lastStatus: Boolean = false
-
-    private var googleLocationManager: FusedLocationProviderClient? = null
-    private var googleLocationRequest: LocationRequest? = null
-
-    private var currentRestoreLocationTrys = 0
-
     //Listener
 
     override fun onPageScrollStateChanged(state: Int) {}
@@ -96,52 +89,17 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
     private var myPositionButtonListener = View.OnClickListener {
         if (!isScrolling) {
             if (mPager?.currentItem == 0) {
-                requestPermission()
+                if (RootActivity.lastLocation != null) {
+                     val location = RootActivity.lastLocation!!
+                     val latLng = LatLng(location.latitude,location.longitude)
+                     homeMapFragment?.animateCameraToLocation(latLng)
+                } else {
+                    notifyInteractionHomeTab?.checkWhyLastLocationIsNull()
+                }
             }
         }
     }
 
-    private var googleLocationListener = object : LocationCallback(){
-
-        override fun onLocationResult(p0: LocationResult?) {
-            super.onLocationResult(p0)
-            Log.i("NewLocation","New Location $p0")
-            val lastLocation = p0?.lastLocation
-            val lastLat = lastLocation?.latitude
-            val lastLon = lastLocation?.longitude
-            if (lastLon != null && lastLat != null) {
-                val latLon= LatLng(lastLat,lastLon)
-                homeMapFragment?.initMoveMyPositionUser(latLon)
-            }
-
-        }
-
-        override fun onLocationAvailability(p0: LocationAvailability?) {
-            super.onLocationAvailability(p0)
-
-            if (!booted) {
-                lastStatus = p0?.isLocationAvailable!!
-                booted = true
-                return
-            }
-
-            if (p0?.isLocationAvailable!! && p0.isLocationAvailable != lastStatus) {
-                if (googleLocationManager != null) {
-                    restoreUserPosition()
-                }
-
-            } else if (!p0.isLocationAvailable && p0.isLocationAvailable != lastStatus){
-                if (googleLocationManager != null) {
-                    val permiso = ContextCompat.checkSelfPermission(activity!!.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
-                    if (permiso == PackageManager.PERMISSION_GRANTED) {
-
-                        homeMapFragment?.removeMyPositionUserMarker()
-                    }
-                }
-            }
-            lastStatus = p0.isLocationAvailable
-        }
-    }
 
     //Métodos lifeCycle
 
@@ -149,7 +107,6 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         super.onCreate(savedInstanceState)
 
         initPagerFragments()
-        initGoogleLocation()
 
     }
 
@@ -222,16 +179,9 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
 
     private fun startListenersOnFragmentVisibleOrInResume(){
         listenPagerEvents()
-
-        trackGoogleLocation()
-
-        if (homeMapFragment?.isGmapInit() != null && !locationListenerActive) {
-            requestPermission()
-        }
     }
 
     private fun stopListenersOnFragmentNotVisibleOrInPause(){
-        unTrackGoogleLocation()
         deleteListenerPagerEvents()
     }
 
@@ -346,125 +296,17 @@ class HomePagerFragment : Fragment() , ViewPager.OnPageChangeListener{
         }
     }
 
-    private fun requestPermission(){
-        val permiso = ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)
-        if (permiso == PackageManager.PERMISSION_GRANTED){
-            if (!locationListenerActive) {
-                //locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1f, locationListener)
-                googleLocationManager!!.requestLocationUpdates(googleLocationRequest,googleLocationListener, null)
-                locationListenerActive = true
-            }
-            moveToUserPosition()
-        } else {
-            requestPermissions(
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_REQUEST_CODE)
-        }
+    fun movePointerToUserPosition(newLocation: Location?){
+        Log.i("mainTag","Location arrives to pagerFragment $newLocation")
+        if (newLocation == null) return
+
+        val localizacionUsuario = LatLng(newLocation.latitude,newLocation.longitude)
+        homeMapFragment?.movePointerToUserLocation(localizacionUsuario)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when(requestCode){
-            LOCATION_REQUEST_CODE -> {
-                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                    (activity?.application as? CustomApplication)?.showMessage("No se ha permitido la ubicación")
-                }
-                else{
-                    requestPermission()
-                }
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    fun locationNotAvaliable(){
+        homeMapFragment?.positionUnavaliable()
     }
 
-    private fun moveToUserPosition(){
-        val permiso = ContextCompat.checkSelfPermission(activity!!.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
-        if (permiso == PackageManager.PERMISSION_GRANTED){
-            googleLocationManager?.let{ location ->
-                location.locationAvailability.addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        location.lastLocation.addOnCompleteListener { locationTask ->
-                            val currentLocation = locationTask.result
-                            if (currentLocation != null) {
-                                val localizacionUsuario = LatLng(currentLocation.latitude,currentLocation.longitude)
-                                homeMapFragment?.animateCameraToLocation(localizacionUsuario)
-                            } else {
-                                (activity?.application as? CustomApplication)?.showMessage("Ubicación desactivada")
-                            }
-                        }
-                    } else {
-                        (activity?.application as? CustomApplication)?.showMessage("Ubicación desactivada")
-                    }
-                }
-            }
-        } else {
-            (activity?.application as? CustomApplication)?.showMessage("No se ha permitido la ubicación")
-        }
-    }
-
-    private fun restoreUserPosition(){
-        currentRestoreLocationTrys += 1
-        if (currentRestoreLocationTrys == MAX_RESTORE_LOCATION_TRYS) {
-            currentRestoreLocationTrys = 0
-            return
-        }
-        val permiso = ContextCompat.checkSelfPermission(activity!!.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
-        if (permiso == PackageManager.PERMISSION_GRANTED){
-            googleLocationManager?.let{ location ->
-                location.locationAvailability.addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        location.lastLocation.addOnCompleteListener { locationTask ->
-                            val currentLocation = locationTask.result
-                            if (currentLocation != null) {
-                                val localizacionUsuario = LatLng(currentLocation.latitude,currentLocation.longitude)
-                                homeMapFragment?.animateCameraToLocation(localizacionUsuario)
-                                currentRestoreLocationTrys = 0
-                            } else {
-                                restoreUserPosition()
-                            }
-                        }
-                    } else {
-                        restoreUserPosition()
-                    }
-                }
-            }
-        } else {
-            (activity?.application as? CustomApplication)?.showMessage("No se ha permitido la ubicación")
-            currentRestoreLocationTrys = 0
-        }
-    }
-
-    private fun initGoogleLocation(){
-        googleLocationManager = FusedLocationProviderClient(activity!!)
-        googleLocationRequest = LocationRequest()
-        googleLocationRequest?.interval = 500
-        googleLocationRequest?.maxWaitTime = 0
-        googleLocationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        googleLocationRequest?.smallestDisplacement = 1f
-
-        requestPermission()
-    }
-
-    private fun trackGoogleLocation(){
-        if (!locationListenerActive && googleLocationManager != null) {
-            val permiso = ContextCompat.checkSelfPermission(activity!!.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
-            if (permiso == PackageManager.PERMISSION_GRANTED) {
-                //Mostrar marker
-                googleLocationManager!!.requestLocationUpdates(googleLocationRequest,googleLocationListener, null)
-                locationListenerActive = true
-            }
-        }
-    }
-
-    private fun unTrackGoogleLocation(){
-        if (locationListenerActive && googleLocationManager != null) {
-
-            val permiso = ContextCompat.checkSelfPermission(activity!!.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION)
-            if (permiso == PackageManager.PERMISSION_GRANTED) {
-                //Borrar marker
-                googleLocationManager?.removeLocationUpdates(googleLocationListener)
-                locationListenerActive = false
-            }
-        }
-    }
 
 }

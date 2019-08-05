@@ -2,7 +2,7 @@ package com.enrech.nearchat.utils
 
 import android.content.Context
 import android.location.Location
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import com.enrech.nearchat.R
 
 import java.text.DateFormat
