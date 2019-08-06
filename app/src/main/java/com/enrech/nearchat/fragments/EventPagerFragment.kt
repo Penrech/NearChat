@@ -152,8 +152,8 @@ class EventPagerFragment : Fragment() , ViewPager.OnPageChangeListener{
     }
 
     override fun onPause() {
-        super.onPause()
         stopListenersOnFragmentNotVisibleOrInPause()
+        super.onPause()
     }
 
     override fun onDetach() {

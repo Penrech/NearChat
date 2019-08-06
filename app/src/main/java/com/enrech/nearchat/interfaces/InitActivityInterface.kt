@@ -5,4 +5,5 @@ interface InitActivityInterface {
     fun goToRegister()
     fun goBackToLogin()
     fun loadingEnableBack(enable: Boolean)
+    fun defaultErrorLoading()
 }

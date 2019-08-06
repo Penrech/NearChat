@@ -82,7 +82,7 @@ class AddEditEventFragment : Fragment() {
 
     private var closeSaveButtonListener = View.OnClickListener {
         //listener?.eventPropagateBackButton()
-        getCurrentPositionAndCalculateDistance()
+
     }
 
     private var enableCapacityLimit = object : CompoundButton.OnCheckedChangeListener {
@@ -188,35 +188,6 @@ class AddEditEventFragment : Fragment() {
 
 
     //métodos
-
-    private fun getCurrentPositionAndCalculateDistance(){
-        val permiso = ContextCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_FINE_LOCATION)
-        if (permiso == PackageManager.PERMISSION_GRANTED){
-            googleLocationManager?.let { location ->
-                location.locationAvailability.addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        location.lastLocation.addOnCompleteListener { locationTask ->
-                            val currentLocation = locationTask.result
-                            if (currentLocation != null) {
-                                val localizacionUsuario = LatLng(currentLocation.latitude,currentLocation.longitude)
-                                if (calculateDistance(localizacionUsuario)) {
-                                    checkDataBeforeSave()
-                                } else {
-                                    (activity?.application as? CustomApplication)?.showMessage("No es posible crear un evento sin estar dentro de su rango")
-                                }
-                            } else {
-                                (activity?.application as? CustomApplication)?.showMessage("No se ha podido determinar la ubicación")
-                            }
-                        }
-                    } else {
-                        (activity?.application as? CustomApplication)?.showMessage("La ubicación está desactivada")
-                    }
-                }
-            }
-        } else {
-            (activity?.application as? CustomApplication)?.showMessage("No se ha permitido la ubicación")
-        }
-    }
 
     private fun calculateDistance(currentLocation: LatLng): Boolean {
         val userLocation = Location("")

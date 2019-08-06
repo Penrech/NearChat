@@ -719,5 +719,4 @@ class RootActivity : AppCompatActivity(),
         }
 
 
-
 }

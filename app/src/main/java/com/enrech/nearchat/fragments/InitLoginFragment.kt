@@ -11,6 +11,10 @@ import android.view.inputmethod.InputMethodManager
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.InitActivityInterface
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_init_login.*
 
 private const val ARG_PARAM1 = "param1"
@@ -20,10 +24,16 @@ class InitLoginFragment : Fragment() {
 
     //Variables
 
+    private var mAuth: FirebaseAuth? = null
+    private var firebaseDatabase: FirebaseFirestore? = null
     private var param1: String? = null
     private var param2: String? = null
 
     private var loginInterface: InitActivityInterface? = null
+
+    enum class LoginError{
+        WRONG_MAIL,WRONG_PASSWORD,WRONG_ACCOUNT, UNKNOW_ERROR
+    }
 
     //Listeners
 
@@ -32,9 +42,7 @@ class InitLoginFragment : Fragment() {
     }
 
     private var loginWithEmailAndPassword = View.OnClickListener {
-            if (checkIfEmailAndPassAreCorred()) {
-                loginInterface?.userLoggedProperly()
-            }
+            checkDataBeforeSend()
     }
 
     private fun setClickOnScreenListener(){
@@ -50,6 +58,8 @@ class InitLoginFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        mAuth = FirebaseAuth.getInstance()
+        firebaseDatabase = FirebaseFirestore.getInstance()
     }
 
     override fun onCreateView(
@@ -86,11 +96,6 @@ class InitLoginFragment : Fragment() {
         loginGoToRegisterButton.setOnClickListener(goToRegisterFragment)
     }
 
-    private fun checkIfEmailAndPassAreCorred(): Boolean {
-        startLoadingWhileChecking(true)
-        return true
-    }
-
     private fun startLoadingWhileChecking(start: Boolean) {
         if (start) {
             loginButton.isEnabled = false
@@ -115,6 +120,70 @@ class InitLoginFragment : Fragment() {
             it.clearFocus()
         }
     }
+
+    private fun checkDataBeforeSend(){
+        startLoadingWhileChecking(true)
+
+        val login = loginEmailEditText.text?.toString()
+        val password = loginPasswordEditText.text?.toString()
+        val loginRealLength = login?.trim()?.length ?: 0
+        val passwordRealLength = password?.trim()?.length ?: 0
+
+        restartUI()
+
+        if (login.isNullOrEmpty() || loginRealLength < 1) {
+            loginInputLayout.showError(true, "Introduce tu email")
+            startLoadingWhileChecking(false)
+        } else if (password.isNullOrEmpty() || passwordRealLength < 1) {
+            passwordInputLayout.showError(true,"Introduce la contraseña")
+            startLoadingWhileChecking(false)
+        } else {
+            LogInWithMailAndPassword(login,password)
+        }
+    }
+
+    private fun LogInWithMailAndPassword(email: String, password: String){
+        mAuth!!.signInWithEmailAndPassword(email,password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    loginInterface?.userLoggedProperly()
+                } else {
+                    try {
+                        throw task.exception?.fillInStackTrace()!!
+                    } catch (e: FirebaseAuthInvalidUserException){
+                        checkDataAferSend(LoginError.WRONG_ACCOUNT)
+                    } catch (e: FirebaseAuthInvalidCredentialsException){
+                        checkDataAferSend(LoginError.WRONG_PASSWORD)
+                    } catch (e: Exception){
+                        checkDataAferSend(LoginError.UNKNOW_ERROR)
+                    }
+                }
+            }
+    }
+
+    private fun checkDataAferSend(errorType: LoginError){
+        when(errorType){
+            LoginError.WRONG_ACCOUNT ->{
+                loginInputLayout.showError(true,"Email y/o contraseña incorrectos")
+            }
+            LoginError.WRONG_PASSWORD ->{
+                passwordInputLayout.showError(true,"Contraseña incorrecta")
+            }
+            LoginError.WRONG_MAIL ->{
+                loginInputLayout.showError(true,"Email incorrecto")
+            }
+            else ->{
+                loginInterface?.defaultErrorLoading()
+            }
+        }
+        startLoadingWhileChecking(false)
+    }
+
+    private fun restartUI(){
+        loginInputLayout.showError(false)
+        passwordInputLayout.showError(false)
+    }
+
 
     companion object {
 

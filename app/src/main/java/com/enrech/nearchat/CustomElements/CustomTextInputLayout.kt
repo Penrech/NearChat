@@ -81,7 +81,7 @@ class CustomTextInputLayout @JvmOverloads constructor(
         if (layoutSet) return
 
         label = children.first() as? TextView
-        inputElement = children.elementAtOrNull(1)
+        inputElement = if (label == null) children.elementAtOrNull(0) else children.elementAtOrNull(1)
 
         helperErrorTextView = children.firstOrNull{ it is CustomHelperTextView} as? CustomHelperTextView
         initialHelperTextColor = helperErrorTextView?.currentTextColor

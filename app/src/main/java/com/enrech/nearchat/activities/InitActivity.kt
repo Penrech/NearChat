@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.enrech.nearchat.R
 import com.enrech.nearchat.fragments.InitLoginFragment
 import com.enrech.nearchat.fragments.InitRegisterFragment
 import com.enrech.nearchat.fragments.LoadingRegistrationOrLogin
 import com.enrech.nearchat.interfaces.InitActivityInterface
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_init.*
 
 class InitActivity : AppCompatActivity(), InitActivityInterface {
 
@@ -22,12 +26,33 @@ class InitActivity : AppCompatActivity(), InitActivityInterface {
 
     private var enableBack = true
 
+    //Listeners
+
+    private var backStackListening = false
+
+    private var backStackChangeListener = object : FragmentManager.OnBackStackChangedListener {
+        override fun onBackStackChanged() {
+            currentFragment = supportFragmentManager.findFragmentById(R.id.RootInitActivityContainer)
+            changeKeyboardInputType(currentFragment!!)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_init)
 
         initTopFragments()
         isUserLogged()
+    }
+
+    override fun onPause() {
+        removeBackStackChangeListener()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        addBackStackChangeListener()
     }
 
     //Este método inicializa los cuatro fragments principales de la aplicación, y se guarda siempre una instacia de ellos
@@ -38,7 +63,8 @@ class InitActivity : AppCompatActivity(), InitActivityInterface {
     }
 
     private fun isUserLogged(){
-        val isLogged = true
+        val mAuth = FirebaseAuth.getInstance()
+        val isLogged = mAuth?.currentUser != null
         if (isLogged) {
             loadMainActivity()
         } else {
@@ -52,11 +78,7 @@ class InitActivity : AppCompatActivity(), InitActivityInterface {
         if (fragment != null && currentFragment != fragment) {
             val transaction = supportFragmentManager.beginTransaction()
 
-            if (fragment == loginFragment) {
-                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-            } else {
-                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-            }
+            changeKeyboardInputType(fragment)
 
             if (shouldAddToBackStack) {
                 transaction.addToBackStack(null)
@@ -72,6 +94,28 @@ class InitActivity : AppCompatActivity(), InitActivityInterface {
         }
 
         return false
+    }
+
+    private fun changeKeyboardInputType(fragment: Fragment){
+        if (fragment == loginFragment) {
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        } else {
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        }
+    }
+
+    private fun addBackStackChangeListener(){
+        if (!backStackListening) {
+            supportFragmentManager.addOnBackStackChangedListener(backStackChangeListener)
+            backStackListening = true
+        }
+    }
+
+    private fun removeBackStackChangeListener(){
+        if (backStackListening) {
+            supportFragmentManager.removeOnBackStackChangedListener(backStackChangeListener)
+            backStackListening = false
+        }
     }
 
     private fun loadMainActivity(){
@@ -102,5 +146,14 @@ class InitActivity : AppCompatActivity(), InitActivityInterface {
     override fun onBackPressed() {
         if (enableBack) super.onBackPressed()
         else { }
+    }
+
+    override fun defaultErrorLoading() {
+        showMessage("Error iniciando sesión")
+    }
+
+    fun showMessage(message: String) {
+        val snack = Snackbar.make(RootInitActivityContainer,message, Snackbar.LENGTH_LONG)
+        snack.show()
     }
 }
