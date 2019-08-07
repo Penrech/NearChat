@@ -6,4 +6,5 @@ interface InitActivityInterface {
     fun goBackToLogin()
     fun loadingEnableBack(enable: Boolean)
     fun defaultErrorLoading()
+    fun unkwonErrorFirebase()
 }

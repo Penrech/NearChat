@@ -181,40 +181,63 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <TextView
-                    android:text="@string/username_label"
+            <com.enrech.nearchat.CustomElements.CustomTextInputLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/RegisterProfileUserNameLabel"
+                    android:orientation="vertical"
+                    app:parent_scrollview="@+id/registerUserScrollView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:id="@+id/registerUserNameLayout"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_marginTop="20dp"
-                    app:layout_constraintStart_toStartOf="@+id/registerUsernameEditText"
-                    app:layout_constraintEnd_toEndOf="@+id/registerUsernameEditText"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/background_light"
-                    android:layout_marginStart="20dp"/>
+                    app:hasHelper="false"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toStartOf="@+id/registerValidUserNameIndicator">
 
-            <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:inputType="textPersonName"
-                    android:ems="0"
-                    android:id="@+id/registerUsernameEditText"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toBottomOf="@+id/RegisterProfileUserNameLabel"
-                    style="@style/Widget.AppCompat.AutoCompleteTextView"
-                    android:background="@drawable/text_field_background"
-                    android:layout_marginEnd="12dp"
-                    app:layout_constraintEnd_toStartOf="@+id/registerValidUserNameIndicator"
-                    android:fontFamily="@font/roboto"
-                    android:textSize="16sp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:singleLine="true"
-                    android:hint="@string/username_hint"/>
+                <TextView
+                        android:text="@string/username_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/RegisterProfileUserNameLabel"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/background_light"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginEnd="12dp"/>
+
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:inputType="textPersonName"
+                        android:ems="0"
+                        android:id="@+id/registerUsernameEditText"
+                        style="@style/Widget.AppCompat.AutoCompleteTextView"
+                        android:background="@drawable/text_field_background"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginStart="12dp"
+                        android:fontFamily="@font/roboto"
+                        android:textSize="16sp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:singleLine="true"
+                        android:hint="@string/username_hint"/>
+
+                <com.enrech.nearchat.CustomElements.CustomHelperTextView
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeMaxTextSize="15sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/registerUserNameHelper"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/defaultWhite"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="12dp"
+                        android:textSize="15sp"/>
+
+            </com.enrech.nearchat.CustomElements.CustomTextInputLayout>
+
 
             <ImageView
                     android:layout_width="40dp"
@@ -224,10 +247,71 @@
                     android:padding="10dp"
                     android:background="@drawable/rounded_button_background_unchecked"
                     android:backgroundTint="@color/defaultRed"
+                    android:layout_marginTop="32dp"
                     android:layout_marginEnd="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/registerUsernameEditText"
-                    app:layout_constraintBottom_toBottomOf="@+id/registerUsernameEditText"/>
+                    app:layout_constraintTop_toTopOf="@+id/registerUserNameLayout"/>
+
+
+            <com.enrech.nearchat.CustomElements.CustomTextInputLayout
+                    android:layout_width="0dp"
+                    android:orientation="vertical"
+                    app:parent_scrollview="@+id/registerUserScrollView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:id="@+id/registerEmailLayout"
+                    app:layout_constraintTop_toBottomOf="@+id/registerUserNameLayout"
+                    android:layout_marginTop="20dp"
+                    app:hasHelper="false"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toStartOf="@+id/registerValidEmailIndicator">
+
+                <TextView
+                        android:text="@string/email_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/registerEmailLabel"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/background_light"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginStart="32dp"/>
+
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:inputType="textEmailAddress"
+                        android:ems="0"
+                        android:id="@+id/registerEmailEditText"
+                        style="@style/Widget.AppCompat.AutoCompleteTextView"
+                        android:background="@drawable/text_field_background"
+                        android:fontFamily="@font/roboto"
+                        android:textSize="16sp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:singleLine="true"
+                        android:hint="@string/email_hint"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/registerUserNameLayout"
+                        app:layout_constraintEnd_toStartOf="@+id/registerValidEmailIndicator"
+                        android:layout_marginEnd="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="12dp"/>
+
+                <com.enrech.nearchat.CustomElements.CustomHelperTextView
+                        app:autoSizeTextType="uniform"
+                        app:autoSizeStepGranularity="2sp"
+                        app:autoSizeMaxTextSize="15sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/registerEmailHelper"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/defaultWhite"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="12dp"
+                        android:textSize="15sp"/>
+
+            </com.enrech.nearchat.CustomElements.CustomTextInputLayout>
 
             <ImageView
                     android:layout_width="40dp"
@@ -239,78 +323,52 @@
                     android:backgroundTint="@color/defaultRed"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="12dp"
-                    app:layout_constraintTop_toTopOf="@+id/registerEmailEditText"
-                    app:layout_constraintBottom_toBottomOf="@+id/registerEmailEditText"/>
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintTop_toTopOf="@+id/registerEmailLayout"/>
 
-            <EditText
-                    android:layout_width="335dp"
-                    android:layout_height="40dp"
-                    android:inputType="textEmailAddress"
-                    android:ems="0"
-                    android:id="@+id/registerEmailEditText"
-                    style="@style/Widget.AppCompat.AutoCompleteTextView"
-                    android:background="@drawable/text_field_background"
-                    android:fontFamily="@font/roboto"
-                    android:textSize="16sp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:singleLine="true"
-                    android:hint="@string/email_hint"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toBottomOf="@+id/registerEmailLabel"
-                    app:layout_constraintEnd_toStartOf="@+id/registerValidEmailIndicator"
-                    android:layout_marginEnd="12dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="12dp"/>
-
-            <TextView
-                    android:text="@string/email_label"
+            <com.enrech.nearchat.CustomElements.CustomTextInputLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/registerEmailLabel"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/background_light"
-                    android:layout_marginTop="20dp"
-                    app:layout_constraintTop_toBottomOf="@+id/registerUsernameEditText"
-                    app:layout_constraintStart_toStartOf="@+id/registerEmailEditText"
-                    app:layout_constraintEnd_toEndOf="@+id/registerEmailEditText"
-                    android:layout_marginStart="20dp"/>
-
-            <EditText
-                    android:layout_width="335dp"
-                    android:layout_height="40dp"
-                    android:inputType="textPassword"
-                    android:ems="0"
-                    android:id="@+id/registerPasswordEditText"
-                    style="@style/Widget.AppCompat.AutoCompleteTextView"
-                    android:background="@drawable/text_field_background"
-                    android:fontFamily="@font/roboto"
-                    android:textSize="16sp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:singleLine="true"
-                    android:hint="@string/password_hint"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toBottomOf="@+id/registerPasswordLabel"
+                    android:orientation="vertical"
+                    app:parent_scrollview="@+id/registerUserScrollView"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="12dp"
-                    app:layout_constraintEnd_toStartOf="@+id/registerViewPasswordButton"
-                    android:layout_marginEnd="12dp"/>
-
-            <TextView
-                    android:text="@string/password_label"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/registerPasswordLabel"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/background_light"
+                    android:id="@+id/registerPasswordLayout"
+                    app:layout_constraintTop_toBottomOf="@+id/registerEmailLayout"
                     android:layout_marginTop="20dp"
-                    app:layout_constraintTop_toBottomOf="@+id/registerEmailEditText"
-                    app:layout_constraintStart_toStartOf="@+id/registerPasswordEditText"
-                    app:layout_constraintEnd_toEndOf="@+id/registerPasswordEditText"
-                    android:layout_marginStart="20dp"/>
+                    app:hasHelper="false"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toStartOf="@+id/registerViewPasswordButton">
+
+                <TextView
+                        android:text="@string/password_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/registerPasswordLabel"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="18sp"
+                        android:textColor="@android:color/background_light"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginStart="32dp"/>
+
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:inputType="textPassword"
+                        android:ems="0"
+                        android:id="@+id/registerPasswordEditText"
+                        style="@style/Widget.AppCompat.AutoCompleteTextView"
+                        android:background="@drawable/text_field_background"
+                        android:fontFamily="@font/roboto"
+                        android:textSize="16sp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:singleLine="true"
+                        android:hint="@string/password_hint"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"/>
+
+            </com.enrech.nearchat.CustomElements.CustomTextInputLayout>
+
 
             <ImageButton
                     android:layout_width="@dimen/custom_toolbar_item_height"
@@ -324,9 +382,9 @@
                     android:elevation="0dp"
                     android:contentDescription="@string/view_password_button_descriptor"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="32dp"
                     android:layout_marginEnd="12dp"
-                    app:layout_constraintTop_toTopOf="@+id/registerPasswordEditText"
-                    app:layout_constraintBottom_toBottomOf="@+id/registerPasswordEditText"/>
+                    app:layout_constraintTop_toTopOf="@+id/registerPasswordLayout"/>
 
             <Button
                     android:text="@string/register_button_label"
@@ -349,7 +407,7 @@
                     android:textSize="18sp"
                     android:textColor="@color/defaultWhite"
                     android:layout_marginTop="32dp"
-                    app:layout_constraintTop_toBottomOf="@+id/registerPasswordEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/registerPasswordLayout"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginBottom="120dp"
                     app:layout_constraintVertical_bias="0.0"/>

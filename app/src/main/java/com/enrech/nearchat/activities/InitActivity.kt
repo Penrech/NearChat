@@ -152,6 +152,10 @@ class InitActivity : AppCompatActivity(), InitActivityInterface {
         showMessage("Error iniciando sesión")
     }
 
+    override fun unkwonErrorFirebase() {
+        showMessage("Error registrando nuevo usuario")
+    }
+
     fun showMessage(message: String) {
         val snack = Snackbar.make(RootInitActivityContainer,message, Snackbar.LENGTH_LONG)
         snack.show()
