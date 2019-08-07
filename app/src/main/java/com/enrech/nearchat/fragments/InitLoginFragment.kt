@@ -74,6 +74,7 @@ class InitLoginFragment : Fragment() {
 
         setClickOnScreenListener()
         setUpButtons()
+        debugUser()
     }
 
     override fun onAttach(context: Context) {
@@ -89,6 +90,12 @@ class InitLoginFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         loginInterface = null
+    }
+
+    //TODO eliminate on production
+    private fun debugUser(){
+        loginEmailEditText.setText("prueba@nearchat.com")
+        loginPasswordEditText.setText("12345678")
     }
 
     private fun setUpButtons(){

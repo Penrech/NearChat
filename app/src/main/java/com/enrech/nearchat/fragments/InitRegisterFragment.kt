@@ -189,7 +189,6 @@ class InitRegisterFragment : Fragment() {
     private fun checkUserNameLive(){
         val userName = registerUsernameEditText.text?.toString()
         registerUserNameLayout.showError(false)
-        changeValidationButtonUI(validationButton.USERNAME,true)
 
         if (checkUserName(userName)) {
             val query = usersnamesReference!!.document(userName!!)
@@ -221,7 +220,6 @@ class InitRegisterFragment : Fragment() {
     private fun checkEmailLive(){
         val email = registerEmailEditText.text?.toString()
         registerEmailLayout.showError(false)
-        changeValidationButtonUI(validationButton.EMAIL,true)
 
         if (checkEmail(email)) {
             val query = usersReference!!.whereEqualTo("email",email)
