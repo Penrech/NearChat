@@ -4,4 +4,5 @@ interface NotifyInteractionUserProfile {
     fun profileOpenEditUserClick(boolean: Boolean)
     fun profileOpenEditAccessClick()
     fun profilePropagateBackButton()
+    fun logOut()
 }

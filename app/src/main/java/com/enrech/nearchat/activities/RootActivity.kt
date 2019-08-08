@@ -381,6 +381,10 @@ class RootActivity : AppCompatActivity(),
        onBackPressed()
     }
 
+    override fun logOut() {
+        backToInitActivity()
+    }
+
     override fun onBackPressed() {
 
         if (navigationButtonPress) return
@@ -718,5 +722,13 @@ class RootActivity : AppCompatActivity(),
             snack.show()
         }
 
+    private fun backToInitActivity(){
+        val intent = Intent(this,InitActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        mService?.removeLocationUpdates()
+        startActivity(intent)
+        finish()
+        overridePendingTransition(0, 0)
+    }
 
 }

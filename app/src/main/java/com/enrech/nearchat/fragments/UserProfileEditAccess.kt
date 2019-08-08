@@ -13,6 +13,9 @@ import android.view.inputmethod.InputMethodManager
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.ModifyNavigationBarFromFragments
 import com.enrech.nearchat.interfaces.NotifyInteractionEventTab
+import com.enrech.nearchat.interfaces.NotifyInteractionUserProfile
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_user_profile_edit_access.*
 
 private const val ARG_PARAM1 = "param1"
@@ -28,7 +31,7 @@ class UserProfileEditAccess : Fragment() {
     private var oldPasswordVisible = false
     private var newPasswordVisible = false
 
-    private var notifyInteractionEventTab: NotifyInteractionEventTab? = null
+    private var notifyInteractionUserProfile: NotifyInteractionUserProfile? = null
 
     private var bottomNavigationListener: ModifyNavigationBarFromFragments? = null
 
@@ -65,11 +68,16 @@ class UserProfileEditAccess : Fragment() {
     }
 
     private var exitSavingListener = View.OnClickListener {
-        notifyInteractionEventTab?.eventPropagateBackButton()
+        notifyInteractionUserProfile?.profilePropagateBackButton()
     }
 
     private var exitWithoutSavingListener = View.OnClickListener {
-        notifyInteractionEventTab?.eventPropagateBackButton()
+        notifyInteractionUserProfile?.profilePropagateBackButton()
+    }
+
+    private var logOut = View.OnClickListener {
+        FirebaseAuth.getInstance().signOut()
+        notifyInteractionUserProfile?.logOut()
     }
 
     private fun setClickOnScreenListener(){
@@ -112,8 +120,8 @@ class UserProfileEditAccess : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is NotifyInteractionEventTab) {
-            notifyInteractionEventTab = context
+        if (context is NotifyInteractionUserProfile) {
+            notifyInteractionUserProfile = context
         }
         if (context is ModifyNavigationBarFromFragments){
             bottomNavigationListener = context
@@ -125,7 +133,7 @@ class UserProfileEditAccess : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
-        notifyInteractionEventTab = null
+        notifyInteractionUserProfile = null
         bottomNavigationListener = null
     }
 
@@ -144,6 +152,7 @@ class UserProfileEditAccess : Fragment() {
         editAccessViewPasswordButton.setOnClickListener(viewNewPasswordClickListener)
         editAccessCloseButton.setOnClickListener(exitWithoutSavingListener)
         saveChangesEditAccessToolbarButton.setOnClickListener(exitSavingListener)
+        editAccessLogOut.setOnClickListener(logOut)
     }
 
     //Esta función oculta el teclado al apretar fuera de los límites del textEdit

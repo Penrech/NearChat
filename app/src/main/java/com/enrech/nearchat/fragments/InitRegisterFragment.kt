@@ -16,6 +16,7 @@ import androidx.core.widget.ImageViewCompat
 
 import com.enrech.nearchat.R
 import com.enrech.nearchat.interfaces.InitActivityInterface
+import com.enrech.nearchat.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
@@ -57,9 +58,7 @@ class InitRegisterFragment : Fragment() {
     }
 
     private var registerUser = View.OnClickListener {
-        if (checkIfRegisterDateIsCorrect()) {
-            loginInterface?.userLoggedProperly()
-        }
+        checkDataBeforeSend()
     }
 
     private var viewPasswordClickListener = View.OnClickListener {
@@ -191,11 +190,11 @@ class InitRegisterFragment : Fragment() {
         registerUserNameLayout.showError(false)
 
         if (checkUserName(userName)) {
-            val query = usersnamesReference!!.document(userName!!)
+            val query = usersReference!!.whereEqualTo("username",userName)
             query
                 .get()
                 .addOnSuccessListener { result ->
-                    if (result.exists()) {
+                    if (result.size() > 0) {
                         registerUserNameLayout.showError(true,"Username no disponible")
                         changeValidationButtonUI(validationButton.USERNAME,false)
                     }
@@ -300,7 +299,7 @@ class InitRegisterFragment : Fragment() {
         mAuth!!.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener{ task ->
                 if (task.isSuccessful) {
-                    loginInterface?.userLoggedProperly()
+                    checkAndRepiteAddingUser(username,email,1)
                 } else {
                     try {
                         throw task.exception?.fillInStackTrace()!!
@@ -316,18 +315,41 @@ class InitRegisterFragment : Fragment() {
             }
     }
 
-    private fun addUserToDBAndSuccessLog(username: String, email: String){
-        val documentRef = usersnamesReference!!.document(username)
-        firebaseDatabase!!.runTransaction { transaction ->
-
-            val snapshot = transaction.get(documentRef)
-
-            if (snapshot.exists()) {
-
-            } else {
-
+    private fun checkAndRepiteAddingUser(username: String, email: String, tryNumber: Int){
+        var newUserName = username
+        val query = usersReference!!.whereEqualTo("username",username)
+        query
+            .get()
+            .addOnSuccessListener { result ->
+                if (result.size() > 0) {
+                    if (username.length <= 15) {
+                        newUserName = username + tryNumber
+                    } else {
+                        val cutUserName = username.slice(0 until 15)
+                        newUserName = cutUserName + tryNumber
+                    }
+                    checkAndRepiteAddingUser(newUserName,email,tryNumber + 1)
+                } else {
+                    addNewUserAndLogIn(newUserName, email)
+                }
             }
-        }
+            .addOnFailureListener { exception ->
+                Log.i("FirebaseExc","Exception $exception")
+                loginInterface?.unkwonErrorFirebase()
+            }
+
+    }
+
+    private fun addNewUserAndLogIn(username: String, email: String){
+        val newUser = User.registerNewUser(mAuth!!.currentUser!!.uid,email,username,null,null)
+        usersReference!!.document(mAuth!!.currentUser!!.uid)
+            .set(newUser)
+            .addOnSuccessListener {
+                loginInterface?.userLoggedProperly()
+            }
+            .addOnFailureListener {
+                loginInterface?.unkwonErrorFirebase()
+            }
     }
 
     private fun checkDataAfterSend(errorType: RegisterError){
