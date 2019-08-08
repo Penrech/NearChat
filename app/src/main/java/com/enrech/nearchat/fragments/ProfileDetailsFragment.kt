@@ -10,9 +10,12 @@ import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 
 import com.enrech.nearchat.R
+import com.enrech.nearchat.activities.RootActivity
 import com.enrech.nearchat.interfaces.NotifyInteractionUserProfile
+import com.enrech.nearchat.utils.RandomColorManagment
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_profile_details.*
+
 
 //Este fragment es el encargado de mostrar la información del perfil de usuario
 class ProfileDetailsFragment : Fragment() {
@@ -26,6 +29,8 @@ class ProfileDetailsFragment : Fragment() {
     private var appBarIsListening = false
 
     private var scrollOffset: Int? = null
+
+    private var randomColorManager: RandomColorManagment? = null
 
     //Listeners
 
@@ -59,6 +64,8 @@ class ProfileDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadUserData()
+
         setUpButtons()
 
         setScrollListener()
@@ -78,6 +85,7 @@ class ProfileDetailsFragment : Fragment() {
         } else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
         }
+        randomColorManager = RandomColorManagment(context = context)
     }
 
     override fun onDetach() {
@@ -121,6 +129,35 @@ class ProfileDetailsFragment : Fragment() {
             profileDetailsAppBar.removeOnOffsetChangedListener(onAppBarOffsetChangeListener)
             appBarIsListening = false
         }
+    }
+
+    private fun loadUserData(){
+        val backgroundImageColor = randomColorManager!!.getRandomColor()
+        userDetailsProfileImage.setCardBackgroundColor(backgroundImageColor)
+        RootActivity.userInfo?.let { user ->
+            if (user.photoThumbnail != null){
+                loadUserImage()
+            }
+
+            if (user.nameSurname != null) {
+                UserNameLabel.text = user.nameSurname
+            } else {
+                UserNameLabel.text = user.username
+            }
+            UserNameLabel.background = null
+
+            if (user.bio != null) {
+                userBioLabel.text = user.bio
+            } else {
+                userBioLabel.text = "Oh, I see you near me"
+            }
+
+        }
+    }
+
+
+    private fun loadUserImage(){
+
     }
 
 }

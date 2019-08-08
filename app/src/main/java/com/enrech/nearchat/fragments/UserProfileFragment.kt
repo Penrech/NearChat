@@ -12,6 +12,9 @@ import androidx.fragment.app.FragmentManager
 import com.enrech.nearchat.R
 import com.enrech.nearchat.activities.RootActivity
 import com.enrech.nearchat.interfaces.NotifyTopFragmentChange
+import com.enrech.nearchat.models.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 //Este fragment gestiona todos los fragments encargados de mostrar o editar información del usuario
 class UserProfileFragment : Fragment() {
@@ -26,6 +29,10 @@ class UserProfileFragment : Fragment() {
 
     private var backStackListening = false
 
+    private var firebaseDatabase: FirebaseFirestore? = null
+
+    private var userDetails: User? = null
+
     //Listeners
 
     private var backStackChangeListener = object : FragmentManager.OnBackStackChangedListener {
@@ -39,6 +46,7 @@ class UserProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        firebaseDatabase = FirebaseFirestore.getInstance()
         initFragments()
     }
 
@@ -134,6 +142,18 @@ class UserProfileFragment : Fragment() {
         }
 
         return false
+    }
+
+    private fun getUserDetailsData(){
+        val query = firebaseDatabase!!.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+        query
+            .get()
+            .addOnSuccessListener {
+                userDetails = it.toObject(User::class.java)
+            }
+            .addOnFailureListener {
+
+            }
     }
 
 }

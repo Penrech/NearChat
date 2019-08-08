@@ -29,10 +29,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import kotlinx.android.synthetic.main.activity_root.*
 import com.enrech.nearchat.models.EventHelper
 import com.enrech.nearchat.models.StateFragment
+import com.enrech.nearchat.models.User
 import com.enrech.nearchat.services.LocationUpdatesService
 import com.enrech.nearchat.utils.Utils
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 
 private const val MAX_HISTORIC = 5
 
@@ -51,6 +55,7 @@ class RootActivity : AppCompatActivity(),
         const val TAG_FOURTH = "fourth"
         var lastLocation : Location? = null
         var locationAvaliable: Boolean? = null
+        var userInfo: User? = null
     }
 
     //Variables
@@ -102,11 +107,17 @@ class RootActivity : AppCompatActivity(),
     private var oldTag: String = TAG_ONE
     private var currentMenuItemId: Int = R.id.navigation_home
 
+    private var firebaseDatabase: FirebaseFirestore? = null
+
+    private var userListenerRegistration: ListenerRegistration? = null
+
     // métodos de vista
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_root)
+
+        firebaseDatabase = FirebaseFirestore.getInstance()
 
         onCreateLocationServices()
 
@@ -127,10 +138,12 @@ class RootActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         onResumeLocationServices()
+        startListeningForUserInfo()
     }
 
     override fun onPause() {
         onPauseLocationServices()
+        stopListenerForUserInfo()
         super.onPause()
     }
 
@@ -730,5 +743,33 @@ class RootActivity : AppCompatActivity(),
         finish()
         overridePendingTransition(0, 0)
     }
+
+    private fun startListeningForUserInfo(){
+        if (userListenerRegistration != null) return
+
+        val docRef = firebaseDatabase!!.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+        userListenerRegistration = docRef.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+            if (firebaseFirestoreException != null) {
+                Log.i("ERROR","Listener failed $firebaseFirestoreException")
+                return@addSnapshotListener
+            }
+
+            if (documentSnapshot != null && documentSnapshot.exists()) {
+                userInfo = documentSnapshot.toObject(User::class.java)
+            } else {
+                Log.i("ERROR","Data of user is null")
+            }
+
+        }
+    }
+
+    private fun stopListenerForUserInfo(){
+        if (userListenerRegistration == null) return
+
+        userListenerRegistration!!.remove()
+        userListenerRegistration = null
+    }
+
+
 
 }
