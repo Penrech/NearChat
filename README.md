@@ -10,7 +10,7 @@
 
 <h1>Description</h1>
 <p>Design and code of a location based chat application</p>
-<p>Nearchat (provisional name) is a location based chat concept application which let you talk with near users who join virtual chat rooms with a phisical location, called Events</p>
+<p>Nearchat (provisional name) is a location based chat concept application which let you talk with near users who join virtual chat rooms with a physical location, called Events</p>
 <p>The app contained in this repo is an early concept, which might be developed in the future. This is the Android version, which is more advanced in development than the IOS version</p>
 
 <h1>Actual propotype feautures - Dynamic toolbar animations </h1>
