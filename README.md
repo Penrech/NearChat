@@ -15,8 +15,8 @@
 
 <h1>Actual propotype feautures - Dynamic toolbar animations </h1>
 <p>
-  <a href='#img1'><img id='img1' width = '49%' src='video_1.png'/></a>
-  <a href='#img2'><img id='img2' width = '49%' src='video_2.png'/></a>
+  <a href='https://youtu.be/OjyhlosTItc'><img id='img1' width = '49%' src='video_1.png'/></a>
+  <a href='https://youtu.be/mFb-cwisKyI'><img id='img2' width = '49%' src='video_2.png'/></a>
 </p>
 
 
